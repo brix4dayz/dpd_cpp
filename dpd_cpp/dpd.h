@@ -14,6 +14,8 @@ typedef unsigned char idx;
 
 // Class prototypes
 
+class ObjDPD;
+
 class PosVect;
 
 class DirVect;
