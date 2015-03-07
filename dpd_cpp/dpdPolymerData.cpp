@@ -1,6 +1,8 @@
 #include "dpdPolymerData.h"
 #include <cstdlib>
 
+// Consider putting a few of the functions and data in polymerData in dpdData.
+
 #define PHOBE_PHOBE 1
 #define PHIL_PHIL 2
 
