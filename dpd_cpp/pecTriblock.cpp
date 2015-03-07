@@ -1,0 +1,140 @@
+//#include "copolymerChain.h"
+#include "bin.h"
+#include <cstdlib>
+
+PECTriblock::PECTriblock() {}
+
+// Generic constuctor
+PECTriblock::PECTriblock( idx pec_length, idx tail_length ) {
+	this->pec_length = pec_length;
+	this->tail_length = tail_length;
+	this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length );
+	this->tail1 = new HydrophobicTail( this, tail_length );
+	this->tail2 = new HydrophobicTail( this, tail_length );
+	this->calcLength();
+	this->tail1->other = this->tail2;
+	this->tail2->other = this->tail1;
+	this->micelle = NULL;
+}
+
+// Constructs from reading input file
+// Should I add a void ptr to the frame as a parameter?
+PECTriblock::PECTriblock( idx pec_length, idx tail_length,
+                          std::ifstream* inFile, 
+                          idx* box_length ) {
+	this->pec_length = pec_length;
+	this->tail_length = tail_length;
+	this->tail1 = new HydrophobicTail( this, tail_length, 
+	 inFile, box_length );
+	this->pec_block = new PolymerBlock( this, 
+	 HYDROPHILIC, pec_length, inFile, box_length );
+	this->tail2 = new HydrophobicTail( this, tail_length, 
+	 inFile, box_length );
+	this->calcLength();
+	this->tail1->other = this->tail2;
+	this->tail2->other = this->tail1;
+	this->micelle = NULL;
+}
+
+// Chain length should be calculated once and passed as a parameter...
+
+// Constructs a chain with a random position within a box
+// This function needs to be tested!
+// DEBUG
+PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
+                          unsigned int* idTracker, unsigned short id ) {
+  this->id = id + 1;
+  this->pec_length = pec_length;
+  this->tail_length = tail_length;
+  this->chain_length = chain_length;
+  
+  DirVect* d = new DirVect( bond_length ); // assigns random direction for chain
+  PosVect* first = new PosVect( box_length ); // assigns random position for first bead
+  this->tail1 = new HydrophobicTail( this, tail_length, d, box_length, first, idTracker ); // makes tail1 from
+  // first position and random direction
+  
+  // determines first position of pec block using random direction and 
+  // last position of tail block
+  first = new PosVect( this->tail1->beadList[ tail_length - 1 ].r, d );
+  this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length, d, box_length,
+                                      first, idTracker );
+  
+
+  // determines first position of tail2 using random direction and
+  // last position of pec block
+  first = new PosVect( this->pec_block->beadList[ pec_length - 1 ].r, d );
+  this->tail2 = new HydrophobicTail( this, tail_length, d, box_length,
+                                     first, idTracker );
+  delete d;
+
+  this->tail1->other = this->tail2;
+  this->tail2->other = this->tail1;
+  this->micelle = NULL;
+}
+
+void PECTriblock::printChain( FILE* stream ) {
+  this->tail1->printBlock( stream );
+	this->pec_block->printBlock( stream );
+	this->tail2->printBlock( stream );
+}
+
+void PECTriblock::calcLength() {
+	this->chain_length = this->pec_block->length + 2 * this->tail1->length;
+}
+
+//Deconstructor... clean up
+PECTriblock::~PECTriblock() {}
+
+// has been redone, needs to be tested...
+void PECTriblock::determineConfiguration() {
+  Bin* bin1 = this->tail1->bin;
+  Bin* bin2 = this->tail2->bin;
+  if (bin1 && bin2) {
+    if ( bin1->core == bin2->core && bin1->core )
+      this->config = petal;
+    else if ( bin1->core || bin2->core )
+      this->config = stem;
+    else
+      this->config = neither;
+  } else
+  	this->config = neither;
+}
+
+#if defined( TESTING )
+#include <iostream>
+#include <ctime>
+
+int main() {
+	std::ifstream infile( "bead_test.txt" );
+	idx box_length = 36;
+	PECTriblock* chain = new PECTriblock( 50, 4, &infile, &box_length );
+	chain->printChain( stdout );
+	std::cout << (short) chain->chain_length << std::endl;
+	
+  // test determineConfiguration
+  chain->determineConfiguration();
+	if ( chain->config != neither )
+		std::cout << "Fail" << std::endl;
+
+  delete chain;
+
+  // Test random chain maker instead  
+  srand(2);
+  float* bond_length = new float( .1 );
+  unsigned int id = 0;
+  chain = new PECTriblock( &box_length, bond_length, 30, 5, 40, &id, 1 );
+  chain->printChain( stdout );
+
+  /*DirVect* dir = new DirVect( bond_length );
+  std::cout << "dx: " << dir->dx << std::endl;
+  std::cout << "dy: " << dir->dy << std::endl;
+  std::cout << "dz: " << dir->dz << std::endl;
+  PosVect* r = new PosVect( &box_length );
+  std::cout << "x: " << r->x << std::endl;
+  std::cout << "y: " << r->y << std::endl;
+  std::cout << "z: " << r->z << std::endl;*/
+
+	return 0;
+}
+
+#endif

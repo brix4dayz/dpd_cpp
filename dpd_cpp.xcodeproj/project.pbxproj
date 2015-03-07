@@ -1,0 +1,294 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BC0A32B91A55FE6700586A7C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC0A32B81A55FE6700586A7C /* main.cpp */; };
+		BC465D6D1A55FED100D1A078 /* bead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D5F1A55FED100D1A078 /* bead.cpp */; };
+		BC465D6E1A55FED100D1A078 /* bin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D611A55FED100D1A078 /* bin.cpp */; };
+		BC465D6F1A55FED100D1A078 /* dpdFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D641A55FED100D1A078 /* dpdFrame.cpp */; };
+		BC465D701A55FED100D1A078 /* hydrophobicCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D661A55FED100D1A078 /* hydrophobicCore.cpp */; };
+		BC465D711A55FED100D1A078 /* micelle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D681A55FED100D1A078 /* micelle.cpp */; };
+		BC465D721A55FED100D1A078 /* pecTriblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D6A1A55FED100D1A078 /* pecTriblock.cpp */; };
+		BC465D731A55FED100D1A078 /* polymerBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D6B1A55FED100D1A078 /* polymerBlock.cpp */; };
+		BC942C8D1AAAB6DD00E3C78E /* dpdData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC942C8C1AAAB6DD00E3C78E /* dpdData.cpp */; };
+		BCFAF9BB1A89650B00BAB7F4 /* vect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCFAF9BA1A89650B00BAB7F4 /* vect.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BC0A32B31A55FE6600586A7C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BC0A32B51A55FE6600586A7C /* dpd_cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dpd_cpp; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC0A32B81A55FE6700586A7C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		BC465D5F1A55FED100D1A078 /* bead.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bead.cpp; sourceTree = "<group>"; };
+		BC465D601A55FED100D1A078 /* bead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bead.h; sourceTree = "<group>"; };
+		BC465D611A55FED100D1A078 /* bin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bin.cpp; sourceTree = "<group>"; };
+		BC465D621A55FED100D1A078 /* bin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bin.h; sourceTree = "<group>"; };
+		BC465D631A55FED100D1A078 /* copolymerChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = copolymerChain.h; sourceTree = "<group>"; };
+		BC465D641A55FED100D1A078 /* dpdFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dpdFrame.cpp; sourceTree = "<group>"; };
+		BC465D651A55FED100D1A078 /* dpdFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpdFrame.h; sourceTree = "<group>"; };
+		BC465D661A55FED100D1A078 /* hydrophobicCore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hydrophobicCore.cpp; sourceTree = "<group>"; };
+		BC465D671A55FED100D1A078 /* hydrophobicCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hydrophobicCore.h; sourceTree = "<group>"; };
+		BC465D681A55FED100D1A078 /* micelle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = micelle.cpp; sourceTree = "<group>"; tabWidth = 2; };
+		BC465D691A55FED100D1A078 /* micelle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = micelle.h; sourceTree = "<group>"; };
+		BC465D6A1A55FED100D1A078 /* pecTriblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = pecTriblock.cpp; sourceTree = "<group>"; tabWidth = 2; };
+		BC465D6B1A55FED100D1A078 /* polymerBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = polymerBlock.cpp; sourceTree = "<group>"; };
+		BC465D6C1A55FED100D1A078 /* polymerBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = polymerBlock.h; sourceTree = "<group>"; };
+		BC942C8C1AAAB6DD00E3C78E /* dpdData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dpdData.cpp; sourceTree = "<group>"; };
+		BC942C8E1AAAB6E600E3C78E /* dpdData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpdData.h; sourceTree = "<group>"; };
+		BCFAF9B91A8964FB00BAB7F4 /* vect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vect.h; sourceTree = "<group>"; };
+		BCFAF9BA1A89650B00BAB7F4 /* vect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vect.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BC0A32B21A55FE6600586A7C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BC0A32AC1A55FE6600586A7C = {
+			isa = PBXGroup;
+			children = (
+				BC0A32B71A55FE6600586A7C /* dpd_cpp */,
+				BC0A32B61A55FE6600586A7C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BC0A32B61A55FE6600586A7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BC0A32B51A55FE6600586A7C /* dpd_cpp */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BC0A32B71A55FE6600586A7C /* dpd_cpp */ = {
+			isa = PBXGroup;
+			children = (
+				BC942C8E1AAAB6E600E3C78E /* dpdData.h */,
+				BC942C8C1AAAB6DD00E3C78E /* dpdData.cpp */,
+				BCFAF9BA1A89650B00BAB7F4 /* vect.cpp */,
+				BCFAF9B91A8964FB00BAB7F4 /* vect.h */,
+				BC465D5F1A55FED100D1A078 /* bead.cpp */,
+				BC465D601A55FED100D1A078 /* bead.h */,
+				BC465D611A55FED100D1A078 /* bin.cpp */,
+				BC465D621A55FED100D1A078 /* bin.h */,
+				BC465D631A55FED100D1A078 /* copolymerChain.h */,
+				BC465D641A55FED100D1A078 /* dpdFrame.cpp */,
+				BC465D651A55FED100D1A078 /* dpdFrame.h */,
+				BC465D661A55FED100D1A078 /* hydrophobicCore.cpp */,
+				BC465D671A55FED100D1A078 /* hydrophobicCore.h */,
+				BC465D681A55FED100D1A078 /* micelle.cpp */,
+				BC465D691A55FED100D1A078 /* micelle.h */,
+				BC465D6A1A55FED100D1A078 /* pecTriblock.cpp */,
+				BC465D6B1A55FED100D1A078 /* polymerBlock.cpp */,
+				BC465D6C1A55FED100D1A078 /* polymerBlock.h */,
+				BC0A32B81A55FE6700586A7C /* main.cpp */,
+			);
+			path = dpd_cpp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BC0A32B41A55FE6600586A7C /* dpd_cpp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BC0A32BC1A55FE6700586A7C /* Build configuration list for PBXNativeTarget "dpd_cpp" */;
+			buildPhases = (
+				BC0A32B11A55FE6600586A7C /* Sources */,
+				BC0A32B21A55FE6600586A7C /* Frameworks */,
+				BC0A32B31A55FE6600586A7C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dpd_cpp;
+			productName = dpd_cpp;
+			productReference = BC0A32B51A55FE6600586A7C /* dpd_cpp */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BC0A32AD1A55FE6600586A7C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "W Hayden Fuss";
+				TargetAttributes = {
+					BC0A32B41A55FE6600586A7C = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = BC0A32B01A55FE6600586A7C /* Build configuration list for PBXProject "dpd_cpp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BC0A32AC1A55FE6600586A7C;
+			productRefGroup = BC0A32B61A55FE6600586A7C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BC0A32B41A55FE6600586A7C /* dpd_cpp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BC0A32B11A55FE6600586A7C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC942C8D1AAAB6DD00E3C78E /* dpdData.cpp in Sources */,
+				BC465D721A55FED100D1A078 /* pecTriblock.cpp in Sources */,
+				BC465D6F1A55FED100D1A078 /* dpdFrame.cpp in Sources */,
+				BCFAF9BB1A89650B00BAB7F4 /* vect.cpp in Sources */,
+				BC465D6E1A55FED100D1A078 /* bin.cpp in Sources */,
+				BC0A32B91A55FE6700586A7C /* main.cpp in Sources */,
+				BC465D731A55FED100D1A078 /* polymerBlock.cpp in Sources */,
+				BC465D711A55FED100D1A078 /* micelle.cpp in Sources */,
+				BC465D6D1A55FED100D1A078 /* bead.cpp in Sources */,
+				BC465D701A55FED100D1A078 /* hydrophobicCore.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BC0A32BA1A55FE6700586A7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BC0A32BB1A55FE6700586A7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BC0A32BD1A55FE6700586A7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BC0A32BE1A55FE6700586A7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BC0A32B01A55FE6600586A7C /* Build configuration list for PBXProject "dpd_cpp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC0A32BA1A55FE6700586A7C /* Debug */,
+				BC0A32BB1A55FE6700586A7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BC0A32BC1A55FE6700586A7C /* Build configuration list for PBXNativeTarget "dpd_cpp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC0A32BD1A55FE6700586A7C /* Debug */,
+				BC0A32BE1A55FE6700586A7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BC0A32AD1A55FE6600586A7C /* Project object */;
+}
