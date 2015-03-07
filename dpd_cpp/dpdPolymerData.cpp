@@ -1,8 +1,8 @@
 #include "dpdPolymerData.h"
 #include <cstdlib>
 
-#define BOND1 1
-#define BOND2 2
+#define PHOBE_PHOBE 1
+#define PHIL_PHIL 2
 
 DPDPolymerData::DPDPolymerData() {}
 
@@ -72,31 +72,27 @@ void TriblockData::generate() {
 }
 
 void TriblockData::deriveBondList() {
-  Bond* b = NULL;
   PECTriblock* chain = NULL;
 
   for ( unsigned short i = 0; i  < this->num_chains; i++ ) {
     chain = this->chainList + i;
   
     for( idx i = 0; i < chain->tail_length - 1; i++ ) {
-      b = new Bond( BOND1, this->bondCursor + 1, chain->tail1->beadList + i,
+      this->makeNewBond( PHOBE_PHOBE, chain->tail1->beadList + i,
                     chain->tail1->beadList + i + 1 );
-      this->addBond( b );
     }
   
-    b = new Bond( BOND2, this->bondCursor + 1, chain->tail1->beadList + chain->tail_length - 1,
+    this->makeNewBond( PHIL_PHIL, chain->tail1->beadList + chain->tail_length - 1,
                 chain->pec_block->beadList );
-    this->addBond( b );
     for( idx i = 0; i < chain->pec_length - 1; i++ ) {
-      b = new Bond( BOND2, this->bondCursor + 1, chain->pec_block->beadList + i,
+      this->makeNewBond( PHIL_PHIL, chain->pec_block->beadList + i,
                     chain->pec_block->beadList + i + 1 );
-      this->addBond( b );
     }
 
-    this->makeNewBond( BOND2, chain->pec_block->beadList + chain->pec_length - 1,
+    this->makeNewBond( PHIL_PHIL, chain->pec_block->beadList + chain->pec_length - 1,
                 chain->tail2->beadList );
     for( idx i = 0; i < chain->tail_length - 1; i++ ) {
-      this->makeNewBond( BOND1, chain->tail2->beadList + i,
+      this->makeNewBond( PHOBE_PHOBE, chain->tail2->beadList + i,
                     chain->tail2->beadList + i + 1 );
     }
   }
