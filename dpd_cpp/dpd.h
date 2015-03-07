@@ -1,3 +1,8 @@
+// Library for building and processing DPD simulations.
+// Copyirght (c) 2015
+// author: Hayden Fuss
+// Yinglab labs
+
 
 // a single byte to store integer values between 0 - 255
 // when printing must cast to short in order to see integer value
