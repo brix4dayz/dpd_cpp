@@ -1,15 +1,19 @@
 #include "dpdPolymerData.h"
 #include <cstdlib>
+#include <cmath>
 
 // Consider putting a few of the functions and data in polymerData in dpdData.
 
 #define PHOBE_PHOBE 1
 #define PHIL_PHIL 2
 
+#define FLUID_ID_TRIBLOCK 3
+
 DPDPolymerData::DPDPolymerData() {}
 
 DPDPolymerData::DPDPolymerData( std::string filename, idx density, 
-                                idx box_length, float bond_length ) {
+                                idx box_length, float bond_length, idx Fluid_type ) {
+  this->Fluid_type = Fluid_type;
   this->filename = filename;
   this->density = density;
   this->box_length = box_length;
@@ -18,8 +22,8 @@ DPDPolymerData::DPDPolymerData( std::string filename, idx density,
 }
 
 DPDPolymerData::DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length,
-                                idx chain_length, unsigned short num_chains ):
-                                DPDPolymerData( filename, density, box_length, bond_length ) {
+                                idx chain_length, unsigned short num_chains, idx Fluid_type ):
+                                DPDPolymerData( filename, density, box_length, bond_length, Fluid_type ) {
   this->chain_length = chain_length;
   this->num_chains = num_chains;
   this->calcNumFluid();
@@ -44,7 +48,8 @@ TriblockData::TriblockData(): DPDPolymerData() {}
 
 TriblockData::TriblockData( std::string filename, idx box_length, float bond_length,
                             float polymer_volume_fraction, idx pec_length, idx tail_length ):
-                            DPDPolymerData( filename, FLUID_DENSITY, box_length, bond_length ) {
+                            DPDPolymerData( filename, FLUID_DENSITY, box_length, 
+                            bond_length, FLUID_ID_TRIBLOCK ) {
   this->pec_length = pec_length;
   this->tail_length = tail_length;
   this->calcChainLength();
@@ -70,8 +75,14 @@ void TriblockData::calcNumChains( float* polymer_volume_fraction ) {
 
 void TriblockData::generate() {
   this->deriveChainList();
+  this->deriveFluidList();
+  //if ( this->num_atoms != this->idTracker ) {
+    //fprintf( stdout, "Not all atoms made...\n" );
+    //exit( 1 );
+  //}
+  //printf( "%d %d\n", this->num_atoms, this->idTracker );
   this->deriveBondList();
-  this->print();
+  this->printLAMMPS();
 }
 
 void TriblockData::deriveBondList() {
@@ -100,6 +111,9 @@ void TriblockData::deriveBondList() {
     }
   }
   
+  if ( this->num_bonds != this->bondCursor )
+    printf("problem3");
+
 }
 
 void DPDPolymerData::makeNewBond( idx type, Bead* bead1, Bead* bead2 ) {
@@ -112,11 +126,18 @@ void DPDPolymerData::makeNewBond( idx type, Bead* bead1, Bead* bead2 ) {
 void TriblockData::deriveChainList() {
   PECTriblock* chain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    unsigned int oldID = this->idTracker;
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
                                 this->pec_length, this->tail_length, this->chain_length,
                                 &( this->idTracker ), this->chainCursor );
+    if ( this->idTracker - oldID != this->chain_length || 
+         this->idTracker - oldID != chain->chain_length )
+      printf("%d problem", (int) chain->chain_length );
     this->addChain( chain );
   }
+  this->molIDTracker = this->num_chains;
+  if ( this->chainCursor != this->molIDTracker )
+    printf("%d problem2\n", this->chainCursor); 
 }
 
 void TriblockData::addChain( PECTriblock* chain ) {
@@ -137,7 +158,73 @@ void DPDPolymerData::addBond( Bond* bond ) {
   this->bondCursor++;
 }
 
-void TriblockData::print() {}
+bool DPDPolymerData::addFluid( Bead* bead ) { 
+  if ( this->FluidCursor >= this->num_Fluid )
+    return false;
+  this->FluidList[ this->FluidCursor ] = *bead;
+  this->FluidCursor++;
+  return true;
+}
+
+void DPDPolymerData::deriveFluidList() {
+  idx fluid = pow( this->num_Fluid, ( 1.0 / 3.0 ) ) + 1;
+  PosVect* r = NULL;
+  Bead* b = NULL;
+
+  int oldID = this->idTracker;
+
+  for ( idx i = 0; i < fluid; i++ ) {
+    for ( idx j = 0; j < fluid; j++ ) {
+      for ( idx k = 0; k < fluid; k++ ) {
+        r = new PosVect( ( ( double ) i/fluid )*box_length, 
+                         ( ( double ) j/fluid )*box_length,
+                         ( ( double ) k/fluid )*box_length );
+        b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
+        this->molIDTracker++;
+        if ( !this->addFluid( b ) ) {
+          k = fluid;
+          j = fluid;
+          i = fluid;
+        } 
+      }
+    }
+  }
+
+  if ( this->idTracker - oldID != this->num_Fluid + 1 )
+    printf("%d fluid issue", this->idTracker - oldID );
+
+}
+
+void TriblockData::printLAMMPS() {
+  FILE* fp = fopen( this->filename.c_str(), "w" );
+
+  fprintf( fp, "LAMMPS Description\n\n");
+  fprintf( fp, "%d atoms\n%d bonds\n\n", this->num_atoms, this->num_bonds );
+  fprintf( fp, "%d atom types\n2 bond types\n\n", this->Fluid_type );
+
+  fprintf( fp, "%e %e xlo xhi\n", 0.0, ( (double) this->box_length ) );
+  fprintf( fp, "%e %e ylo yhi\n", 0.0, ( (double) this->box_length ) );
+  fprintf( fp, "%e %e zlo zhi\n", 0.0, ( (double) this->box_length ) );
+  fprintf( fp, "\nAtoms\n\n");
+
+  for ( int i = 0; i < this->num_chains; i++ ) {
+    this->chainList[ i ].printData( fp );
+  }
+
+  for ( int i = 0; i < this->num_Fluid; i++ ) {
+    this->FluidList[ i ].printData( fp );
+  }
+
+  fprintf( fp, "\nBonds\n\n" );
+
+  for ( int i = 0; i < this->num_bonds; i++ ) {
+    this->bondList[ i ].printBond( fp );
+  }
+
+
+
+  fclose( fp );
+}
 
 // Should properly delete everything
 TriblockData::~TriblockData() {}
@@ -159,12 +246,21 @@ int main() {
   delete data;
 
   srand(2);
-  data = new TriblockData( "again", 3, .1f, .1f, 3, 2 );
-
+  data = new TriblockData( "newdataTest.dat", 3, .1f, .1f, 3, 2 );
+  cout << (int) data->chain_length << endl;
+  cout << data->num_atoms << endl;
+  cout << data->num_chains << endl;
+  cout << data->num_Fluid << endl;
   data->generate();
+  int diff = (data->idTracker - data->num_Fluid);
+  cout << diff << endl;
 
   for ( int i = 0; i < data->num_chains; i++ ) {
     data->chainList[ i ].printChain( stdout );
+  }
+
+  for ( int i = 0; i < data->num_Fluid; i++ ) {
+    data->FluidList[ i ].printBead( stdout );
   }
   
   for ( int i = 0; i < data->num_bonds; i++ ) {

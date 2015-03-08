@@ -46,25 +46,25 @@ PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, i
   this->id = id + 1;
   this->pec_length = pec_length;
   this->tail_length = tail_length;
-  this->chain_length = chain_length;
+  this->chain_length = length;
   
   DirVect* d = new DirVect( bond_length ); // assigns random direction for chain
   PosVect* first = new PosVect( box_length ); // assigns random position for first bead
-  this->tail1 = new HydrophobicTail( this, tail_length, d, box_length, first, idTracker ); // makes tail1 from
+  this->tail1 = new HydrophobicTail( this, tail_length, d, box_length, first, idTracker, this->id ); // makes tail1 from
   // first position and random direction
   
   // determines first position of pec block using random direction and 
   // last position of tail block
   first = new PosVect( this->tail1->beadList[ tail_length - 1 ].r, d );
   this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length, d, box_length,
-                                      first, idTracker );
+                                      first, idTracker, this->id );
   
 
   // determines first position of tail2 using random direction and
   // last position of pec block
   first = new PosVect( this->pec_block->beadList[ pec_length - 1 ].r, d );
   this->tail2 = new HydrophobicTail( this, tail_length, d, box_length,
-                                     first, idTracker );
+                                     first, idTracker, this->id );
   delete d;
 
   this->tail1->other = this->tail2;
@@ -76,6 +76,12 @@ void PECTriblock::printChain( FILE* stream ) {
   this->tail1->printBlock( stream );
 	this->pec_block->printBlock( stream );
 	this->tail2->printBlock( stream );
+}
+
+void PECTriblock::printData( FILE* stream ) {
+  this->tail1->printData( stream );
+  this->pec_block->printData( stream );
+  this->tail2->printData( stream ); 
 }
 
 void PECTriblock::calcLength() {

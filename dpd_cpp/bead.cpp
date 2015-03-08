@@ -21,7 +21,7 @@ void Bead::pbcCorrectDistanceCompInChain( double* d, double* coord,
 }
 
 double Bead::getPbcCorrectedDistance( Bead* other, idx* box_length, 
- float* micelle_cutoff ) {
+                                      float* micelle_cutoff ) {
   return this->r->getCorrectedDist( other->r, box_length, micelle_cutoff );
 }
 
@@ -36,6 +36,11 @@ void Bead::pbcCorrectBeadInChain( Bead* base, idx* box_length ) {
 void Bead::printBead( FILE *stream ) {
 	fprintf( stream, "%d ", this->type );
   this->r->print( stream );
+}
+
+void Bead::printData( FILE* stream ) {
+  fprintf( stream, "%d %d %e %e %e %d\n", this->id, this->type, this->r->x,
+           this->r->y, this->r->z, this->mol_id );
 }
 
 Bead::Bead() {
@@ -56,9 +61,11 @@ Bead::Bead( PosVect* r, idx type ) {
   this->type = type;
 }
 
-Bead::Bead( PosVect* r, idx type, unsigned int* id ) : Bead( r, type ) {
+Bead::Bead( PosVect* r, idx type, unsigned int* id,
+            unsigned int mol_id ) : Bead( r, type ) {
   this->id = *id;
   *id += 1;
+  this->mol_id = mol_id;
 }
 
 Bead::Bead( double x, double y, double z, idx type ): Bead( new PosVect( x, y, z ), type ) {}
@@ -147,7 +154,7 @@ Bond::~Bond() {
 }
 
 void Bond::printBond( FILE* fp ) {
-	fprintf(fp, "%d %d %d %d\n", this->type, this->id, this->bead1->id, this->bead2->id );
+	fprintf(fp, "%d %d %d %d\n", this->id, this->type, this->bead1->id, this->bead2->id );
 }
 
 
@@ -165,7 +172,7 @@ int main() {
 
 	Bead *b1 = new Bead(0, 3, 4, 1);
 	Bead *b2 = new Bead(0, 3, -4, 1);
-	Bead *com = new Bead(0, 0, 0, 1);
+	Bead *com = new Bead(0.0, 0.0, 0.0, 1);
 
 	//Test Distance Modulus
 	printf("%10.5f %10.5f\n", b1->getDistanceModulus( com ), 

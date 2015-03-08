@@ -17,20 +17,25 @@ class DPDPolymerData : public DPDData {
     Bond* bondList;
     unsigned int bondCursor;
     unsigned int idTracker;
+    unsigned int molIDTracker;
+    idx Fluid_type;
     DPDPolymerData();
-    DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length );
+    DPDPolymerData( std::string filename, idx density, 
+                    idx box_length, float bond_length, idx Fluid_type );
     DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length,
-                    idx chain_length, unsigned short num_chains );
+                    idx chain_length, unsigned short num_chains, idx Fluid_type );
     virtual ~DPDPolymerData() {}
     void calcNumFluid();
     void calcNumBonds();
     void calcNumAtoms();
     void addBond( Bond* bond );
     void makeNewBond( idx type, Bead* bead1, Bead* bead2 );
+    bool addFluid( Bead* fluid );
+    void deriveFluidList();
     virtual void deriveBondList() {}
     virtual void deriveChainList() {}
     virtual void generate() {}
-    virtual void print() {} // does this need to be virtual?
+    virtual void printLAMMPS() {} // does this need to be virtual?
 };
 
 class TriblockData : public DPDPolymerData {
@@ -47,7 +52,7 @@ class TriblockData : public DPDPolymerData {
     void deriveBondList();
     void deriveChainList();
     void generate();
-    void print();
+    void printLAMMPS();
     void addChain( PECTriblock* chain );
 };
 

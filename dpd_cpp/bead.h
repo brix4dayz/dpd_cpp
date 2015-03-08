@@ -44,7 +44,7 @@ class Bead : public ObjDPD {
 		std::string type_name;
 		//Constructor/Destructor
 		Bead( PosVect* r, idx type );
-    Bead( PosVect* r, idx type, unsigned int* id);
+    Bead( PosVect* r, idx type, unsigned int* id, unsigned int mol_id);
     Bead( double x, double y, double z, idx type );
 		Bead( double x, double y, double z, idx type, 
 			    std::string name );
@@ -57,6 +57,7 @@ class Bead : public ObjDPD {
 		double getPbcCorrectedDistance( Bead* other, idx* box_length, 
 			                              float* micelle_cutoff );
 		void printBead( FILE* stream );
+		void printData( FILE* stream );
 		void reset();
     void addBeadCoords( Bead* other );
     void divideCoords( int* value );

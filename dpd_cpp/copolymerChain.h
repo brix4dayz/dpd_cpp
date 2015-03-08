@@ -8,6 +8,7 @@ class CopolymerChain {
 		Micelle* micelle;
     unsigned short id;
     virtual void printChain( FILE* stream ) {}
+    virtual void printData( FILE* stream ) {}
 		// Calclength is not needed
 		virtual void calcLength () {}
 		virtual ~CopolymerChain() {}
@@ -31,7 +32,8 @@ class PECTriblock : public CopolymerChain {
 		PECTriblock( idx tail_length, idx pec_length );
 		PECTriblock( idx tail_length, idx pec_length, std::ifstream* inFile, idx* box_length );
 		~PECTriblock();
-		void printChain( FILE *stream );
+		void printChain( FILE* stream );
+		void printData( FILE* stream );
 		void calcLength();
 		void determineConfiguration(); // THIS IS WRONG
 };

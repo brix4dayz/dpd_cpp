@@ -23,14 +23,15 @@ PolymerBlock::PolymerBlock( CopolymerChain*chain, idx type, idx length,
 
 PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, 
 	                          idx length, DirVect* d, 
-	                          idx* box_length, PosVect* r, unsigned int* idTracker ) :
+	                          idx* box_length, PosVect* r, unsigned int* idTracker,
+	                          unsigned int mol_id ) :
                             PolymerBlock( chain, type, length ) {
-  Bead* b = new Bead( r, type, idTracker );
+  Bead* b = new Bead( r, type, idTracker, mol_id );
 	this->addBead( b );
 
 	for (idx i = 1; i < length; i++ ) {
 		PosVect* rr = new PosVect( this->beadList[ i - 1 ].r, d );
-		b = new Bead( rr, type, idTracker);
+		b = new Bead( rr, type, idTracker, mol_id );
 		this->addBead( b );
 	}
 
@@ -77,6 +78,12 @@ void PolymerBlock::printBlock( FILE *stream ) {
 	}
 }
 
+void PolymerBlock::printData( FILE* stream ) {
+		for (idx i = 0; i < this->length; i++ ) {
+		this->beadList[ i ].printData( stream );
+	}
+}
+
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length ) : 
 																	PolymerBlock( chain, HYDROPHOBIC, length ) {
 	this->bin = NULL;
@@ -91,9 +98,11 @@ HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length,
 
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length, 
 	                                DirVect* d, idx* box_length, 
-	                                PosVect* r, unsigned int* idTracker ) : PolymerBlock( chain,
+	                                PosVect* r, unsigned int* idTracker,
+	                                unsigned int mol_id ) :
+	                                PolymerBlock( chain,
 	                                HYDROPHOBIC, length, d, 
-	                                box_length, r, idTracker ) {
+	                                box_length, r, idTracker, mol_id ) {
 	this->bin = NULL;
 }
 
@@ -114,7 +123,7 @@ int main() {
 	Bead b4(-3, -3, -3, 1);
 	Bead b5(5, -1, 2, 1);
 
-	Bead b6(0, 0, 0, 2);
+	Bead b6(0.0, 0.0, 0.0, 2);
 
 	idx test_box_length = 15;
 
