@@ -17,3 +17,5 @@ __Current__ __Objectives__:
 * Add collision detection to builders using bins.
 * Organize library and executables into application.
 * Develop Python GUI to handle inputs and call executables to generate and process simulations.
+* Finish unlink and deconstructors for objects to prevent memory leaks.
+* Consider using references in some places instead of pointers.
