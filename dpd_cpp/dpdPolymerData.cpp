@@ -82,7 +82,8 @@ void TriblockData::generate() {
   //}
   //printf( "%d %d\n", this->num_atoms, this->idTracker );
   this->deriveBondList();
-  this->printLAMMPS();
+  FILE* fp = fopen( this->filename.c_str(), "w" );
+  this->printLAMMPS( fp );
 }
 
 void TriblockData::deriveBondList() {
@@ -192,7 +193,7 @@ void DPDPolymerData::deriveFluidList() {
   }
 
   // if that didn't make all the fluid beads, put a bead at every half position within box
-  if ( this->idTracker - oldID != this->num_Fluid + 1 ) {
+  if ( this->idTracker - oldID - 1 != this->num_Fluid ) {
      for ( idx i = 0; i <= box_length; i++ ) {
       for ( idx j = 0; j <= box_length; j++ ) {
         for ( idx k = 0; k <= box_length; k++ ) {
@@ -202,6 +203,7 @@ void DPDPolymerData::deriveFluidList() {
           b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
           this->molIDTracker++;
           if ( !this->addFluid( b ) ) {
+            delete b;
             k = box_length + 1;
             j = box_length + 1;
             i = box_length + 1;
@@ -213,8 +215,7 @@ void DPDPolymerData::deriveFluidList() {
 
 }
 
-void TriblockData::printLAMMPS() {
-  FILE* fp = fopen( this->filename.c_str(), "w" );
+void TriblockData::printLAMMPS( FILE* fp ) {
 
   fprintf( fp, "LAMMPS Description\n\n");
   fprintf( fp, "%d atoms\n%d bonds\n\n", this->num_atoms, this->num_bonds );
@@ -238,8 +239,6 @@ void TriblockData::printLAMMPS() {
   for ( int i = 0; i < this->num_bonds; i++ ) {
     this->bondList[ i ].printBond( fp );
   }
-
-
 
   fclose( fp );
 }
@@ -273,17 +272,7 @@ int main() {
   int diff = (data->idTracker - data->num_Fluid);
   cout << diff << endl;
 
-  for ( int i = 0; i < data->num_chains; i++ ) {
-    data->chainList[ i ].printChain( stdout );
-  }
-
-  for ( int i = 0; i < data->num_Fluid; i++ ) {
-    data->FluidList[ i ].printBead( stdout );
-  }
-  
-  for ( int i = 0; i < data->num_bonds; i++ ) {
-    data->bondList[ i ].printBond( stdout );
-  }
+  data->printLAMMPS( stdout );
 
   return 0;
 }

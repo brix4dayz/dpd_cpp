@@ -35,7 +35,7 @@ class DPDPolymerData : public DPDData {
     virtual void deriveBondList() {}
     virtual void deriveChainList() {}
     virtual void generate() {}
-    virtual void printLAMMPS() {} // does this need to be virtual?
+    virtual void printLAMMPS( FILE* fp ) {} // does this need to be virtual?
 };
 
 class TriblockData : public DPDPolymerData {
@@ -52,7 +52,7 @@ class TriblockData : public DPDPolymerData {
     void deriveBondList();
     void deriveChainList();
     void generate();
-    void printLAMMPS();
+    void printLAMMPS( FILE* fp );
     void addChain( PECTriblock* chain );
 };
 
