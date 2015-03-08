@@ -20,7 +20,7 @@ class DPDPolymerData : public DPDData {
     DPDPolymerData();
     DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length );
     DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length,
-             idx chain_length, unsigned short num_chains );
+                    idx chain_length, unsigned short num_chains );
     virtual ~DPDPolymerData() {}
     void calcNumFluid();
     void calcNumBonds();

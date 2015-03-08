@@ -1,6 +1,7 @@
 #include "copolymerMicelleFrame.h"
 
-CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length, idx chain_length, idx bin_size ) {
+CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length, 
+	                                            idx chain_length, idx bin_size ) {
 	this->num_atoms = num_atoms;
 	this->box_length = box_length;
 	this->chain_length = chain_length;
@@ -53,15 +54,18 @@ idx CopolymerMicelleFrame::coordToBin( double coord ) {
 
 // Triblock
 
-TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, idx bin_size, 
- idx tail_length, idx pec_length ): CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size ) {
+TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
+	                            idx bin_size, idx tail_length, idx pec_length ): 
+															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size ) {
   this->tail_length = tail_length;
   this->pec_length = pec_length;
 }
 
-TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, idx bin_size, 
- idx tail_length, idx pec_length, std::ifstream* inFile ): TriblockFrame( num_atoms, box_length, chain_length, 
- bin_size, tail_length, pec_length) {
+TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
+															idx bin_size, idx tail_length, idx pec_length, 
+															std::ifstream* inFile ):
+														  TriblockFrame( num_atoms, box_length, chain_length, 
+                              bin_size, tail_length, pec_length) {
   
 }
 

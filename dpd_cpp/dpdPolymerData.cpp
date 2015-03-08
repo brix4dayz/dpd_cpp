@@ -8,7 +8,8 @@
 
 DPDPolymerData::DPDPolymerData() {}
 
-DPDPolymerData::DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length ) {
+DPDPolymerData::DPDPolymerData( std::string filename, idx density, 
+                                idx box_length, float bond_length ) {
   this->filename = filename;
   this->density = density;
   this->box_length = box_length;
@@ -17,8 +18,8 @@ DPDPolymerData::DPDPolymerData( std::string filename, idx density, idx box_lengt
 }
 
 DPDPolymerData::DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length,
-                  idx chain_length, unsigned short num_chains ):
-                  DPDPolymerData( filename, density, box_length, bond_length ) {
+                                idx chain_length, unsigned short num_chains ):
+                                DPDPolymerData( filename, density, box_length, bond_length ) {
   this->chain_length = chain_length;
   this->num_chains = num_chains;
   this->calcNumFluid();
@@ -112,8 +113,8 @@ void TriblockData::deriveChainList() {
   PECTriblock* chain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
-                               this->pec_length, this->tail_length, this->chain_length,
-                               &( this->idTracker ), this->chainCursor );
+                                this->pec_length, this->tail_length, this->chain_length,
+                                &( this->idTracker ), this->chainCursor );
     this->addChain( chain );
   }
 }
