@@ -150,5 +150,7 @@ testGenerateData:
 	g++ -Wall -std=c++11 -c bin.cpp
 	g++ -Wall -std=c++11 -DTESTING -o dataTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.cpp
 	mv newdata formerdata
+	mv newdataTest.dat formerdataTest.dat
 	./dataTest > newdata
 	diff formerdata newdata
+	diff newdataTest.dat formerdataTest.dat
