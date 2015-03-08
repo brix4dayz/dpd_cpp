@@ -172,6 +172,7 @@ void DPDPolymerData::deriveFluidList() {
 
   int oldID = this->idTracker;
 
+  // puts a fluid bead at every whole number position within box
   for ( idx i = 0; i <= box_length; i++ ) {
     for ( idx j = 0; j <= box_length; j++ ) {
       for ( idx k = 0; k <= box_length; k++ ) {
@@ -189,8 +190,7 @@ void DPDPolymerData::deriveFluidList() {
     }
   }
 
-
-
+  // if that didn't make all the fluid beads, put a bead at every half position within box
   if ( this->idTracker - oldID != this->num_Fluid + 1 ) {
      for ( idx i = 0; i <= box_length; i++ ) {
       for ( idx j = 0; j <= box_length; j++ ) {
