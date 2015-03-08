@@ -176,16 +176,17 @@ void DPDPolymerData::deriveFluidList() {
   for ( idx i = 0; i <= box_length; i++ ) {
     for ( idx j = 0; j <= box_length; j++ ) {
       for ( idx k = 0; k <= box_length; k++ ) {
-          r = new PosVect( ( ( double ) i ), 
-                         ( ( double ) j ),
-                         ( ( double ) k ) );
-          b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
-          this->molIDTracker++;
-          if ( !this->addFluid( b ) ) {
-            k = box_length + 1;
-            j = box_length + 1;
-            i = box_length + 1;
-          } 
+        r = new PosVect( ( ( double ) i ), 
+                       ( ( double ) j ),
+                       ( ( double ) k ) );
+        b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
+        this->molIDTracker++;
+        if ( !this->addFluid( b ) ) {
+          delete b; // extra bead made
+          k = box_length + 1;
+          j = box_length + 1;
+          i = box_length + 1;
+        } 
       }
     }
   }
