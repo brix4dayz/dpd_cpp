@@ -12,6 +12,8 @@ typedef unsigned char idx;
 
 #define FLUID_DENSITY 3
 
+double gauss();
+
 // Class prototypes
 
 class ObjDPD;

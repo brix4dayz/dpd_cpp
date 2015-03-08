@@ -10,12 +10,13 @@
 		BC0A32B91A55FE6700586A7C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC0A32B81A55FE6700586A7C /* main.cpp */; };
 		BC465D6D1A55FED100D1A078 /* bead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D5F1A55FED100D1A078 /* bead.cpp */; };
 		BC465D6E1A55FED100D1A078 /* bin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D611A55FED100D1A078 /* bin.cpp */; };
-		BC465D6F1A55FED100D1A078 /* dpdFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D641A55FED100D1A078 /* dpdFrame.cpp */; };
 		BC465D701A55FED100D1A078 /* hydrophobicCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D661A55FED100D1A078 /* hydrophobicCore.cpp */; };
 		BC465D711A55FED100D1A078 /* micelle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D681A55FED100D1A078 /* micelle.cpp */; };
 		BC465D721A55FED100D1A078 /* pecTriblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D6A1A55FED100D1A078 /* pecTriblock.cpp */; };
 		BC465D731A55FED100D1A078 /* polymerBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC465D6B1A55FED100D1A078 /* polymerBlock.cpp */; };
-		BC942C8D1AAAB6DD00E3C78E /* dpdData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC942C8C1AAAB6DD00E3C78E /* dpdData.cpp */; };
+		BCDC2EA01AACD014006B2182 /* copolymerMicelleFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCDC2E9F1AACD014006B2182 /* copolymerMicelleFrame.cpp */; };
+		BCDC2EA31AACD05C006B2182 /* dpdPolymerData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCDC2EA21AACD05C006B2182 /* dpdPolymerData.cpp */; };
+		BCDC2EA61AACD86B006B2182 /* triblockBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCDC2EA51AACD86B006B2182 /* triblockBuilder.cpp */; };
 		BCFAF9BB1A89650B00BAB7F4 /* vect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCFAF9BA1A89650B00BAB7F4 /* vect.cpp */; };
 /* End PBXBuildFile section */
 
@@ -39,8 +40,6 @@
 		BC465D611A55FED100D1A078 /* bin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bin.cpp; sourceTree = "<group>"; };
 		BC465D621A55FED100D1A078 /* bin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bin.h; sourceTree = "<group>"; };
 		BC465D631A55FED100D1A078 /* copolymerChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = copolymerChain.h; sourceTree = "<group>"; };
-		BC465D641A55FED100D1A078 /* dpdFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dpdFrame.cpp; sourceTree = "<group>"; };
-		BC465D651A55FED100D1A078 /* dpdFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpdFrame.h; sourceTree = "<group>"; };
 		BC465D661A55FED100D1A078 /* hydrophobicCore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hydrophobicCore.cpp; sourceTree = "<group>"; };
 		BC465D671A55FED100D1A078 /* hydrophobicCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hydrophobicCore.h; sourceTree = "<group>"; };
 		BC465D681A55FED100D1A078 /* micelle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = micelle.cpp; sourceTree = "<group>"; tabWidth = 2; };
@@ -48,8 +47,11 @@
 		BC465D6A1A55FED100D1A078 /* pecTriblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = pecTriblock.cpp; sourceTree = "<group>"; tabWidth = 2; };
 		BC465D6B1A55FED100D1A078 /* polymerBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = polymerBlock.cpp; sourceTree = "<group>"; };
 		BC465D6C1A55FED100D1A078 /* polymerBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = polymerBlock.h; sourceTree = "<group>"; };
-		BC942C8C1AAAB6DD00E3C78E /* dpdData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dpdData.cpp; sourceTree = "<group>"; };
-		BC942C8E1AAAB6E600E3C78E /* dpdData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpdData.h; sourceTree = "<group>"; };
+		BCDC2E9F1AACD014006B2182 /* copolymerMicelleFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = copolymerMicelleFrame.cpp; sourceTree = "<group>"; };
+		BCDC2EA11AACD032006B2182 /* copolymerMicelleFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = copolymerMicelleFrame.h; sourceTree = "<group>"; };
+		BCDC2EA21AACD05C006B2182 /* dpdPolymerData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dpdPolymerData.cpp; sourceTree = "<group>"; };
+		BCDC2EA41AACD069006B2182 /* dpdPolymerData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpdPolymerData.h; sourceTree = "<group>"; };
+		BCDC2EA51AACD86B006B2182 /* triblockBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = triblockBuilder.cpp; sourceTree = "<group>"; };
 		BCFAF9B91A8964FB00BAB7F4 /* vect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vect.h; sourceTree = "<group>"; };
 		BCFAF9BA1A89650B00BAB7F4 /* vect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vect.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,8 +86,11 @@
 		BC0A32B71A55FE6600586A7C /* dpd_cpp */ = {
 			isa = PBXGroup;
 			children = (
-				BC942C8E1AAAB6E600E3C78E /* dpdData.h */,
-				BC942C8C1AAAB6DD00E3C78E /* dpdData.cpp */,
+				BCDC2EA51AACD86B006B2182 /* triblockBuilder.cpp */,
+				BCDC2EA41AACD069006B2182 /* dpdPolymerData.h */,
+				BCDC2EA21AACD05C006B2182 /* dpdPolymerData.cpp */,
+				BCDC2EA11AACD032006B2182 /* copolymerMicelleFrame.h */,
+				BCDC2E9F1AACD014006B2182 /* copolymerMicelleFrame.cpp */,
 				BCFAF9BA1A89650B00BAB7F4 /* vect.cpp */,
 				BCFAF9B91A8964FB00BAB7F4 /* vect.h */,
 				BC465D5F1A55FED100D1A078 /* bead.cpp */,
@@ -93,8 +98,6 @@
 				BC465D611A55FED100D1A078 /* bin.cpp */,
 				BC465D621A55FED100D1A078 /* bin.h */,
 				BC465D631A55FED100D1A078 /* copolymerChain.h */,
-				BC465D641A55FED100D1A078 /* dpdFrame.cpp */,
-				BC465D651A55FED100D1A078 /* dpdFrame.h */,
 				BC465D661A55FED100D1A078 /* hydrophobicCore.cpp */,
 				BC465D671A55FED100D1A078 /* hydrophobicCore.h */,
 				BC465D681A55FED100D1A078 /* micelle.cpp */,
@@ -163,12 +166,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC942C8D1AAAB6DD00E3C78E /* dpdData.cpp in Sources */,
 				BC465D721A55FED100D1A078 /* pecTriblock.cpp in Sources */,
-				BC465D6F1A55FED100D1A078 /* dpdFrame.cpp in Sources */,
+				BCDC2EA01AACD014006B2182 /* copolymerMicelleFrame.cpp in Sources */,
 				BCFAF9BB1A89650B00BAB7F4 /* vect.cpp in Sources */,
 				BC465D6E1A55FED100D1A078 /* bin.cpp in Sources */,
 				BC0A32B91A55FE6700586A7C /* main.cpp in Sources */,
+				BCDC2EA31AACD05C006B2182 /* dpdPolymerData.cpp in Sources */,
+				BCDC2EA61AACD86B006B2182 /* triblockBuilder.cpp in Sources */,
 				BC465D731A55FED100D1A078 /* polymerBlock.cpp in Sources */,
 				BC465D711A55FED100D1A078 /* micelle.cpp in Sources */,
 				BC465D6D1A55FED100D1A078 /* bead.cpp in Sources */,

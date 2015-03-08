@@ -5,8 +5,11 @@
 // Constants
 #define PI 3.14159265
 
-// Constructors
+double gauss() {
+  return ( ( double ) rand() / RAND_MAX );
+}
 
+// Constructors
 PosVect::PosVect( double x, double y, double z ) {
   this->x = x;
   this->y = y;
@@ -24,9 +27,9 @@ PosVect::PosVect( PosVect* pos, DirVect* d ) {
 // Generates random point within a square box
 // Adapted from gendata2.m
 PosVect::PosVect( idx* box_length ) {
-  this->x = ( ( double ) rand() / RAND_MAX ) * ( *box_length - 2 ) + 1;
-  this->y = ( ( double ) rand() / RAND_MAX ) * ( *box_length - 2 ) + 1;
-  this->z = ( ( double ) rand() / RAND_MAX ) * ( *box_length - 2 ) + 1;
+  this->x = gauss() * ( *box_length - 2 ) + 1;
+  this->y = gauss() * ( *box_length - 2 ) + 1;
+  this->z = gauss() * ( *box_length - 2 ) + 1;
 }
 
 PosVect::~PosVect() {}
@@ -75,8 +78,8 @@ void PosVect::divideCoords( int* value ) {
 // Builds random direction with given length
 // Adapted from random_polymerchain.m
 DirVect::DirVect( float* bond_length ) {
-  float angle1 = ( ( ( float ) rand() ) / RAND_MAX ) * 2 * PI;
-  float angle2 = ( ( ( float ) rand() ) / RAND_MAX ) * 2 * PI;
+  float angle1 = gauss() * 2 * PI;
+  float angle2 = gauss() * 2 * PI;
   float height = std::cos( angle2 ) * *bond_length;
   this->dx = std::sin( angle1 ) * height;
   this->dy = std::cos( angle1 ) * height;

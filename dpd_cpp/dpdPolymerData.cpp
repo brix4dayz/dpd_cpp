@@ -246,6 +246,40 @@ void TriblockData::printLAMMPS( FILE* fp ) {
 // Should properly delete everything
 TriblockData::~TriblockData() {}
 
+ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, float bond_length,
+                                       float polymer_volume_fraction, idx pec_length, idx tail_length, float charge_density ):
+                                        TriblockData( filename, box_length, bond_length,
+                                        polymer_volume_fraction, pec_length, tail_length ) {
+  this->Fluid_type += 1;
+  this->charge_density = charge_density;
+}
+
+void ChargeTriblockData::deriveChainList() {
+  PECTriblock* chain = NULL;
+  float uncharged_density = 1.0f - this->charge_density;
+  idx num_uncharged = uncharged_density*this->pec_length + 1.0f;
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
+                            this->pec_length, this->tail_length, this->chain_length,
+                            &( this->idTracker ), this->chainCursor );
+    idx uncharged_counter = 0;
+    while ( uncharged_counter < num_uncharged ) {
+      for ( idx pec_counter = 0; pec_counter < this->pec_length; pec_counter++ ) {
+        if ( gauss() <= uncharged_density ) {
+          uncharged_counter++;
+          chain->pec_block->beadList[ pec_counter ].type = FLUID_ID_TRIBLOCK;
+          if ( uncharged_counter >= num_uncharged )
+            break;
+        }
+      }
+    }
+    this->addChain( chain );
+  }
+  this->molIDTracker = this->num_chains;
+  if ( this->chainCursor != this->molIDTracker )
+    printf("%d problem2\n", this->chainCursor);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #if defined(TESTING)
 #include <iostream>

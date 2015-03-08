@@ -35,7 +35,7 @@ class DPDPolymerData : public DPDData {
     virtual void deriveBondList() {}
     virtual void deriveChainList() {}
     virtual void generate() {}
-    virtual void printLAMMPS( FILE* fp ) {} // does this need to be virtual?
+    virtual void printLAMMPS( FILE* fp ) {}
 };
 
 class TriblockData : public DPDPolymerData {
@@ -59,5 +59,9 @@ class TriblockData : public DPDPolymerData {
 class ChargeTriblockData : public TriblockData {
     public:
         float charge_density;
+        void deriveChainList();
+        ChargeTriblockData( std::string filename, idx box_length, float bond_length,
+                     float polymer_volume_fraction, idx pec_length, idx tail_length,
+                     float charge_density );
 };
 
