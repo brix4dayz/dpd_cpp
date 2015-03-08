@@ -126,13 +126,13 @@ void DPDPolymerData::makeNewBond( idx type, Bead* bead1, Bead* bead2 ) {
 void TriblockData::deriveChainList() {
   PECTriblock* chain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
-    unsigned int oldID = this->idTracker;
+    //unsigned int oldID = this->idTracker;
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
                                 this->pec_length, this->tail_length, this->chain_length,
                                 &( this->idTracker ), this->chainCursor );
-    if ( this->idTracker - oldID != this->chain_length || 
-         this->idTracker - oldID != chain->chain_length )
-      printf("%d problem", (int) chain->chain_length );
+    //if ( this->idTracker - oldID != this->chain_length || 
+      //   this->idTracker - oldID != chain->chain_length )
+      //printf("%d problem", (int) chain->chain_length );
     this->addChain( chain );
   }
   this->molIDTracker = this->num_chains;
