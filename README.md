@@ -9,3 +9,11 @@ A library of C++ classes designed for building and processing DPD simulations, w
 There are generic classes such as PosVect (position vector), DirVect (direction vector), Bond, Bead (atom), Gyration, PolymerBlock, CopolymerChain, DPDFrame (trajectory processor), DPDData (builder).
 
 Also has specific implementations descending from these classes: HydrophobicTail, PECTriblock, HydrophobicCore, Micelle, DPDPolymerData (aqueous polymer builder), TriblockData (builder), ChargeTriblockData (builder), DiblockMicelle, TriblockMicelle, CopolymerMicelleFrame (processor), TriblockFrame (processor).
+
+__Current__ __Objectives__:
+* Finish TriblockFrame and its parent classes.
+* Reorganize dpdData, dpdFrame, and bin classes as parent classes.
+* Implement Nanoparticle class.
+* Add collision detection to builders using bins.
+* Organize library and executables into application.
+* Develop Python GUI to handle inputs and call executables to generate and process simulations.
