@@ -13,7 +13,8 @@ Also has specific implementations descending from these classes: HydrophobicTail
 __Current__ __Objectives__:  
 * Finish TriblockFrame and its parent classes.  
 * Reorganize dpdData, dpdFrame, and bin classes as parent classes.   
-   + CopolymerFrame inherents from DPDFrame, should have BondBin cube instead Bin's.  
+   + CopolymerFrame inherents from DPDFrame, should have TailBin cube instead Bin's.
+   + Builders could use BondBin cube for fluid collision detection.
    + Bond's need com and reference to molecule.  
    + AngBond could be class containing two bonds.  
 * Implement Nanoparticle class.  
