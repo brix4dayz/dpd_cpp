@@ -13,10 +13,10 @@ Also has specific implementations descending from these classes: **BeadGyration*
 __Current__ __Objectives__:  
 * Finish **TriblockFrame** and its parent classes.  
 * Reorganize **DPDData**, **DPDFrame**, and **Bin** classes as parent classes.   
-   + **CopolymerMicelleFrame** inherents from **DPDFrame**, should have **TailBin** cube instead **Bin**'s.
-   + Builders could use **BondBin** cube for fluid collision detection.
+   + **CopolymerMicelleFrame** inherents from **DPDFrame**, should have **TailBin** cube instead **Bin**'s.  
+   + Builders could use **BondBin** cube for fluid collision detection.  
    + **Bond**'s need com and reference to molecule.  
-   + **AngBond** could be class containing two **Bond**'s.  
+   + **AngBond** could be class containing two **Bond**'s.   
 * Implement **Nanoparticle** class.  
 * Add collision detection to builders using **Bin**s.  
 * Organize library and executables into application.  
