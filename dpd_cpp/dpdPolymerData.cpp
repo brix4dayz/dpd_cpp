@@ -165,39 +165,20 @@ void DPDPolymerData::deriveFluidList() {
   PosVect* r = NULL;
   Bead* b = NULL;
 
-  int oldID = this->idTracker;
+  double fluid_step = 0.0;
 
-  // puts a fluid bead at every whole number position within box
-  for ( idx i = 0; i <= box_length; i++ ) {
-    for ( idx j = 0; j <= box_length; j++ ) {
-      for ( idx k = 0; k <= box_length; k++ ) {
-        r = new PosVect( ( ( double ) i ), 
-                       ( ( double ) j ),
-                       ( ( double ) k ) );
-        b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
-        this->molIDTracker++;
-        if ( !this->addFluid( b ) ) {
-          delete b; // extra bead made
-          k = box_length + 1;
-          j = box_length + 1;
-          i = box_length + 1;
-        } 
-      }
-    }
-  }
-
-  // if that didn't make all the fluid beads, put a bead at every half position within box
-  if ( this->idTracker - oldID - 1 != this->num_Fluid ) {
-     for ( idx i = 0; i <= box_length; i++ ) {
+  while ( this->FluidCursor < this->num_Fluid ) {
+    // puts a fluid bead at every whole number position within box
+    for ( idx i = 0; i <= box_length; i++ ) {
       for ( idx j = 0; j <= box_length; j++ ) {
         for ( idx k = 0; k <= box_length; k++ ) {
-          r = new PosVect( ( ( double ) i ) + .5, 
-                       ( ( double ) j ) + .5,
-                       ( ( double ) k ) + .5 );
+          r = new PosVect( ( ( double ) i ) + fluid_step, 
+                         ( ( double ) j ) + fluid_step,
+                         ( ( double ) k ) + fluid_step );
           b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
           this->molIDTracker++;
           if ( !this->addFluid( b ) ) {
-            delete b;
+            delete b; // extra bead made
             k = box_length + 1;
             j = box_length + 1;
             i = box_length + 1;
@@ -205,6 +186,7 @@ void DPDPolymerData::deriveFluidList() {
         }
       }
     }
+    fluid_step = ( 1.0 - fluid_step )/2.0;
   }
 
 }
