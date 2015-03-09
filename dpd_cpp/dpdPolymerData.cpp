@@ -92,27 +92,15 @@ void TriblockData::deriveBondList() {
   for ( unsigned short i = 0; i  < this->num_chains; i++ ) {
     chain = this->chainList + i;
   
-    /*for( idx i = 0; i < chain->tail_length - 1; i++ ) {
-      this->makeNewBond( PHOBE_PHOBE, chain->tail1->beadList + i,
-                    chain->tail1->beadList + i + 1 );
-    }*/
     this->addBlockBonds( chain->tail1, PHOBE_PHOBE );
   
     this->makeNewBond( PHIL_PHIL, chain->tail1->beadList + chain->tail_length - 1,
                 chain->pec_block->beadList );
     this->addBlockBonds( chain->pec_block, PHIL_PHIL );
-    /*for( idx i = 0; i < chain->pec_length - 1; i++ ) {
-      this->makeNewBond( PHIL_PHIL, chain->pec_block->beadList + i,
-                    chain->pec_block->beadList + i + 1 );
-    }*/
 
     this->makeNewBond( PHIL_PHIL, chain->pec_block->beadList + chain->pec_length - 1,
                 chain->tail2->beadList );
     this->addBlockBonds( chain->tail2, PHOBE_PHOBE );
-    /*for( idx i = 0; i < chain->tail_length - 1; i++ ) {
-      this->makeNewBond( PHOBE_PHOBE, chain->tail2->beadList + i,
-                    chain->tail2->beadList + i + 1 );
-    }*/
   }
   
   if ( this->num_bonds != this->bondCursor )
@@ -133,18 +121,12 @@ void DPDPolymerData::makeNewBond( idx type, Bead* bead1, Bead* bead2 ) {
   this->addBond( b );
 }
 
-// Write this function
-// DEBUG
 void TriblockData::deriveChainList() {
   PECTriblock* chain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
-    //unsigned int oldID = this->idTracker;
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
                                 this->pec_length, this->tail_length, this->chain_length,
                                 &( this->idTracker ), this->chainCursor );
-    //if ( this->idTracker - oldID != this->chain_length || 
-      //   this->idTracker - oldID != chain->chain_length )
-      //printf("%d problem", (int) chain->chain_length );
     this->addChain( chain );
   }
   this->molIDTracker = this->num_chains;
@@ -178,6 +160,7 @@ bool DPDPolymerData::addFluid( Bead* bead ) {
   return true;
 }
 
+// add collision detection with binlist
 void DPDPolymerData::deriveFluidList() {
   PosVect* r = NULL;
   Bead* b = NULL;
