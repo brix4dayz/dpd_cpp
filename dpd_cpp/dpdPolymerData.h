@@ -29,6 +29,7 @@ class DPDPolymerData : public DPDData {
     void calcNumBonds();
     void calcNumAtoms();
     void addBond( Bond* bond );
+    void addBlockBonds( PolymerBlock* block, idx bond_type );
     void makeNewBond( idx type, Bead* bead1, Bead* bead2 );
     bool addFluid( Bead* fluid );
     void deriveFluidList();
