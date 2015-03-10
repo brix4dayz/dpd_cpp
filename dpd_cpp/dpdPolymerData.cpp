@@ -75,15 +75,20 @@ void TriblockData::calcNumChains( float* polymer_volume_fraction ) {
 
 void TriblockData::generate() {
   this->deriveChainList();
-  this->deriveFluidList();
-  //if ( this->num_atoms != this->idTracker ) {
-    //fprintf( stdout, "Not all atoms made...\n" );
-    //exit( 1 );
-  //}
-  //printf( "%d %d\n", this->num_atoms, this->idTracker );
   this->deriveBondList();
+  this->deriveFluidList();
+  this->wereAllBeadsMade();
   FILE* fp = fopen( this->filename.c_str(), "w" );
   this->printLAMMPS( fp );
+}
+
+void TriblockData::wereAllBeadsMade() {
+  unsigned int atoms_added = this->idTracker - 1; // -1 for idTracker being one ahead in index
+  if ( this->num_atoms != atoms_added ) {
+    fprintf( stdout, "Error in number of atoms added to system.\nExpected: %d\nActual: %d\n", 
+             this->num_atoms, atoms_added );
+    exit( 1 );
+  }
 }
 
 void TriblockData::deriveBondList() {
@@ -103,9 +108,11 @@ void TriblockData::deriveBondList() {
     this->addBlockBonds( chain->tail2, PHOBE_PHOBE );
   }
   
-  if ( this->num_bonds != this->bondCursor )
-    printf("problem3");
-
+  if ( this->num_bonds != this->bondCursor ) {
+    fprintf( stdout, "Error in number of bonds added to system.\nExpected: %d\nActual: %d\n", 
+             this->num_bonds, this->bondCursor );
+    exit( 1 );
+  }
 }
 
 
@@ -130,8 +137,9 @@ void TriblockData::deriveChainList() {
     this->addChain( chain );
   }
   this->molIDTracker = this->num_chains;
-  if ( this->chainCursor != this->molIDTracker )
-    printf("%d problem2\n", this->chainCursor); 
+  if ( this->chainCursor != this->molIDTracker ) 
+    fprintf( stdout, "Error in current number of chains added to system.\nExpected: %d\nActual: %d\n", 
+             this->molIDTracker, this->chainCursor ); 
 }
 
 void TriblockData::addChain( PECTriblock* chain ) {
@@ -153,8 +161,7 @@ void DPDPolymerData::addBond( Bond* bond ) {
 }
 
 bool DPDPolymerData::addFluid( Bead* bead ) { 
-  if ( this->FluidCursor >= this->num_Fluid )
-    return false;
+  if ( this->FluidCursor >= this->num_Fluid ) return false;
   this->FluidList[ this->FluidCursor ] = *bead;
   this->FluidCursor++;
   return true;
@@ -165,20 +172,21 @@ void DPDPolymerData::deriveFluidList() {
   PosVect* r = NULL;
   Bead* b = NULL;
 
-  double fluid_step = 0.0;
+  double fluid_offset = 0.0;
 
-  while ( this->FluidCursor < this->num_Fluid ) {
-    // puts a fluid bead at every whole number position within box
+  while ( this->FluidCursor < this->num_Fluid ) { // leq to guarantees addFluid is done one extra time
+    // puts a fluid bead at every integer position plus a changing offset within the box
     for ( idx i = 0; i <= box_length; i++ ) {
       for ( idx j = 0; j <= box_length; j++ ) {
         for ( idx k = 0; k <= box_length; k++ ) {
-          r = new PosVect( ( ( double ) i ) + fluid_step, 
-                         ( ( double ) j ) + fluid_step,
-                         ( ( double ) k ) + fluid_step );
+          r = new PosVect( ( ( double ) i ) + fluid_offset, 
+                         ( ( double ) j ) + fluid_offset,
+                         ( ( double ) k ) + fluid_offset );
           b = new Bead( r, this->Fluid_type, &( this->idTracker ), this->molIDTracker + 1 );
           this->molIDTracker++;
           if ( !this->addFluid( b ) ) {
-            delete b; // extra bead made
+            this->idTracker--; // idTracker gets incremented one too many times, fix it
+            delete b; // extra bead made, free the memory
             k = box_length + 1;
             j = box_length + 1;
             i = box_length + 1;
@@ -186,7 +194,7 @@ void DPDPolymerData::deriveFluidList() {
         }
       }
     }
-    fluid_step = ( 1.0 - fluid_step )/2.0;
+    fluid_offset = ( 1.0 - fluid_offset )/2.0; // offset initially zero than goes to .5, and approaches 1/3
   }
 
 }
