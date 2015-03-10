@@ -77,16 +77,24 @@ void TriblockData::generate() {
   this->deriveChainList();
   this->deriveBondList();
   this->deriveFluidList();
-  this->wereAllBeadsMade();
   FILE* fp = fopen( this->filename.c_str(), "w" );
   this->printLAMMPS( fp );
+  fclose( fp );
 }
 
-void TriblockData::wereAllBeadsMade() {
+void DPDPolymerData::wereAllBeadsMade() {
   unsigned int atoms_added = this->idTracker - 1; // -1 for idTracker being one ahead in index
   if ( this->num_atoms != atoms_added ) {
     fprintf( stdout, "Error in number of atoms added to system.\nExpected: %d\nActual: %d\n", 
              this->num_atoms, atoms_added );
+    exit( 1 );
+  }
+}
+
+void DPDPolymerData::wereAllBondsMade() {
+  if ( this->num_bonds != this->bondCursor ) {
+    fprintf( stdout, "Error in number of bonds added to system.\nExpected: %d\nActual: %d\n", 
+             this->num_bonds, this->bondCursor );
     exit( 1 );
   }
 }
@@ -107,12 +115,7 @@ void TriblockData::deriveBondList() {
                 chain->tail2->beadList );
     this->addBlockBonds( chain->tail2, PHOBE_PHOBE );
   }
-  
-  if ( this->num_bonds != this->bondCursor ) {
-    fprintf( stdout, "Error in number of bonds added to system.\nExpected: %d\nActual: %d\n", 
-             this->num_bonds, this->bondCursor );
-    exit( 1 );
-  }
+  this->wereAllBondsMade();
 }
 
 
@@ -197,6 +200,7 @@ void DPDPolymerData::deriveFluidList() {
     fluid_offset = ( 1.0 - fluid_offset )/2.0; // offset initially zero than goes to .5, and approaches 1/3
   }
 
+  this->wereAllBeadsMade();
 }
 
 void TriblockData::printLAMMPS( FILE* fp ) {
@@ -224,7 +228,6 @@ void TriblockData::printLAMMPS( FILE* fp ) {
     this->bondList[ i ].printBond( fp );
   }
 
-  fclose( fp );
 }
 
 // Should properly delete everything

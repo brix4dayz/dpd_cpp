@@ -33,10 +33,11 @@ class DPDPolymerData : public DPDData {
     void makeNewBond( idx type, Bead* bead1, Bead* bead2 );
     bool addFluid( Bead* fluid );
     void deriveFluidList();
+    void wereAllBeadsMade();
+    void wereAllBondsMade();
     virtual void deriveBondList() {}
     virtual void deriveChainList() {}
     virtual void generate() {}
-    virtual void wereAllBeadsMade() {}
     virtual void printLAMMPS( FILE* fp ) {}
 };
 
