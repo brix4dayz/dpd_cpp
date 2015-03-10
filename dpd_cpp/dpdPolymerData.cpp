@@ -140,9 +140,11 @@ void TriblockData::deriveChainList() {
     this->addChain( chain );
   }
   this->molIDTracker = this->num_chains;
-  if ( this->chainCursor != this->molIDTracker ) 
+  if ( this->chainCursor != this->molIDTracker ) {
     fprintf( stdout, "Error in current number of chains added to system.\nExpected: %d\nActual: %d\n", 
-             this->molIDTracker, this->chainCursor ); 
+             this->molIDTracker, this->chainCursor );
+    exit( 1 );
+  } 
 }
 
 void TriblockData::addChain( PECTriblock* chain ) {
