@@ -26,7 +26,7 @@ Also has specific implementations descending from these classes: **BeadGyration*
 * Write code which can read output files produced by other software into data, process/edit/manipulate that data and print it in a friendly format.  
 * Make generic classes for calculating measurements for **DPD** simulation objects such persistence length of a chain, or radius of gyration for micelles, etc.  
 * Could make **ParticleBin**'s who determine their size based on the size of the **Nanoparticle**'s, which can be useful for preventing _fluidCollision_ in _deriveFluid_.
-* DPD/MD Engine using Python:
+* _DPD/MD Engine using Python_:
    + Look into use C++ objects in Python, so dpd_cpp can be extended without being reimplemented in Python.
    + Could make a similar MD library in Python which can read various file formats produced by NAMD, GROMACS, AMBER, etc., putting the data into MD objects which have predefined fields and behavior which can be manipulated for secondary analysis by our group who would write everything in Python/SciPy.   
    + Those who get better at Python could learn to extend these existing MD objects for specifc systems/calculations/etc. and our library could build.  
