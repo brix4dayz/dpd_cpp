@@ -1,5 +1,5 @@
-# _dpd_cpp_
-#### _Copyright (c) 2015_
+## _dpd_cpp_
+##### _Copyright (c) 2015_
 ##### _author: Hayden Fuss_
 ##### _Yingling labs_
 
@@ -10,7 +10,7 @@ There are generic classes such as **PosVect** (position vector), **DirVect** (di
 
 Also has specific implementations descending from these classes: **BeadGyration**, **HydrophobicTail**, **PECTriblock**, **HydrophobicCore**, **Micelle**, **DPDPolymerData** (aqueous polymer builder), **TriblockData** (builder), **ChargeTriblockData** (builder), **DiblockMicelle**, **TriblockMicelle**, **CopolymerMicelleFrame** (processor), **TriblockFrame** (processor).
 
-__Current__ __Objectives__:  
+##### __Current Objectives__:  
 * Finish **TriblockFrame** and its parent classes.  
 * Reorganize **DPDData**, **DPDFrame**, and **Bin** classes as parent classes.   
    + **CopolymerMicelleFrame** inherents from **DPDFrame**, should have **TailBin** cube instead **Bin**'s.  
