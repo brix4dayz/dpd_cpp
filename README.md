@@ -18,10 +18,10 @@ Also has specific implementations descending from these classes: **BeadGyration*
    + **Bond**'s need com and reference to molecule.  
    + **AngBond** could be class containing two **Bond**'s.   
 * Implement **Nanoparticle** class.  
-* Add collision detection to builders using **Bin**s.  
+* Add collision detection to builders using **Bin**'s.  
 * Organize library and executables into application.  
 * Develop Python GUI to handle inputs and call executables to generate and process simulations.  
 * Finish _unlink_ and _deconstructors_ for objects to prevent memory leaks.  
 * Consider using _references_ in some places instead of _pointers_.  
 * Write code which can read output files produced by other software into data, process/edit/manipulate that data and print it in a friendly format.  
-* Make generic classes for calculating measurements for dpd simulation objects such persistence length of a chain, or radius of gyration for micelles, etc.
+* Make generic classes for calculating measurements for **DPD** simulation objects such persistence length of a chain, or radius of gyration for micelles, etc.
