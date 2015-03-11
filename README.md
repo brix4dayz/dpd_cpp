@@ -34,10 +34,10 @@ Also has specific implementations descending from these classes: **BeadGyration*
    + See `DPD/MD Engine`
 * Make generic classes for calculating measurements for **DPD** simulation objects such persistence length of a chain, or radius of gyration for micelles, etc.  
 * Could make **ParticleBin**'s who determine their size based on the size of the **Nanoparticle**'s, which can be useful for preventing _fluidCollision_ in _deriveFluid_.  
-* **Molecule** and **Macromolecule** parent classes? Essentially just a list of beads for *Molecule*.  
+* **Molecule** and **Macromolecule** parent classes? Essentially just a list of beads for **Molecule**.  
    + **PolymerBlock** could extend **Molecule** and **CopolymerChain** could extend **Macromolecule**.
 * Organize library into folders: _types_, _builders_, and _processors_.
-* Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**.
+* Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**).
 * Incorporate multithreading and GPU paralleization for processors.
  
 
