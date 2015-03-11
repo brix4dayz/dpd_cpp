@@ -42,3 +42,4 @@ Also has specific implementations descending from these classes: **BeadGyration*
    + Could make a similar MD library in Python which can read various file formats produced by NAMD, GROMACS, AMBER, etc., putting the data into MD objects which have predefined fields and behavior which can be manipulated for secondary analysis by our group who would write everything in Python/SciPy.   
    + Those who get better at Python could learn to extend these existing MD objects for specifc systems/calculations/etc. and our library could build.  
    + We can create a GUI application which uses the our library and scripts, as well as other MD software tools, to build/edit/process various systems.  
+   + Maybe extend or utilize PyMol and/or VMD?
