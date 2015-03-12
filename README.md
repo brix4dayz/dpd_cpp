@@ -39,6 +39,7 @@ Also has specific implementations descending from these classes: **BeadGyration*
 * Organize library into folders: _types_, _builders_, and _processors_.
 * Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**).
 * Incorporate multithreading and GPU paralleization for processors.
+* Remember that C++ has _multiple inheritance_, would work well for **Molecule**'s and **PolymerBlock**'s.
  
 
 #### _Future Projects/Extensions_
