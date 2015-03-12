@@ -9,8 +9,8 @@ Main directories (for now): *types*, *init_data*, *frames*, *processors*, *build
 * *Types:*
 	+ **ObjDPD** - base class with virtual functions for properly managing memory.
 	+ **PosVect, DirVect, Bead, Bond, Gyration, BeadGyration**
-	+ **Molecule, PolymerBlock, HydrophobicTail, Nanoparticle, DNABlock**
-	+ **Macromolecule, CopolymerChain, PECTriblock, SSDNAChain, DNAChain**
+	+ **BeadList, PolymerBlock, HydrophobicTail, Nanoparticle, DNABlock**
+	+ **Molecule, CopolymerChain, PECTriblock, SSDNAChain, DNAChain, Nanopartcle**
 	+ **Bin, BeadBin, BondBin, TailBin, BlockBin, ChainBin, NPBin**
 	+ **Micelle, DiblockMicelle, TriblockMicelle, HydrophobicCore**
 * *Initial Data:*
