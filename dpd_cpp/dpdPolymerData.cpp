@@ -4,10 +4,13 @@
 
 // Consider putting a few of the functions and data in polymerData in dpdData.
 
+
+// Bond type enumerations
 #define PHOBE_PHOBE 1
 #define PHIL_PHIL 2
 
 #define FLUID_ID_TRIBLOCK 3
+
 
 DPDPolymerData::DPDPolymerData() {}
 
@@ -20,6 +23,7 @@ DPDPolymerData::DPDPolymerData( std::string filename, idx density,
   this->bond_length = bond_length;
   this->calcNumAtoms();
 }
+
 
 DPDPolymerData::DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length,
                                 idx chain_length, unsigned short num_chains, idx Fluid_type ):
