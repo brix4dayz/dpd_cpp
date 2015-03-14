@@ -10,6 +10,8 @@ results:
 	make testFrameFile
 	rm -rf *.o
 	diff mac_results old_mac_results
+	make testGenerateData
+	make testDLLInPython
 
 testBead:
 	g++ -Wall -std=c++11 -c vect.cpp
@@ -143,6 +145,7 @@ testFrame:
 	./frameTest
 
 testGenerateData:
+	rm -rf *.o
 	g++ -Wall -std=c++11 -c vect.cpp
 	g++ -Wall -std=c++11 -c bead.cpp
 	g++ -Wall -std=c++11 -c polymerBlock.cpp
@@ -154,3 +157,10 @@ testGenerateData:
 	./dataTest > newdata
 	diff formerdata newdata
 	diff newdataTest.dat formerdataTest.dat
+
+testDLLInPython:
+	rm -rf *.o *.dylib
+	g++ -Wall -std=c++11 -DPYTHON_LIB -DTESTING -c -fPIC vect.cpp -o vect.o && g++ -Wall -std=c++11 -shared -Wl -o libvect.dylib vect.o
+	mv current_libvect_test former_libvect_test
+	python2.7 test_libvect.py > current_libvect_test
+	diff current_libvect_test former_libvect_test
