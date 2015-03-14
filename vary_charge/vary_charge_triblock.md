@@ -45,7 +45,7 @@ $$$\rho = 0.1$$$
 		<img src="init.jp2" height=250 >  
 	* Current snapshots (t = 4000 frames):
 		<div>
-			<table cellpadding="0" width="400" cellspacing="0">
+			<table>
 				<tr> 
 					<td>$$$\delta = 1.0$$$, PEC (cyan) vs. Phobes (gold)</td>
 			 		<td>$$$\delta = $$$ $$$ 2.0 \over 3.0 $$$, PEC (cyan) vs. Phobes (gold):</td> 
