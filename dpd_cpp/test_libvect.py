@@ -1,8 +1,9 @@
 from ctypes import *
 
-# Import dynamic library on Mac
+# Import custom dynamic library on Mac
 libvect = cdll.LoadLibrary('./libvect.dylib')
-libc = cdll.LoadLibrary('/usr/lib/libSystem.B.dylib')
+# Import libc so can use a bunch of useful C functions in Python
+# libc = cdll.LoadLibrary('/usr/lib/libSystem.B.dylib')
 
 # For Unix use `ld` to make libvect.so
 # libvect = cdll.LoadLibrary('./libvect.so')
@@ -36,7 +37,7 @@ class PosVect(object):
 
 # Test
 def main():
-  libc.srand(2)
+  libvect.Set_Seed()
   r = PosVect(36)
   string = str(r.x) + " " + str(r.y) + " " + str(r.z)
   print(string)
