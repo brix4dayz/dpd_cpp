@@ -4,7 +4,7 @@ Creating dynamically linked libraries in C/C++: <http://www.cs.swarthmore.edu/~n
 
 Basically put multiple `.o` files into one `.so` file (shared object, or `.dylib` for Mac), which can then be linked using `-l`, and `-L` if the `.so` file is not in the standard path.  
 
-Using C++ libraries within Python without 3rd party dependencies: <http://stackoverflow.com/questions/145270/calling-c-c-from-python>
+Using C++ libraries within Python without 3rd party dependencies:   <http://stackoverflow.com/questions/145270/calling-c-c-from-python>
 <http://stackoverflow.com/questions/23713949/how-to-expose-c-class-to-python-without-using-boost>
 <https://www.safaribooksonline.com/library/view/c-cookbook/0596007612/ch01s05.html>
 
