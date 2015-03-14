@@ -54,24 +54,20 @@ class DirVect { // Direction Vector class
 
 // C-style interface to use C++ objects in Python via a DLL
 #if defined(PYTHON_LIB)
-#include <cstdlib>
-#include <ctime>
 
 extern "C" {
     PosVect* Random_PosVect_In_Box( idx box_length ) {
-        #if defined(TESTING)
-        srand( 2 );
-        #else
-        srand( time( NULL ) );
-        #endif
         return new PosVect( &box_length );
     }
+
     double Get_X( PosVect* ptr ) {
         return ptr->x;
     }
+
     double Get_Y( PosVect* ptr ) {
         return ptr->y;   
     }
+
     double Get_Z( PosVect* ptr ) {
         return ptr->z;
     }
