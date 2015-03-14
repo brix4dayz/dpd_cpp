@@ -18,7 +18,7 @@ Main directories (for now): *types*, *init_data*, *frames*, *processors*, *build
 		- _Polymers_:
 			* **CopolymerChain, PECTriblock, PEChargeTriblock, PECLinkerQuadblock, SSDNAChain, DNAChain**
 		- _Solids_: 
-			* **Nanoparticle, Surfaces**
+			* **Nanoparticle, Surfaces, Silica, Nanotube**
 	+ _Dynamics Containers_:
 		- **Bin, BeadBin, BondBin, TailBin, BlockBin, ChainBin, NPBin**
 	+ _Complex Structures_:
