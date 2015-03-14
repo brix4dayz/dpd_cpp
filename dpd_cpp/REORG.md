@@ -16,7 +16,7 @@ Main directories (for now): *types*, *init_data*, *frames*, *processors*, *build
 		- **BondList, AngBond, AngBondList**
 	+ **Molecule**'s:
 		- _Polymers_:
-			* **CopolymerChain, PECTriblock, SSDNAChain, DNAChain**
+			* **CopolymerChain, PECTriblock, PEChargeTriblock, PECLinkerQuadblock, SSDNAChain, DNAChain**
 		- _Solids_: 
 			* **Nanoparticle, Surfaces**
 	+ _Dynamics Containers_:
