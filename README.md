@@ -24,7 +24,7 @@ Also has specific implementations descending from these classes: **BeadGyration*
    + Builders could use **BondBin** cube for fluid collision detection.  
    + **Bond**'s need **PosVect** com and **Molecule**  reference.  
    + **AngBond** could be class containing two **Bond**'s.   
-* Implement **Nanoparticle** class.  
+* Implement **Nanoparticle, Surface,** and **Layer** classes, etc.  
 * Add collision detection to builders using **Bin**'s.  
 * Organize library and executables into application.  
 * Develop Python GUI to handle inputs and call executables to generate and process simulations.  

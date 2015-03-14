@@ -15,7 +15,9 @@ class ObjDPD {
     virtual ~ObjDPD() {}
 };
 
-class PosVect {
+// Vector3 from C#/Unity is an array with three doubles
+
+class PosVect { // Position Vector class
   private:
     void pbcCorrectDistanceCompForCluster( double* d, idx* box_length,
                                            float* micelle_cutoff );
@@ -35,7 +37,7 @@ class PosVect {
     double getCorrectedDist( PosVect* r, idx* box_length, float* micelle_cutoff );
 };
 
-class DirVect {
+class DirVect { // Direction Vector class
   public:
     // Data
     double dx; //x2 - x1
