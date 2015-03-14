@@ -39,7 +39,8 @@ Also has specific implementations descending from these classes: **BeadGyration*
 * Organize library into folders: _types_, _builders_, and _processors_.
 * Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**).
 * Incorporate multithreading and GPU paralleization eventually.
-* C++ has _multiple inheritance_, which could work well for **Molecule**'s and **PolymerBlock**'s.
+* C++ has _multiple inheritance_, which could work well for **Molecule**'s and **PolymerBlock**'s.  
+* Creating dynamically linked libraries in C/C++: <http://www.cs.swarthmore.edu/~newhall/unixhelp/howto_C_libraries.html>  
  
 
 #### _Future Projects/Extensions_
@@ -49,3 +50,4 @@ Also has specific implementations descending from these classes: **BeadGyration*
    + Those who get better at Python could learn to extend these existing MD objects for specifc systems/calculations/etc. and our library could build.  
    + We can create a GUI application which uses the our library and scripts, as well as other MD software tools, to build/edit/process various systems.  
    + Maybe extend or utilize PyMol and/or VMD?
+   + Using C++ libraries within Python without 3rd party dependencies: <http://stackoverflow.com/questions/145270/calling-c-c-from-python>  

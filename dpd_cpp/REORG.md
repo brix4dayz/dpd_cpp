@@ -4,7 +4,19 @@ Creating dynamically linked libraries in C/C++: <http://www.cs.swarthmore.edu/~n
 
 Basically put multiple `.o` files into one `.so` file (shared object), which can then be linked using `-l`, and `-L` if the `.so` file is not in the standard path.  
 
-Main directories (for now): *types*, *init_data*, *frames*, *processors*, *builders*
+Using C++ libraries within Python without 3rd party dependencies: <http://stackoverflow.com/questions/145270/calling-c-c-from-python>
+
+Using this `.so` file to contain the library, the library can then be imported to Python using `extern "C"` functions, a C interface I will have to write to communicate with these C++ objects. Once the interface is written and the `.so` file is compiled, wrapper Python classes can be written using Python's "natural" `ctypes`: 
+     
+     from ctypes import cdll  
+	 library = cdll.LoadLibrary('path to .so file')   
+	 
+	 # Use extern "C" function  
+	 library.externFunction()  
+	 
+
+
+Needs to be organized into folders/directories:
 
 * *Types:*
 	+ Data structures (**List, Bin, BinCube**) with generic types T ???
