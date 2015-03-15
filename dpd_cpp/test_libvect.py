@@ -8,6 +8,7 @@ libvect = cdll.LoadLibrary('./libvect.dylib')
 # For Unix use `ld` to make libvect.so
 # libvect = cdll.LoadLibrary('./libvect.so')
 
+########################################################
 # Must declare return types of C interface functions
 
 libvect.Random_PosVect_In_Box.restype = c_void_p
@@ -36,15 +37,24 @@ libvect.Get_DZ.restype = c_double
 
 libvect.Get_Distance_Mod.restype = c_double
 
-# Python wrapper class
+libvect.RandomPercentage.restype = c_double
+
+########################################################
+
+########################################################
+# Wrappers
+
+# Python wrapper class for PosVect
 class PosVect(object):
+  # Make an object that points to nothing
   def __init__(self):
     self.obj = 0
 
   @classmethod
   def makePos(cls, x, y, z):
-    self = cls()
-    self.obj = libvect.Make_PosVect(c_double(x), c_double(y), c_double(z))
+    self = cls() # makes empty object
+    # Have object point to C++ object
+    self.obj = libvect.Make_PosVect(c_double(x), c_double(y), c_double(z)) # convert all params to c_types
     return self
 
   @classmethod
@@ -71,8 +81,11 @@ class PosVect(object):
   def z(self):
     return libvect.Get_Z(c_void_p(self.obj))
 
+  def output(self):
+    libvect.printPos(c_void_p(self.obj))
 
-# Python wrapper class
+
+# Python wrapper class for DirVect
 class DirVect(object):
   def __init__(self):
     self.obj = 0
@@ -111,18 +124,28 @@ class DirVect(object):
   def modulus(self):
     return libvect.Get_Distance_Mod(c_void_p(self.obj))
 
+  def output(self):
+    libvect.printDir(c_void_p(self.obj))
+
+# Wrapper functions for additional C/C++ functions
+def setSeedForC():
+  libvect.Set_Seed()
+
+def getRandomPercentageFromC():
+  return libvect.RandomPercentage()
+
+########################################################
+
 # Test
 def main():
-  libvect.Set_Seed()
+  setSeedForC()
   r = PosVect.randomPos(36)
-  string = str(r.x) + " " + str(r.y) + " " + str(r.z)
-  print(string)
+  r.output()
   d = DirVect.randomDir(0.1)
-  string = str(d.dx) + " " + str(d.dy) + " " + str(d.dz) + " " + str(d.modulus)
-  print(string)
+  d.output()
   r2 = PosVect.posFromPosDir(r, d)
-  string = str(r2.x) + " " + str(r2.y) + " " + str(r2.z)
-  print(string)
+  r2.output()
+  print(str(getRandomPercentageFromC()))
 
 if __name__ == "__main__":
   main()

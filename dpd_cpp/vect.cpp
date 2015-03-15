@@ -38,6 +38,10 @@ void PosVect::print( FILE* fp ) {
   fprintf( fp, "%10.5f %10.5f %10.5f\n", this->x, this->y, this->z );
 }
 
+void DirVect::print( FILE* fp ) {
+  fprintf( fp, "%10.5f %10.5f %10.5f\n", this->dx, this->dy, this->dz );  
+}
+
 void PosVect::reset() {
   this->x = 0;
   this->y = 0;

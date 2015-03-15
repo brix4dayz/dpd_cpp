@@ -48,6 +48,7 @@ class DirVect { // Direction Vector class
     DirVect( float* bond_length ); // Creates a random direction of given length
     DirVect( PosVect* pos1, PosVect* pos2 ); // Creates direction vector given two position vectors
     DirVect( double dx, double dy, double dz );
+    void print( FILE* fp );
     ~DirVect();
     void calcMod();
 };
@@ -65,6 +66,10 @@ extern "C" {
         #else
         srand( time( NULL ) );
         #endif
+    }
+
+    double RandomPercentage() {
+        return gauss();
     }
 
     PosVect* Random_PosVect_In_Box( idx box_length ) {
@@ -103,6 +108,10 @@ extern "C" {
         return ptr->z;
     }
 
+    void printPos( PosVect* r ) {
+        r->print( stdout );
+    }
+
     double Get_DX( DirVect* ptr ) {
         return ptr->dx;
     }
@@ -117,6 +126,10 @@ extern "C" {
 
     double Get_Distance_Mod( DirVect* ptr ) {
         return ptr->modulus;
+    }
+
+    void printDir( DirVect* d ) {
+        d->print( stdout );
     }
 }
 
