@@ -12,16 +12,52 @@ libvect = cdll.LoadLibrary('./libvect.dylib')
 
 libvect.Random_PosVect_In_Box.restype = c_void_p
 
+libvect.Make_PosVect.restype = c_void_p
+
+libvect.New_PosVect.restype = c_void_p
+
+libvect.Random_DirVect_With_Length.restype = c_void_p
+
+libvect.DirVect_Btwn_Positions.restype = c_void_p
+
+libvect.Make_DirVect.restype = c_void_p
+
 libvect.Get_X.restype = c_double
 
 libvect.Get_Y.restype = c_double
 
 libvect.Get_Z.restype = c_double
 
+libvect.Get_DX.restype = c_double
+
+libvect.Get_DY.restype = c_double
+
+libvect.Get_DZ.restype = c_double
+
+libvect.Get_Distance_Mod.restype = c_double
+
 # Python wrapper class
 class PosVect(object):
-  def __init__(self, box_length):
-    self.obj = libvect.Random_PosVect_In_Box(box_length)
+  def __init__(self):
+    self.obj = 0
+
+  @classmethod
+  def makePos(cls, x, y, z):
+    self = cls()
+    self.obj = libvect.Make_PosVect(c_double(x), c_double(y), c_double(z))
+    return self
+
+  @classmethod
+  def randomPos(cls, box_length):
+    self = cls()
+    self.obj = libvect.Random_PosVect_In_Box(c_ubyte(box_length))
+    return self
+
+  @classmethod
+  def posFromPosDir(cls, p, d):
+    self = cls()
+    self.obj = libvect.New_PosVect(c_void_p(p.obj), c_void_p(d.obj))
+    return self
 
   @property
   def x(self):
@@ -35,11 +71,57 @@ class PosVect(object):
   def z(self):
     return libvect.Get_Z(c_void_p(self.obj))
 
+
+# Python wrapper class
+class DirVect(object):
+  def __init__(self):
+    self.obj = 0
+
+  @classmethod
+  def randomDir(cls, bond_length):
+    self = cls()
+    self.obj = libvect.Random_DirVect_With_Length(c_float(bond_length))
+    return self
+
+  @classmethod
+  def makeDir(cls, dx, dy, dz):
+    self = cls()
+    self.obj = libvect.Make_DirVect(c_double(dx), c_double(dy), c_double(dz))
+    return self
+
+  @classmethod
+  def dirBtwnPositions(cls, p1, p2):
+    self = cls()
+    self.obj = libvect.DirVect_Btwn_Positions(c_void_p(p1.obj), c_void_p(p2.obj))
+    return self
+
+  @property
+  def dx(self):
+    return libvect.Get_DX(c_void_p(self.obj))
+
+  @property
+  def dy(self):
+    return libvect.Get_DY(c_void_p(self.obj))
+
+  @property
+  def dz(self):
+    return libvect.Get_DZ(c_void_p(self.obj))
+
+  @property
+  def modulus(self):
+    return libvect.Get_Distance_Mod(c_void_p(self.obj))
+
 # Test
 def main():
   libvect.Set_Seed()
-  r = PosVect(36)
+  r = PosVect.randomPos(36)
   string = str(r.x) + " " + str(r.y) + " " + str(r.z)
+  print(string)
+  d = DirVect.randomDir(0.1)
+  string = str(d.dx) + " " + str(d.dy) + " " + str(d.dz) + " " + str(d.modulus)
+  print(string)
+  r2 = PosVect.posFromPosDir(r, d)
+  string = str(r2.x) + " " + str(r2.y) + " " + str(r2.z)
   print(string)
 
 if __name__ == "__main__":

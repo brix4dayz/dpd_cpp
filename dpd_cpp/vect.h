@@ -71,6 +71,26 @@ extern "C" {
         return new PosVect( &box_length );
     }
 
+    PosVect* Make_PosVect( double x, double y, double z ) {
+        return new PosVect( x, y, z );
+    }
+
+    PosVect* New_PosVect( PosVect* p, DirVect* d ) {
+        return new PosVect( p, d );
+    }
+
+    DirVect* Random_DirVect_With_Length( float bond_length ) {
+        return new DirVect( &bond_length );
+    }
+
+    DirVect* DirVect_Btwn_Positions( PosVect* p1, PosVect* p2 ) {
+        return new DirVect( p1, p2 );
+    }
+
+    DirVect* Make_DirVect( double dx, double dy, double dz ) {
+        return new DirVect( dx, dy, dz );
+    }
+
     double Get_X( PosVect* ptr ) {
         return ptr->x;
     }
@@ -81,6 +101,22 @@ extern "C" {
 
     double Get_Z( PosVect* ptr ) {
         return ptr->z;
+    }
+
+    double Get_DX( DirVect* ptr ) {
+        return ptr->dx;
+    }
+
+    double Get_DY( DirVect* ptr ) {
+        return ptr->dy;   
+    }
+
+    double Get_DZ( DirVect* ptr ) {
+        return ptr->dz;
+    }
+
+    double Get_Distance_Mod( DirVect* ptr ) {
+        return ptr->modulus;
     }
 }
 
