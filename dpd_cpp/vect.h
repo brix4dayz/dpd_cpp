@@ -17,6 +17,19 @@ class ObjDPD {
 
 // Primitive data pointers shold be references
 
+class DPDVect : public ObjDPD {
+  private:
+    double a[ 3 ];
+  public:
+    DPDVect();
+    DPDVect( double a1, double a2, double a3 );
+    ~DPDVect();
+    void unlink();
+    void print( FILE* fp );
+    void add( DPDVect* v );
+    void divideByScalar( int* value );
+};
+
 
 class PosVect { // Position Vector class
   private:
