@@ -1,5 +1,5 @@
 
-ifeq ($(LINUX), 1)
+ifdef LINUX
 STDFLAG=-std=gnu++11
 CC=g++-4.8
 else
@@ -21,8 +21,10 @@ results:
 	make testFrameFile
 	rm -rf *.o
 	diff mac_results old_mac_results
+ifndef LINUX
 	make testGenerateData
 	make testDLLInPython
+endif
 
 testBead:
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
