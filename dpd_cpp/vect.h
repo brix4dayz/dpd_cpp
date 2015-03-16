@@ -15,7 +15,8 @@ class ObjDPD {
     virtual ~ObjDPD() {}
 };
 
-// Vector3 from C#/Unity is an array with three doubles
+// Primitive data pointers shold be references
+
 
 class PosVect { // Position Vector class
   private:
@@ -131,6 +132,25 @@ extern "C" {
     void printDir( DirVect* d ) {
         d->print( stdout );
     }
+
+    void resetPos( PosVect* r ) {
+        r->reset();
+    }
+
+    double getCorrectedDistBtwnPos( PosVect* r1, PosVect* r2, idx box_length, float micelle_cutoff ) {
+        return r1->getCorrectedDist( r2, &box_length, &micelle_cutoff );
+    }
+
+    void addPos( PosVect* r1, PosVect* r2 ) {
+        r1->addCoords( r2 );
+    }
+
+    void dividePosByScalar( PosVect* r, int value ) {
+        r->divideCoords( &value );
+    }
+
 }
+
+
 
 #endif

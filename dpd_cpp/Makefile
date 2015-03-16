@@ -162,5 +162,5 @@ testDLLInPython:
 	rm -rf *.o *.dylib
 	g++ -Wall -std=c++11 -DPYTHON_LIB -DTESTING -c -fPIC vect.cpp -o vect.o && g++ -Wall -std=c++11 -shared -Wl -o libvect.dylib vect.o
 	mv current_libvect_test former_libvect_test
-	python2.7 test_libvect.py > current_libvect_test
+	python2.7 dpdVect.py > current_libvect_test
 	diff current_libvect_test former_libvect_test

@@ -39,6 +39,8 @@ libvect.Get_Distance_Mod.restype = c_double
 
 libvect.RandomPercentage.restype = c_double
 
+libvect.getCorrectedDistBtwnPos.restype = c_double
+
 ########################################################
 
 ########################################################
@@ -84,6 +86,18 @@ class PosVect(object):
   def output(self):
     libvect.printPos(c_void_p(self.obj))
 
+  # Test new functions
+  def reset(self):
+    libvect.resetPos(c_void_p(self.obj))
+
+  def getPBCCorrectDistanceModForPhobes(self, other, box_length, micelle_cutoff):
+    return libvect.getCorrectedDistBtwnPos(c_void_p(self.obj), c_void_p(other.obj), c_ubyte(box_length), c_float(micelle_cutoff))
+
+  def add(self, other):
+    libvect.addPos(c_void_p(self.obj), c_void_p(other.obj))
+
+  def divideByScalar(self, scalar):
+    libvect.dividePosByScalar(c_void_p(self.obj), c_int(scalar))
 
 # Python wrapper class for DirVect
 class DirVect(object):
@@ -139,13 +153,28 @@ def getRandomPercentageFromC():
 # Test
 def main():
   setSeedForC()
+  
   r = PosVect.randomPos(36)
   r.output()
+  
   d = DirVect.randomDir(0.1)
   d.output()
+  
   r2 = PosVect.posFromPosDir(r, d)
   r2.output()
+  
   print(str(getRandomPercentageFromC()))
+
+  r.divideByScalar(-1)
+  r.output()
+
+  r2.add(r)
+  r2.output()
+
+  r.reset()
+  r.output()
+
+  print(str(r.getPBCCorrectDistanceModForPhobes(r2, 36, 3.5)))
 
 if __name__ == "__main__":
   main()
