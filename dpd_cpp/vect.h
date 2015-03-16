@@ -19,15 +19,16 @@ class ObjDPD {
 
 class DPDVect : public ObjDPD {
   private:
-    double a[ 3 ];
+    float *a;
+    idx dimensions;
   public:
     DPDVect();
-    DPDVect( double a1, double a2, double a3 );
+    DPDVect( idx dimensions );
     ~DPDVect();
     void unlink();
     void print( FILE* fp );
-    void add( DPDVect* v );
-    void divideByScalar( int* value );
+    void add( const DPDVect& v );
+    void divideByScalar( const int& value );
 };
 
 
