@@ -79,8 +79,7 @@ void Bead::unlink() {
 }
 
 Bead::~Bead() {
-  if ( this->r != NULL)
-    delete this->r;
+  delete this->r;
   this->unlink();
 }
 
@@ -119,8 +118,7 @@ Gyration::Gyration( DirVect* d ) {
 }
 
 Gyration::~Gyration() {
-  if ( this->d != NULL )
-    delete d;
+  delete d;
   this->unlink();
 }
 
@@ -141,8 +139,7 @@ void BeadGyration::unlink() {
 }
 
 BeadGyration::~BeadGyration() {
-  if ( this->d != NULL )
-    delete d;
+  delete d;
   this->unlink();
 }
 
@@ -161,10 +158,8 @@ void Bond::unlink() {
 }
 
 Bond::~Bond() {
-  if ( this->bead1 != NULL )
-    delete this->bead1;
-  if (this->bead2 != NULL )
-    delete this->bead2;
+  delete this->bead1;
+  delete this->bead2;
   this->unlink();
 }
 
