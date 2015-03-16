@@ -4,6 +4,7 @@ Bin::Bin() {
 	this->checked = false;
 	this->grouped = false;
 	this->num_chains = 0;
+	this->core = NULL;
 }
 
 Bin::~Bin() {}

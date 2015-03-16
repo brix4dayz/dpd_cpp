@@ -1,5 +1,5 @@
 
-ifeq ($LINUX, "")
+ifeq ($(LINUX), 1)
 STDFLAG=-std=gnu++11
 CC=g++-4.8
 else
