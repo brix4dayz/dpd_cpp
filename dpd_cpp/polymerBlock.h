@@ -1,7 +1,7 @@
 #include "bead.h"
 #include <fstream>
 
-class PolymerBlock {
+class PolymerBlock : public ObjDPD {
 	public:
 		idx bead_type;
 		idx length;
@@ -23,6 +23,7 @@ class PolymerBlock {
 		void calcCenterOfMass( idx* box_length );
 		bool addBead( Bead* bead );
 		Bead* getBead( idx idx );
+    void unlink();
 };
 
 class HydrophobicTail : public PolymerBlock {
@@ -38,4 +39,5 @@ class HydrophobicTail : public PolymerBlock {
 			std::ifstream* inFile, idx* box_length );
 		HydrophobicTail();
 		~HydrophobicTail();
+    void unlink();
 };

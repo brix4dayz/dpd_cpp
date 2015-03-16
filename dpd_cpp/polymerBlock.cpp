@@ -43,7 +43,14 @@ PolymerBlock::PolymerBlock() {
 	this->cursor = 0;
 }
 
-PolymerBlock::~PolymerBlock() {}
+PolymerBlock::~PolymerBlock() {
+
+}
+
+void PolymerBlock::unlink() {
+  this->beadList = NULL;
+  this->com = NULL;
+}
 
 void PolymerBlock::calcCenterOfMass( idx* box_length ) {
 	Bead* b;
@@ -108,6 +115,10 @@ HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length,
 
 HydrophobicTail::HydrophobicTail() : PolymerBlock() {
 	this->bead_type = HYDROPHOBIC;
+}
+
+void HydrophobicTail::unlink() {
+  
 }
 
 HydrophobicTail::~HydrophobicTail() {}

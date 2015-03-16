@@ -79,7 +79,9 @@ void Bead::unlink() {
 }
 
 Bead::~Bead() {
-  delete this->r;
+  if ( this->r != NULL)
+    delete this->r;
+  this->unlink();
 }
 
 void Bead::reset() {
@@ -117,7 +119,9 @@ Gyration::Gyration( DirVect* d ) {
 }
 
 Gyration::~Gyration() {
-  delete d;
+  if ( this->d != NULL )
+    delete d;
+  this->unlink();
 }
 
 void Gyration::unlink() {
@@ -132,7 +136,15 @@ BeadGyration::BeadGyration( DirVect* d ): Gyration( d ) {}
 
 BeadGyration::BeadGyration( Bead* b, PosVect* com ): BeadGyration( new DirVect( b->r, com ) ) {}
 
-BeadGyration::~BeadGyration() {}
+void BeadGyration::unlink() {
+  this->d = NULL;
+}
+
+BeadGyration::~BeadGyration() {
+  if ( this->d != NULL )
+    delete d;
+  this->unlink();
+}
 
 Bond::Bond() {}
 
@@ -149,8 +161,11 @@ void Bond::unlink() {
 }
 
 Bond::~Bond() {
-  delete this->bead1;
-  delete this->bead2;
+  if ( this->bead1 != NULL )
+    delete this->bead1;
+  if (this->bead2 != NULL )
+    delete this->bead2;
+  this->unlink();
 }
 
 void Bond::printBond( FILE* fp ) {
