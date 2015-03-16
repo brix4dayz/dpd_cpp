@@ -50,14 +50,18 @@ PolymerBlock::~PolymerBlock() {
   	}	
 	}
   delete[] this->beadList;
+  this->beadList = NULL;
   delete this->com;
+  this->com = NULL;
   this->unlink();
 }
 
 void PolymerBlock::unlink() {
-  for ( idx i = 0; i < this->length; i++ ) {
-    beadList[ i ] = NULL;
-  }	
+  if ( this->beadList ) {
+  	for ( idx i = 0; i < this->length; i++ ) {
+    	this->beadList[ i ] = NULL;
+  	}	
+  }
   this->chain = NULL;
 }
 
