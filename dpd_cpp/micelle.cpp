@@ -54,21 +54,21 @@ void TriblockMicelle::printMicelle( FILE* stream ) {
 
 // Looks good but should test a little more to be sure...
 void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
-  Bead* baseBead = this->chainList.at( 0 )->tail1->beadList;
+  Bead* baseBead = this->chainList.at( 0 )->tail1->beadList[ 0 ];
   PECTriblock* triblock = NULL;
   for ( auto chain = std::begin( this->chainList ) ; chain != std::end( this->chainList ) ; chain++ ) {
     triblock = ( *chain );
-    triblock->pec_block->beadList->pbcCorrectBeadInChain( baseBead, box_length );
-    triblock->tail1->beadList->pbcCorrectBeadInChain( baseBead, box_length );
-    triblock->tail2->beadList->pbcCorrectBeadInChain( baseBead, box_length );
+    triblock->pec_block->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
+    triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
+    triblock->tail2->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
     
     for ( idx i = 1 ; i < triblock->pec_block->length ; i ++ ) {
-      ( triblock->pec_block->beadList + i )->pbcCorrectBeadInChain( triblock->pec_block->beadList, box_length );
+      ( triblock->pec_block->getBead( i )  )->pbcCorrectBeadInChain( triblock->pec_block->beadList[ 0 ], box_length );
     }
     
     for ( idx i = 1 ; i < triblock->tail1->length ; i++ ) {
-      ( triblock->tail1->beadList + i )->pbcCorrectBeadInChain( triblock->tail1->beadList, box_length );
-      ( triblock->tail2->beadList + i )->pbcCorrectBeadInChain( triblock->tail2->beadList, box_length );
+      ( triblock->tail1->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
+      ( triblock->tail2->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail2->beadList[ 0 ], box_length );
     }
   
   }
@@ -85,15 +85,15 @@ void TriblockMicelle::calcCenterOfMass( idx* box_length ) {
     triblock = ( *chain );
     
     for ( idx i = 0 ; i < triblock->pec_block->length ; i ++ ) {
-      current = ( triblock->pec_block->beadList + i );
+      current = ( triblock->pec_block->getBead( i ) );
       this->com->addCoords( current->r );
     }
     
     for ( idx i = 0 ; i < triblock->tail1->length ; i++ ) {
-      current = ( triblock->tail1->beadList + i );
+      current = ( triblock->tail1->getBead( i ) );
       this->com->addCoords( current->r );
     
-      current = ( triblock->tail2->beadList + i );
+      current = ( triblock->tail2->getBead( i ) );
       this->com->addCoords( current->r );
     }
   

@@ -111,12 +111,12 @@ void TriblockData::deriveBondList() {
   
     this->addBlockBonds( chain->tail1, PHOBE_PHOBE );
   
-    this->makeNewBond( PHIL_PHIL, chain->tail1->beadList + chain->tail_length - 1,
-                chain->pec_block->beadList );
+    this->makeNewBond( PHIL_PHIL, chain->tail1->getBead( chain->tail_length - 1 ),
+                chain->pec_block->beadList[ 0 ] );
     this->addBlockBonds( chain->pec_block, PHIL_PHIL );
 
-    this->makeNewBond( PHIL_PHIL, chain->pec_block->beadList + chain->pec_length - 1,
-                chain->tail2->beadList );
+    this->makeNewBond( PHIL_PHIL, chain->pec_block->getBead( chain->pec_length - 1 ),
+                chain->tail2->beadList[ 0 ] );
     this->addBlockBonds( chain->tail2, PHOBE_PHOBE );
   }
   this->wereAllBondsMade();
@@ -125,8 +125,8 @@ void TriblockData::deriveBondList() {
 
 void DPDPolymerData::addBlockBonds( PolymerBlock* block, idx bond_type ) {
   for ( idx i = 0; i < block->length - 1; i++ ) {
-    this->makeNewBond( bond_type, block->beadList + i,
-                       block->beadList + i + 1 );
+    this->makeNewBond( bond_type, block->beadList[ i ],
+                       block->beadList[ i + 1 ] );
   }
 }
 
@@ -260,7 +260,7 @@ void ChargeTriblockData::deriveChainList() {
       for ( idx pec_counter = 0; pec_counter < this->pec_length; pec_counter++ ) {
         if ( gauss() <= uncharged_density ) {
           uncharged_counter++;
-          chain->pec_block->beadList[ pec_counter ].type = FLUID_ID_TRIBLOCK;
+          chain->pec_block->beadList[ pec_counter ]->type = FLUID_ID_TRIBLOCK;
           if ( uncharged_counter >= num_uncharged )
             break;
         }

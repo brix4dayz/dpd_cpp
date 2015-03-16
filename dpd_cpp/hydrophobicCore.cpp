@@ -19,10 +19,10 @@ void HydrophobicCore::addBin( Bin* bin ) {
 void HydrophobicCore::calcCenterOfMass( idx* box_length ) {
 	this->com->reset();
 	// First bead in core
-	Bead* base = this->binList[ 0 ]->tailList[ 0 ]->beadList;
+	Bead* base = this->binList[ 0 ]->tailList[ 0 ]->beadList[ 0 ];
 	for ( auto bin = std::begin( this->binList ) ; bin != std::end( this->binList ) ; bin++ ) {
 		for ( auto tail = std::begin( ( *bin )->tailList ) ; tail != std::end( ( *bin )->tailList ) ; tail++ ) {
-			( *tail )->beadList->pbcCorrectBeadInChain( base, box_length );
+			( *tail )->beadList[ 0 ]->pbcCorrectBeadInChain( base, box_length );
 			( *tail )->calcCenterOfMass( box_length );
       this->com->addCoords( (*tail )->com );
 		}

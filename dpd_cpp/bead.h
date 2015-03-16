@@ -27,7 +27,6 @@ class BeadGyration : public Gyration {
 		BeadGyration( DirVect* d );
 		BeadGyration( Bead* b, PosVect* com );
     ~BeadGyration();
-    void unlink();
 };
 
 class Bead : public ObjDPD {

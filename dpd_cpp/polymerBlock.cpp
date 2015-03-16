@@ -1,11 +1,16 @@
 #include "polymerBlock.h"
 
-PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, idx length )	: 
+PolymerBlock::PolymerBlock() {
+  this->com = new PosVect();
+  this->cursor = 0;
+}
+
+PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, idx length )	:
                             PolymerBlock() {
 	this->bead_type = type;
 	this->chain = chain;
 	this->length = length;
-	this->beadList = new Bead[ length ];
+	this->beadList = new Bead*[ length ];
 }
 
 PolymerBlock::PolymerBlock( CopolymerChain*chain, idx type, idx length, 
@@ -30,34 +35,37 @@ PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type,
 	this->addBead( b );
 
 	for (idx i = 1; i < length; i++ ) {
-		PosVect* rr = new PosVect( this->beadList[ i - 1 ].r, d );
+		PosVect* rr = new PosVect( this->beadList[ i - 1 ]->r, d );
 		b = new Bead( rr, type, idTracker, mol_id );
 		this->addBead( b );
 	}
 
 	this->calcCenterOfMass( box_length );
-} 
-
-PolymerBlock::PolymerBlock() {
-	this->com = new PosVect();
-	this->cursor = 0;
 }
 
 PolymerBlock::~PolymerBlock() {
-
+	if ( this->beadList ) {
+		for ( idx i = 0; i < this->length; i++ ) {
+    	delete beadList[ i ];
+  	}	
+	}
+  delete[] this->beadList;
+  delete this->com;
+  this->unlink();
 }
 
 void PolymerBlock::unlink() {
   this->beadList = NULL;
   this->com = NULL;
+  this->chain = NULL;
 }
 
 void PolymerBlock::calcCenterOfMass( idx* box_length ) {
 	Bead* b;
 	this->com->reset();
 	for ( idx i = 0; i < this->length; i++ ) {
-		b = this->beadList + i;
-		b->pbcCorrectBeadInChain( this->beadList, box_length );
+		b = this->beadList[ i ];
+		b->pbcCorrectBeadInChain( this->beadList[ 0 ], box_length );
     this->com->addCoords( b->r );
 	}
   int block_length = this->length;
@@ -67,7 +75,7 @@ void PolymerBlock::calcCenterOfMass( idx* box_length ) {
 bool PolymerBlock::addBead( Bead *bead ) {
 	if (this->cursor >= this->length || bead->type != this->bead_type )
 		return false;
-	this->beadList[ this->cursor ] = *bead;
+	this->beadList[ this->cursor ] = bead;
 	this->cursor++;
 	return true;
 }
@@ -76,24 +84,25 @@ Bead* PolymerBlock::getBead( idx idx ) {
 	if ( idx < 0 || idx >= this->length )
 		return NULL;
 	else
-		return this->beadList + idx;
+		return this->beadList[ idx ];
 }
 
 void PolymerBlock::printBlock( FILE *stream ) {
 	for (idx i = 0; i < this->length; i++ ) {
-		this->beadList[ i ].printBead( stream );
+		this->beadList[ i ]->printBead( stream );
 	}
 }
 
 void PolymerBlock::printData( FILE* stream ) {
 		for (idx i = 0; i < this->length; i++ ) {
-		this->beadList[ i ].printData( stream );
+		this->beadList[ i ]->printData( stream );
 	}
 }
 
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length ) : 
 																	PolymerBlock( chain, HYDROPHOBIC, length ) {
 	this->bin = NULL;
+	this->other = NULL;
 }
 
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length, 
@@ -101,6 +110,7 @@ HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length,
                                   PolymerBlock( chain, HYDROPHOBIC, length,
 	                                inFile, box_length ) {
   this->bin = NULL;
+  this->other = NULL;
 }
 
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length, 
@@ -111,6 +121,7 @@ HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length,
 	                                HYDROPHOBIC, length, d, 
 	                                box_length, r, idTracker, mol_id ) {
 	this->bin = NULL;
+	this->other = NULL;
 }
 
 HydrophobicTail::HydrophobicTail() : PolymerBlock() {
@@ -118,45 +129,58 @@ HydrophobicTail::HydrophobicTail() : PolymerBlock() {
 }
 
 void HydrophobicTail::unlink() {
-  
+  this->other = NULL;
+  this->bin = NULL;
 }
 
-HydrophobicTail::~HydrophobicTail() {}
+HydrophobicTail::~HydrophobicTail() {
+  this->unlink();
+  // Don't delete the other tail or Bin, let them take care of themselves
+}
 
 #if defined( TESTING )
+#include <iostream>
 
 int main() {
 
 	//Setup test
-	Bead b1(-1, 2, -1, 1);
-	Bead b2(1, -2, 1, 1);
-	Bead b3(3, 3, 3, 1);
-	Bead b4(-3, -3, -3, 1);
-	Bead b5(5, -1, 2, 1);
+	Bead* b1 = new Bead(-1, 2, -1, 1);
+	Bead* b2 = new Bead(1, -2, 1, 1);
+	Bead* b3 = new Bead(3, 3, 3, 1);
+	Bead* b4 = new Bead(-3, -3, -3, 1);
+	Bead* b5 = new Bead(5, -1, 2, 1);
 
-	Bead b6(0.0, 0.0, 0.0, 2);
+	Bead* b6 = new Bead(0.0, 0.0, 0.0, 2);
 
+	/*Bead* bb1 = new Bead(-1, 2, -1, 1);
+	Bead* bb2 = new Bead(1, -2, 1, 1);
+	Bead* bb3 = new Bead(3, 3, 3, 1);
+	Bead* bb4 = new Bead(-3, -3, -3, 1);
+	Bead* bb5 = new Bead(5, -1, 2, 1);
+
+	Bead* bb6 = new Bead(0.0, 0.0, 0.0, 2);
+*/
 	idx test_box_length = 15;
 
 	PolymerBlock hydrophobic_block(NULL, 1, 5);
 
 	// Test add
-	if ( !hydrophobic_block.addBead( &b1 ) || hydrophobic_block.cursor != 1 )
+	if ( !hydrophobic_block.addBead( b1 ) || hydrophobic_block.cursor != 1 )
 		return 1;
 
-	if ( hydrophobic_block.addBead( &b6 ) || hydrophobic_block.cursor != 1 )
+	if ( hydrophobic_block.addBead( b6 ) || hydrophobic_block.cursor != 1 )
 		return 1;
 
-	if ( !hydrophobic_block.addBead( &b2 ) || hydrophobic_block.cursor != 2 )
+	if ( !hydrophobic_block.addBead( b2 ) || hydrophobic_block.cursor != 2 )
 		return 1;
 
-	if ( !hydrophobic_block.addBead( &b3 ) || hydrophobic_block.cursor != 3 )
+	if ( !hydrophobic_block.addBead( b3 ) || hydrophobic_block.cursor != 3 )
 		return 1;
 
-	if ( !hydrophobic_block.addBead( &b4 ) || hydrophobic_block.cursor != 4 )
+	if ( !hydrophobic_block.addBead( b4 ) || hydrophobic_block.cursor != 4 )
 		return 1;
 
-	if ( !hydrophobic_block.addBead( &b5 ) || hydrophobic_block.cursor != 5 )
+	if ( !hydrophobic_block.addBead( b5 ) || hydrophobic_block.cursor != 5 )
 		return 1;
 
 	// Test com
@@ -165,7 +189,7 @@ int main() {
 	hydrophobic_block.com->print( stdout );
 
 	// Last test for add
-	if ( hydrophobic_block.addBead( &b1 ) || hydrophobic_block.cursor != 5 )
+	if ( hydrophobic_block.addBead( b1 ) || hydrophobic_block.cursor != 5 )
 		printf("Failed\n");
 
 
@@ -181,22 +205,22 @@ int main() {
 	HydrophobicTail hydrophobic_block1(NULL, 5);
 
 	// Test add
-	if ( !hydrophobic_block1.addBead( &b1 ) || hydrophobic_block1.cursor != 1 )
+	if ( !hydrophobic_block1.addBead( b1 ) || hydrophobic_block1.cursor != 1 )
 		return 1;
 
-	if ( hydrophobic_block1.addBead( &b6 ) || hydrophobic_block1.cursor != 1 )
+	if ( hydrophobic_block1.addBead( b6 ) || hydrophobic_block1.cursor != 1 )
 		return 1;
 
-	if ( !hydrophobic_block1.addBead( &b2 ) || hydrophobic_block1.cursor != 2 )
+	if ( !hydrophobic_block1.addBead( b2 ) || hydrophobic_block1.cursor != 2 )
 		return 1;
 
-	if ( !hydrophobic_block1.addBead( &b3 ) || hydrophobic_block1.cursor != 3 )
+	if ( !hydrophobic_block1.addBead( b3 ) || hydrophobic_block1.cursor != 3 )
 		return 1;
 
-	if ( !hydrophobic_block1.addBead( &b4 ) || hydrophobic_block1.cursor != 4 )
+	if ( !hydrophobic_block1.addBead( b4 ) || hydrophobic_block1.cursor != 4 )
 		return 1;
 
-	if ( !hydrophobic_block1.addBead( &b5 ) || hydrophobic_block1.cursor != 5 )
+	if ( !hydrophobic_block1.addBead( b5 ) || hydrophobic_block1.cursor != 5 )
 		return 1;
 
 	// Test com
@@ -205,7 +229,7 @@ int main() {
 	hydrophobic_block1.com->print( stdout );
 
 	// Last test for add
-	if ( hydrophobic_block1.addBead( &b1 ) || hydrophobic_block1.cursor != 5 )
+	if ( hydrophobic_block1.addBead( b1 ) || hydrophobic_block1.cursor != 5 )
 		printf("Failed\n");
 
 	// Test get
@@ -225,6 +249,11 @@ int main() {
 	test.com->print( stdout );
 
 	test.printBlock( stdout );
+
+	infile.close();
+
+	hydrophobic_block.unlink();
+	delete hydrophobic_block.com;
 
 	return 0;
 }

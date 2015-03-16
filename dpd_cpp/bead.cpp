@@ -134,14 +134,7 @@ BeadGyration::BeadGyration( DirVect* d ): Gyration( d ) {}
 
 BeadGyration::BeadGyration( Bead* b, PosVect* com ): BeadGyration( new DirVect( b->r, com ) ) {}
 
-void BeadGyration::unlink() {
-  this->d = NULL;
-}
-
-BeadGyration::~BeadGyration() {
-  delete d;
-  this->unlink();
-}
+BeadGyration::~BeadGyration() {}
 
 Bond::Bond() {}
 

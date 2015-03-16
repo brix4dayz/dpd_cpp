@@ -6,7 +6,7 @@ class PolymerBlock : public ObjDPD {
 		idx bead_type;
 		idx length;
 		idx cursor;
-		Bead* beadList;
+		Bead** beadList;
 		PosVect* com;
 		CopolymerChain* chain;
 		PolymerBlock( CopolymerChain* chain, idx type, 
