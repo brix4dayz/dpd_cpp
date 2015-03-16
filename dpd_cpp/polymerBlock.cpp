@@ -46,7 +46,7 @@ PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type,
 PolymerBlock::~PolymerBlock() {
 	if ( this->beadList ) {
 		for ( idx i = 0; i < this->length; i++ ) {
-    	delete beadList[ i ];
+    	delete this->beadList[ i ];
   	}	
 	}
   delete[] this->beadList;
@@ -55,8 +55,9 @@ PolymerBlock::~PolymerBlock() {
 }
 
 void PolymerBlock::unlink() {
-  this->beadList = NULL;
-  this->com = NULL;
+  for ( idx i = 0; i < this->length; i++ ) {
+    beadList[ i ] = NULL;
+  }	
   this->chain = NULL;
 }
 
@@ -254,8 +255,6 @@ int main() {
 
 	delete b6;
 
-	delete hydrophobic_block.com;
-	delete[] hydrophobic_block.beadList;
 	hydrophobic_block.unlink();
 
 	return 0;
