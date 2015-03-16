@@ -5,13 +5,13 @@
 PECTriblock::PECTriblock() {}
 
 // Generic constuctor
-PECTriblock::PECTriblock( idx pec_length, idx tail_length ) {
+PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) {
 	this->pec_length = pec_length;
 	this->tail_length = tail_length;
 	this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length );
 	this->tail1 = new HydrophobicTail( this, tail_length );
 	this->tail2 = new HydrophobicTail( this, tail_length );
-	this->calcLength();
+  this->chain_length = length;
 	this->tail1->other = this->tail2;
 	this->tail2->other = this->tail1;
 	this->micelle = NULL;
@@ -19,8 +19,8 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length ) {
 
 // Constructs from reading input file
 // Should I add a void ptr to the frame as a parameter?
-PECTriblock::PECTriblock( idx pec_length, idx tail_length,
-                          std::ifstream* inFile, 
+PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
+                          std::ifstream* inFile,
                           idx* box_length ) {
 	this->pec_length = pec_length;
 	this->tail_length = tail_length;
@@ -30,7 +30,7 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length,
 	 HYDROPHILIC, pec_length, inFile, box_length );
 	this->tail2 = new HydrophobicTail( this, tail_length, 
 	 inFile, box_length );
-	this->calcLength();
+  this->chain_length = length;
 	this->tail1->other = this->tail2;
 	this->tail2->other = this->tail1;
 	this->micelle = NULL;
@@ -84,10 +84,6 @@ void PECTriblock::printData( FILE* stream ) {
   this->tail2->printData( stream ); 
 }
 
-void PECTriblock::calcLength() {
-	this->chain_length = this->pec_block->length + 2 * this->tail1->length;
-}
-
 //Deconstructor... clean up
 PECTriblock::~PECTriblock() {}
 
@@ -113,7 +109,7 @@ void PECTriblock::determineConfiguration() {
 int main() {
 	std::ifstream infile( "bead_test.txt" );
 	idx box_length = 36;
-	PECTriblock* chain = new PECTriblock( 50, 4, &infile, &box_length );
+	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &box_length );
 	chain->printChain( stdout );
 	std::cout << (short) chain->chain_length << std::endl;
 	

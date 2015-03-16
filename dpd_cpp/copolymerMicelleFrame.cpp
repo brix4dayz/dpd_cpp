@@ -82,7 +82,7 @@ int main() {
 	CopolymerMicelleFrame frame( 1, 36, 1, 2 );
 
 	std::ifstream infile( "bead_test.txt" );
-	PECTriblock* chain = new PECTriblock( 50, 4, &infile, &( frame.box_length ) );
+	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame.box_length ) );
 	std::cout << (short) chain->chain_length << std::endl;
 
 	std::cout << "Tail1 com: ";

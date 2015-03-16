@@ -1,6 +1,6 @@
 #include "polymerBlock.h"
 
-class CopolymerChain {
+class CopolymerChain : public ObjDPD {
 	public:
 		idx chain_length;
 		PosVect* com;
@@ -9,9 +9,15 @@ class CopolymerChain {
     unsigned short id;
     virtual void printChain( FILE* stream ) {}
     virtual void printData( FILE* stream ) {}
-		// Calclength is not needed
-		virtual void calcLength () {}
-		virtual ~CopolymerChain() {}
+		~CopolymerChain() {
+     // delete this->com;
+      //this->com = NULL;
+      //this->unlink();
+    }
+    void unlink() {
+      //this->frame = NULL;
+      //this->micelle = NULL;
+    }
 };
 
 enum TriblockConfiguration { stem, petal, neither };
@@ -29,11 +35,10 @@ class PECTriblock : public CopolymerChain {
 		PECTriblock();
 		PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length,
                        unsigned int* idTracker, unsigned short id);
-		PECTriblock( idx tail_length, idx pec_length );
-		PECTriblock( idx tail_length, idx pec_length, std::ifstream* inFile, idx* box_length );
+		PECTriblock( idx tail_length, idx pec_length, idx length );
+		PECTriblock( idx tail_length, idx pec_length, idx length, std::ifstream* inFile, idx* box_length );
 		~PECTriblock();
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
-		void calcLength();
 		void determineConfiguration(); // THIS IS WRONG
 };

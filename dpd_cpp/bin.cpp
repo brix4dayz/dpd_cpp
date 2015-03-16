@@ -59,12 +59,12 @@ int main() {
 	idx box_length = 36;
 	// Make two triblocks from file
 	std::cout << "Chain1: " << std::endl;
-	PECTriblock* chain1 = new PECTriblock( 50, 4, &infile, &box_length );
+	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length );
 	chain1->printChain( stdout );
 	std::cout << ( short ) chain1->chain_length << std::endl;	
 
 	std::cout << "Chain2: " << std::endl;
-	PECTriblock* chain2 = new PECTriblock( 50, 4, &infile, &box_length );
+	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length );
 	chain2->printChain( stdout );
 	std::cout << ( short ) chain2->chain_length << std::endl;
 
