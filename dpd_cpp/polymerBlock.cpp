@@ -252,6 +252,8 @@ int main() {
 
 	infile.close();
 
+	delete b6;
+
 	delete hydrophobic_block.com;
 	delete[] hydrophobic_block.beadList;
 	hydrophobic_block.unlink();
