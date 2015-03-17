@@ -10,13 +10,13 @@ class CopolymerChain : public ObjDPD {
     virtual void printChain( FILE* stream ) {}
     virtual void printData( FILE* stream ) {}
 		~CopolymerChain() {
-     // delete this->com;
-      //this->com = NULL;
-      //this->unlink();
+      delete this->com;
+      this->com = NULL;
+      this->unlink();
     }
     void unlink() {
-      //this->frame = NULL;
-      //this->micelle = NULL;
+      this->frame = NULL;
+      this->micelle = NULL;
     }
 };
 
@@ -24,7 +24,6 @@ enum TriblockConfiguration { stem, petal, neither };
 
 class PECTriblock : public CopolymerChain {
 	public:
-		
     PolymerBlock* pec_block;
 		HydrophobicTail* tail1;
 		HydrophobicTail* tail2;
@@ -38,7 +37,8 @@ class PECTriblock : public CopolymerChain {
 		PECTriblock( idx tail_length, idx pec_length, idx length );
 		PECTriblock( idx tail_length, idx pec_length, idx length, std::ifstream* inFile, idx* box_length );
 		~PECTriblock();
+    void unlink();
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
-		void determineConfiguration(); // THIS IS WRONG
+		void determineConfiguration();
 };

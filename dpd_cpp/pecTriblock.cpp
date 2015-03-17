@@ -6,7 +6,9 @@ PECTriblock::PECTriblock() {}
 
 // Generic constuctor
 PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) {
-	this->pec_length = pec_length;
+  this->com = new PosVect();
+  
+  this->pec_length = pec_length;
 	this->tail_length = tail_length;
 	this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length );
 	this->tail1 = new HydrophobicTail( this, tail_length );
@@ -22,7 +24,9 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) {
 PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
                           std::ifstream* inFile,
                           idx* box_length ) {
-	this->pec_length = pec_length;
+	this->com = new PosVect();
+  
+  this->pec_length = pec_length;
 	this->tail_length = tail_length;
 	this->tail1 = new HydrophobicTail( this, tail_length, 
 	 inFile, box_length );
@@ -39,10 +43,11 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
 // Chain length should be calculated once and passed as a parameter...
 
 // Constructs a chain with a random position within a box
-// This function needs to be tested!
 // DEBUG
 PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
                           unsigned int* idTracker, unsigned short id ) {
+  this->com = new PosVect();
+  
   this->id = id + 1;
   this->pec_length = pec_length;
   this->tail_length = tail_length;
@@ -84,8 +89,19 @@ void PECTriblock::printData( FILE* stream ) {
   this->tail2->printData( stream ); 
 }
 
+void PECTriblock::unlink() {
+  this->pec_block = NULL;
+  this->tail1 = NULL;
+  this->tail2 = NULL;
+}
+
 //Deconstructor... clean up
-PECTriblock::~PECTriblock() {}
+PECTriblock::~PECTriblock() {
+  delete pec_block;
+  delete tail1;
+  delete tail2;
+  this->unlink();
+}
 
 // has been redone, needs to be tested...
 void PECTriblock::determineConfiguration() {
@@ -119,6 +135,7 @@ int main() {
 		std::cout << "Fail" << std::endl;
 
   delete chain;
+  chain = NULL;
 
   // Test random chain maker instead  
   srand(2);
@@ -127,6 +144,8 @@ int main() {
   chain = new PECTriblock( &box_length, bond_length, 30, 5, 40, &id, 1 );
   chain->printChain( stdout );
 
+  delete chain;
+  
   /*DirVect* dir = new DirVect( bond_length );
   std::cout << "dx: " << dir->dx << std::endl;
   std::cout << "dy: " << dir->dy << std::endl;
