@@ -139,12 +139,13 @@ int main() {
 
   // Test random chain maker instead  
   srand(2);
-  float* bond_length = new float( .1 );
+  float bond_length = 0.1f;
   unsigned int id = 0;
-  chain = new PECTriblock( &box_length, bond_length, 30, 5, 40, &id, 1 );
+  chain = new PECTriblock( &box_length, &bond_length, 30, 5, 40, &id, 1 );
   chain->printChain( stdout );
 
   delete chain;
+  
   
   /*DirVect* dir = new DirVect( bond_length );
   std::cout << "dx: " << dir->dx << std::endl;
