@@ -7,7 +7,14 @@ Bin::Bin() {
 	this->core = NULL;
 }
 
-Bin::~Bin() {}
+Bin::~Bin() {
+	this->unlink();
+}
+
+void Bin::unlink() {
+	this->core = NULL;
+	this->frame = NULL;
+}
 
 void Bin::init( CopolymerMicelleFrame* frame, idx size, idx i, idx j, idx k ) {
 	this->frame = frame;
@@ -131,6 +138,10 @@ int main() {
 	// 2 and 2
 	std::cout << "Number of different chains in Bin1: " << (int) b1.num_chains << std::endl;
 	std::cout << "Number of different chains in Bin2: " << (int) b2.num_chains << std::endl;
+
+	delete chain1;
+
+	delete chain2;
 
 	return 0;
 }

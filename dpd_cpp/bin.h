@@ -5,7 +5,7 @@
 #include "copolymerChain.h"
 #include <vector>
 
-class Bin {
+class Bin : public ObjDPD {
 	public:
 		idx size;
 		idx i, j, k;
@@ -24,6 +24,7 @@ class Bin {
 			float* micelle_cutoff  );
 		void addTail( HydrophobicTail* tail );
 		void printBin( FILE* stream );
+		void unlink();
 };
 
 #endif
