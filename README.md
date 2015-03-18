@@ -17,13 +17,15 @@ There are generic classes such as **PosVect** (position vector), **DirVect** (di
 Also has specific implementations descending from these classes: **BeadGyration**, **HydrophobicTail**, **PECTriblock**, **HydrophobicCore**, **Micelle**, **DPDPolymerData** (aqueous polymer builder), **TriblockData** (builder), **ChargeTriblockData** (builder), **DiblockMicelle**, **TriblockMicelle**, **CopolymerMicelleFrame** (processor), **TriblockFrame** (processor).
 
 #### _Current Objectives_
-* Finish _unlink_ and _deconstructors_ for objects to prevent memory leaks.  
+* Finish _unlink_ and _deconstructors_ for objects to prevent memory leaks.
+* Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**).  
 * Finish **TriblockFrame** and its parent classes.  
 * Reorganize **DPDData**, **DPDFrame**, and **Bin** classes as parent classes.   
    + **CopolymerMicelleFrame** inherents from **DPDFrame**, should have **TailBin** hash map instead of the now generic **Bin**'s.  
    + Builders could use **BondBin** cube for fluid collision detection.  
    + **Bond**'s need **PosVect** com and **Molecule**  reference.  
    + **AngBond** could be class containing two **Bond**'s.   
+* Organize library into folders: _types_, _builders_, and _processors_.
 * Implement **Nanoparticle, Surface,** and **Layer** classes, etc.  
 * Add collision detection to builders using **Bin**'s.  
 * Organize library and executables into application.  
@@ -36,8 +38,6 @@ Also has specific implementations descending from these classes: **BeadGyration*
 * Could make **ParticleBin**'s who determine their size based on the size of the **Nanoparticle**'s, which can be useful for preventing _fluidCollision_ in _deriveFluid_.  
 * **Molecule** and **Macromolecule** parent classes.. Essentially just a list of beads for **Molecule**.  
    + **PolymerBlock** could extend **Molecule** and **CopolymerChain** could extend **Macromolecule**.
-* Organize library into folders: _types_, _builders_, and _processors_.
-* Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**).
 * Incorporate multithreading and GPU paralleization eventually.
 * C++ has _multiple inheritance_, which could work well for **Molecule**'s and **PolymerBlock**'s.  
 * Creating dynamically linked libraries in C/C++: <http://www.cs.swarthmore.edu/~newhall/unixhelp/howto_C_libraries.html>  
