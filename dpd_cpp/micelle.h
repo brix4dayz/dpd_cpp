@@ -1,6 +1,6 @@
 #include "hydrophobicCore.h"
 
-class Micelle {
+class Micelle : public ObjDPD {
 	public:
 		unsigned short aggreg_num;
 		std::vector< HydrophobicCore* > coreList;
@@ -11,6 +11,7 @@ class Micelle {
 		~Micelle();
 		void addCore( HydrophobicCore* core );
 		void printMicelleCore( FILE* stream );
+		void unlink();
 		virtual void pbcCorrectMicelle( idx* box_length ) {}
 		virtual void calcCenterOfMass( idx* box_length ) {}
 		virtual void printMicelle( FILE* stream ) {}
@@ -29,6 +30,7 @@ class TriblockMicelle : public Micelle {
 		void deriveChainList();
     void pbcCorrectMicelle( idx* box_length );
 		void calcCenterOfMass( idx* box_length );
+		void unlink();
 };
 
 class DiblockMicelle : public Micelle {

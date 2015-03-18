@@ -8,7 +8,23 @@ Micelle::Micelle( DPDFrame* frame ) {
 
 Micelle::Micelle(): Micelle( NULL ) {}
 
-Micelle::~Micelle() {}
+void Micelle::unlink() {
+  this->frame = NULL;
+
+  for ( auto core = std::begin( this->coreList ); core != std::end( this->coreList ); core++ ) {
+    *core = NULL;
+  }
+}
+
+Micelle::~Micelle() {
+  delete this->com;
+
+  for ( auto core = std::begin( this->coreList ); core != std::end( this->coreList ); core++ ) {
+    delete *core;
+  }
+
+  this->unlink();
+}
 
 void Micelle::addCore( HydrophobicCore* core ) {
 	this->aggreg_num += core->aggregation_num;
@@ -102,6 +118,16 @@ void TriblockMicelle::calcCenterOfMass( idx* box_length ) {
   this->com->divideCoords( &ttlBeads );
 }
 
+void TriblockMicelle::unlink() {
+  for ( auto chain = std::begin( this->chainList ); chain != std::end( this->chainList ); chain++ ) {
+    *chain = NULL;
+  }
+}
+
+TriblockMicelle::~TriblockMicelle() {
+  this->unlink();
+}
+
 #if defined( TESTING )
 #include <iostream>
 
@@ -170,6 +196,14 @@ int main() {
 
   // Test calcCenterOfMass
   // but its not that important of a function
+
+  delete chain1;
+  delete chain2;
+
+  delete b1;
+  delete b2;
+
+  delete micelle;
   
 	return 0;
 }
