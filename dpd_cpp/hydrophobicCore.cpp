@@ -6,7 +6,17 @@ HydrophobicCore::HydrophobicCore() {
 	this->com = new PosVect();
 }
 
-HydrophobicCore::~HydrophobicCore() {}
+void HydrophobicCore::unlink() {
+	this->micelle = NULL;
+	for ( auto bin = std::begin( this->binList ); bin != std::end( this->binList ); bin++ ) {
+		( *bin ) = NULL;
+	}
+}
+
+HydrophobicCore::~HydrophobicCore() {
+	delete this->com;
+	this->unlink();
+}
 
 void HydrophobicCore::addBin( Bin* bin ) {
 	this->aggregation_num += bin->num_chains;
@@ -158,13 +168,25 @@ int main() {
 	if ( core1->groupCores( core2 ) )
 		std::cout << "Group works again" << std::endl;
     
-    chain2->determineConfiguration();
-    if ( chain2->config != stem )
-        std::cout << "Fail" << std::endl;
+  chain2->determineConfiguration();
+  if ( chain2->config != stem )
+    std::cout << "Fail" << std::endl;
     
-    chain1->determineConfiguration();
-    if ( chain1->config != petal )
-        std::cout << "Fail" << std::endl;
+  chain1->determineConfiguration();
+  if ( chain1->config != petal )
+    std::cout << "Fail" << std::endl;
+
+  delete chain1;
+  delete chain2;
+
+  delete b1;
+  delete b2;
+  delete b3;
+  delete b4;
+
+  delete core;
+  delete core1;
+  delete core2;
 
 	return 0;
 }

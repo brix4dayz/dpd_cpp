@@ -1,6 +1,6 @@
 #include "bin.h"
 
-class HydrophobicCore {
+class HydrophobicCore : public ObjDPD {
 	public:
 		Micelle* micelle;
 		std::vector< Bin* > binList;
@@ -18,4 +18,5 @@ class HydrophobicCore {
 		// matches any of the bins in the other core
 		void calcCenterOfMass( idx* box_length );
 		void printCore( FILE* stream );
+		void unlink();
 };
