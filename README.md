@@ -41,7 +41,9 @@ Also has specific implementations descending from these classes: **BeadGyration*
 * Incorporate multithreading and GPU paralleization eventually.
 * C++ has _multiple inheritance_, which could work well for **Molecule**'s and **PolymerBlock**'s.  
 * Creating dynamically linked libraries in C/C++: <http://www.cs.swarthmore.edu/~newhall/unixhelp/howto_C_libraries.html>  
- 
+* **NBlockCopolymer** class which has an dynamic array of **PolymerBlock**'s of length N  
+* Make **Bin** a generic container???
+* **DPDFrame** -> **CopolymerFrame** -> **TriblockFrame**
 
 #### _Future Projects/Extensions_
 * `DPD/MD Engine using Python:`
