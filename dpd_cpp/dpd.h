@@ -16,8 +16,6 @@ double gauss();
 
 // Class prototypes
 
-class ObjDPD;
-
 class PosVect;
 
 class DirVect;
@@ -48,17 +46,37 @@ class TriblockMicelle;
 
 class DiblockMicelle;
 
-// Abstract class for DPD frame processors to inherent from
-class DPDFrame {};
-
 class CopolymerMicelleFrame;
 
 class TriblockFrame;
-
-class DPDData {};
 
 class TriblockData;
 
 class DPDPolymerData;
 
 class ChargeTriblockData;
+
+class ObjDPD {
+  public:
+    virtual void unlink() {}
+    virtual ~ObjDPD() {}
+};
+
+// Abstract class for DPD frame processors to inherent from
+class DPDFrame : public ObjDPD {
+  public:
+    void unlink() {}
+    ~DPDFrame() {}
+};
+
+class DPDTrajectory : public ObjDPD {
+  public:
+    void unlink() {}
+    ~DPDTrajectory() {}
+};
+
+class DPDData : public ObjDPD {
+  public:
+    void unlink() {}
+    ~DPDData() {}
+};

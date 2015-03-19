@@ -20,6 +20,7 @@ class CopolymerMicelleFrame : public DPDFrame {
 		//Bin binBlock( PolymerBlock* block );
 		Bin binBlock( HydrophobicTail* tail );
 		virtual void process() {}
+    void unlink() {}
 };
 
 class TriblockFrame : public CopolymerMicelleFrame {
@@ -39,4 +40,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		TriblockFrame();
 		~TriblockFrame();
 		void process();
+  void unlink() {}
 };

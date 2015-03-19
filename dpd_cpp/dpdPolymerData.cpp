@@ -11,7 +11,6 @@
 
 #define FLUID_ID_TRIBLOCK 3
 
-
 DPDPolymerData::DPDPolymerData() {}
 
 DPDPolymerData::DPDPolymerData( std::string filename, idx density, 
@@ -44,6 +43,17 @@ void DPDPolymerData::calcNumFluid() {
 
 void DPDPolymerData::calcNumBonds() {
   this->num_bonds = this->num_chains*( this->chain_length - 1 );
+}
+
+void DPDPolymerData::printLAMMPSHeader( FILE *fp ) {
+  fprintf( fp, "LAMMPS Description\n\n");
+  fprintf( fp, "%d atoms\n%d bonds\n\n", this->num_atoms, this->num_bonds );
+  fprintf( fp, "%d atom types\n2 bond types\n\n", this->Fluid_type );
+  
+  fprintf( fp, "%e %e xlo xhi\n", 0.0, ( (double) this->box_length ) );
+  fprintf( fp, "%e %e ylo yhi\n", 0.0, ( (double) this->box_length ) );
+  fprintf( fp, "%e %e zlo zhi\n", 0.0, ( (double) this->box_length ) );
+  fprintf( fp, "\nAtoms\n\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,15 +221,8 @@ void DPDPolymerData::deriveFluidList() {
 
 void TriblockData::printLAMMPS( FILE* fp ) {
 
-  fprintf( fp, "LAMMPS Description\n\n");
-  fprintf( fp, "%d atoms\n%d bonds\n\n", this->num_atoms, this->num_bonds );
-  fprintf( fp, "%d atom types\n2 bond types\n\n", this->Fluid_type );
-
-  fprintf( fp, "%e %e xlo xhi\n", 0.0, ( (double) this->box_length ) );
-  fprintf( fp, "%e %e ylo yhi\n", 0.0, ( (double) this->box_length ) );
-  fprintf( fp, "%e %e zlo zhi\n", 0.0, ( (double) this->box_length ) );
-  fprintf( fp, "\nAtoms\n\n");
-
+  this->printLAMMPSHeader( fp );
+  
   for ( int i = 0; i < this->num_chains; i++ ) {
     this->chainList[ i ].printData( fp );
   }

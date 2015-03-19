@@ -73,6 +73,8 @@ void TriblockFrame::process() {
 
 }
 
+TriblockFrame::~TriblockFrame() {}
+
 // Testing
 
 #if defined( TESTING )

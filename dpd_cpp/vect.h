@@ -9,12 +9,6 @@
 // where r1 = < x1, y1, z1 > ; r2 = < x2, y2, z2 >
 // and dx = x2 - x1 ; dy = y2 - y1 ; dz = z2 - z1
 
-class ObjDPD {
-  public:
-    virtual void unlink() {}
-    virtual ~ObjDPD() {}
-};
-
 // Primitive data pointers shold be references
 
 class DPDVect : public ObjDPD {

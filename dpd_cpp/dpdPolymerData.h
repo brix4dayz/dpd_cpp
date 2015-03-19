@@ -39,6 +39,8 @@ class DPDPolymerData : public DPDData {
     virtual void deriveChainList() {}
     virtual void generate() {}
     virtual void printLAMMPS( FILE* fp ) {}
+    void printLAMMPSHeader( FILE* fp );
+    void unlink() {}
 };
 
 class TriblockData : public DPDPolymerData {
@@ -58,6 +60,7 @@ class TriblockData : public DPDPolymerData {
     void wereAllBeadsMade();
     void printLAMMPS( FILE* fp );
     void addChain( PECTriblock* chain );
+    void unlink() {}
 };
 
 class ChargeTriblockData : public TriblockData {
