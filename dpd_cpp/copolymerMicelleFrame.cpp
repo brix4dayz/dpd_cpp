@@ -24,23 +24,26 @@ CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_le
 }
 
 CopolymerMicelleFrame::~CopolymerMicelleFrame() {
-	for ( unsigned short i = 0; i < this->num_chains; i++ ) {
-		if ( this->chainList[ i ] ) {
+	if ( this->chainList ) {
+		for ( unsigned short i = 0; i < this->num_chains; i++ ) {
 			delete this->chainList[ i ];	
 		}
+		delete[] this->chainList;
 	}
-	delete[] this->chainList;
 
-	for ( idx i = 0; i < this->num_bins; i++ ) {
-		for ( idx j = 0; j < this->num_bins; j++ ) {
-			for ( idx k = 0; k < this->num_bins; k++ ) {
-				delete this->box[ i ][ j ][ k ];
+	if ( this->box ) {
+		for ( idx i = 0; i < this->num_bins; i++ ) {
+			for ( idx j = 0; j < this->num_bins; j++ ) {
+				for ( idx k = 0; k < this->num_bins; k++ ) {
+					delete this->box[ i ][ j ][ k ];
+				}
+				delete[] this->box[ i ][ j ];
 			}
-			delete[] this->box[ i ][ j ];
+			delete[] this->box[ i ];
 		}
-		delete[] this->box[ i ];
+		delete[] this->box;
 	}
-	delete[] this->box;
+
 	this->unlink();
 }
 
@@ -117,6 +120,8 @@ TriblockFrame::~TriblockFrame() {}
 int main() {
 	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2 );
 
+	frame->chainList[ 0 ] = (CopolymerChain*) new PECTriblock( 1, 2, 3 );
+
 	std::ifstream infile( "bead_test.txt" );
 	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );
 	std::cout << (short) chain->chain_length << std::endl;
@@ -147,6 +152,9 @@ int main() {
 	b1 = NULL;
 
 	b2 = NULL;
+
+	//delete[] frame->chainList;
+	//frame->chainList = NULL;
 
 	delete frame;
 
