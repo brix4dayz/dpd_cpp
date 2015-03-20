@@ -67,7 +67,6 @@ class DPDFrame {
     virtual ~DPDFrame() {}
 };
 
-template <class C>
 class CopolymerMicelleFrame;
 
 class TriblockFrame;

@@ -22,7 +22,7 @@ enum TriblockConfiguration { stem, petal, neither };
 
 class PECTriblock : public CopolymerChain {
 	public:
-		CopolymerMicelleFrame<PECTriblock>* frame;
+		TriblockFrame* frame;
     PolymerBlock* pec_block;
 		HydrophobicTail* tail1;
 		HydrophobicTail* tail2;

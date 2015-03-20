@@ -1,14 +1,12 @@
 #include "copolymerMicelleFrame.h"
-#define TEMPLATE template <class C>
 
-TEMPLATE
-CopolymerMicelleFrame<C>::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
+CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
 	                                            idx chain_length, idx bin_size ) {
 	this->num_atoms = num_atoms;
 	this->box_length = box_length;
 	this->chain_length = chain_length;
 	this->num_chains = num_atoms / chain_length;
-	this->chainList = new C*[ this->num_chains ];
+	this->chainList = new CopolymerChain*[ this->num_chains ];
 	this->bin_size = bin_size;
 	this->num_bins = box_length / bin_size;
 	this->box = new Bin***[ this->num_bins ];
@@ -25,8 +23,7 @@ CopolymerMicelleFrame<C>::CopolymerMicelleFrame( unsigned int num_atoms, idx box
 	} 
 }
 
-TEMPLATE
-CopolymerMicelleFrame<C>::~CopolymerMicelleFrame() {
+CopolymerMicelleFrame::~CopolymerMicelleFrame() {
 	for ( unsigned short i = 0; i < this->num_chains; i++ ) {
 		if ( this->chainList[ i ] ) {
 			delete this->chainList[ i ];	
@@ -55,8 +52,7 @@ CopolymerMicelleFrame<C>::~CopolymerMicelleFrame() {
 	return this->box[ i ][ j ][ k ];
 }*/
 
-TEMPLATE
-Bin* CopolymerMicelleFrame<C>::binBlock( HydrophobicTail* tail ) {
+Bin* CopolymerMicelleFrame::binBlock( HydrophobicTail* tail ) {
 	idx i = coordToBin( tail->com->x );
 	idx j = coordToBin( tail->com->y );
 	idx k = coordToBin( tail->com->z );
@@ -64,8 +60,7 @@ Bin* CopolymerMicelleFrame<C>::binBlock( HydrophobicTail* tail ) {
 	return this->box[ i ][ j ][ k ];
 }
 
-TEMPLATE
-idx CopolymerMicelleFrame<C>::coordToBin( double coord ) {
+idx CopolymerMicelleFrame::coordToBin( double coord ) {
 	if ( coord < 0 )
 		coord += this->box_length;
 	else if ( ( ( idx ) coord ) >= this->box_length )
@@ -74,18 +69,16 @@ idx CopolymerMicelleFrame<C>::coordToBin( double coord ) {
 }
 
 
-TEMPLATE
-void CopolymerMicelleFrame<C>::addChain( C* chain ) {
+void CopolymerMicelleFrame::addChain( CopolymerChain* chain ) {
   if ( this->chainCursor >= this->num_chains ) {
     fprintf( stdout, "Error, adding too many chains." );
     exit( 1 );
   }
-  this->chainList[ this->chainCursor ] = *chain;
+  this->chainList[ this->chainCursor ] = chain;
   this->chainCursor++;
 }
 
-TEMPLATE
-void CopolymerMicelleFrame<C>::unlink() {
+void CopolymerMicelleFrame::unlink() {
 	this->chainList = NULL;
 	this->box = NULL;
 }
@@ -122,7 +115,7 @@ TriblockFrame::~TriblockFrame() {}
 #include <iostream> //for TESTING
 
 int main() {
-	CopolymerMicelleFrame<PECTriblock*>* frame = new CopolymerMicelleFrame<PECTriblock*>( 1, 36, 1, 2 );
+	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2 );
 
 	std::ifstream infile( "bead_test.txt" );
 	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );

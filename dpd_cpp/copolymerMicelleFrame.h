@@ -1,8 +1,7 @@
 #include "micelle.h"
 
 //
-template <class C>
-class CopolymerMicelleFrame : public DPDFrame<C*> {
+class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
 	private:
 		idx coordToBin( double coord );
 	public:
@@ -12,7 +11,8 @@ class CopolymerMicelleFrame : public DPDFrame<C*> {
 		idx bin_size;
 		idx num_bins;
 		unsigned short num_chains;
-		C** chainList;
+		CopolymerChain** chainList;
+		unsigned short chainCursor;
 		Bin**** box; //3d array of bin pointers making up simulation box
 		CopolymerMicelleFrame( unsigned int num_atoms, idx box_length, 
 			idx chain_length, idx bin_size );
@@ -20,12 +20,12 @@ class CopolymerMicelleFrame : public DPDFrame<C*> {
 		~CopolymerMicelleFrame();
 		//Bin binBlock( PolymerBlock* block );
 		Bin* binBlock( HydrophobicTail* tail );
-  	void addChain( C* chain );
+  	void addChain( CopolymerChain* chain );
 		virtual void process() {}
     void unlink();
 };
 
-class TriblockFrame : public CopolymerMicelleFrame<PECTriblock*> {
+class TriblockFrame : public CopolymerMicelleFrame {
 	public:
 		std::vector< TriblockMicelle* > micelleList;
     idx tail_length;
