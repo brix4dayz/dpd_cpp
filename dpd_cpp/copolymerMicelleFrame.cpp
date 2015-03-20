@@ -2,6 +2,7 @@
 
 CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
 	                                            idx chain_length, idx bin_size ) {
+	this->chainCursor = 0;
 	this->num_atoms = num_atoms;
 	this->box_length = box_length;
 	this->chain_length = chain_length;
@@ -120,10 +121,11 @@ TriblockFrame::~TriblockFrame() {}
 int main() {
 	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2 );
 
-	frame->chainList[ 0 ] = (CopolymerChain*) new PECTriblock( 1, 2, 3 );
-
 	std::ifstream infile( "bead_test.txt" );
 	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );
+
+	frame->addChain( (CopolymerChain*) chain );
+
 	std::cout << (short) chain->chain_length << std::endl;
 
 	std::cout << "Tail1 com: ";
@@ -147,14 +149,9 @@ int main() {
 		// for testing
 	//std::cout << ( int ) b3.i << " " << ( int ) b3.j << " " << ( int ) b3.k << std::endl;
 
-	delete chain;
-
 	b1 = NULL;
 
 	b2 = NULL;
-
-	//delete[] frame->chainList;
-	//frame->chainList = NULL;
 
 	delete frame;
 
