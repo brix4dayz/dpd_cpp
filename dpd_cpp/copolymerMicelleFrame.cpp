@@ -27,7 +27,23 @@ CopolymerMicelleFrame<C>::CopolymerMicelleFrame( unsigned int num_atoms, idx box
 
 TEMPLATE
 CopolymerMicelleFrame<C>::~CopolymerMicelleFrame() {
+	for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+		delete this->chainList[ i ];
+	}
+	delete[] this->chainList;
 
+	for ( idx i = 0; i < this->num_bins; i++ ) {
+		for ( idx j = 0; j < this->num_bins; j++ ) {
+			for ( idx k = 0; k < this->num_bins; k++ ) {
+				delete this->box[ i ][ j ][ k ];
+			}
+			delete[] this->box[ i ][ j ];
+		}
+		delete[] this->box[ i ];
+	}
+	delete[] this->box;
+
+	this->unlink();
 }
 
 /*Bin CopolymerMicelleFrame::binBlock( PolymerBlock* block ) {
@@ -69,7 +85,8 @@ void CopolymerMicelleFrame<C>::addChain( C* chain ) {
 
 TEMPLATE
 void CopolymerMicelleFrame<C>::unlink() {
-
+	this->chainList = NULL;
+	this->box = NULL;
 }
 
 // Triblock
@@ -104,10 +121,10 @@ TriblockFrame::~TriblockFrame() {}
 #include <iostream> //for TESTING
 
 int main() {
-	CopolymerMicelleFrame<PECTriblock> frame( 1, 36, 1, 2 );
+	CopolymerMicelleFrame<PECTriblock>* frame = new CopolymerMicelleFrame<PECTriblock>( 1, 36, 1, 2 );
 
 	std::ifstream infile( "bead_test.txt" );
-	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame.box_length ) );
+	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );
 	std::cout << (short) chain->chain_length << std::endl;
 
 	std::cout << "Tail1 com: ";
@@ -119,17 +136,25 @@ int main() {
 	std::cout << "PEC com: ";
 	chain->pec_block->com->print( stdout );
 
-	Bin* b1 = frame.binBlock( chain->tail1 );
+	Bin* b1 = frame->binBlock( chain->tail1 );
 	// for testing
 	std::cout << ( int ) b1->i << " " << ( int ) b1->j << " " << ( int ) b1->k << std::endl;
 
-	Bin* b2 = frame.binBlock( chain->tail2 );
+	Bin* b2 = frame->binBlock( chain->tail2 );
 	// for testing
 	std::cout << ( int ) b2->i << " " << ( int ) b2->j << " " << ( int ) b2->k << std::endl;	
 	
 	//Bin b3 = frame.binBlock( chain->pec_block );
 		// for testing
 	//std::cout << ( int ) b3.i << " " << ( int ) b3.j << " " << ( int ) b3.k << std::endl;
+
+	delete chain;
+
+	b1 = NULL;
+
+	b2 = NULL;
+
+	delete frame;
 
 
 	return 0;

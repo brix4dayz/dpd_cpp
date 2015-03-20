@@ -20,7 +20,7 @@ class CopolymerMicelleFrame : public DPDFrame<C> {
 		~CopolymerMicelleFrame();
 		//Bin binBlock( PolymerBlock* block );
 		Bin* binBlock( HydrophobicTail* tail );
-  void addChain( C* chain );
+  	void addChain( C* chain );
 		virtual void process() {}
     void unlink();
 };
