@@ -10,7 +10,6 @@ Micelle::Micelle(): Micelle( NULL ) {}
 
 void Micelle::unlink() {
   this->frame = NULL;
-
   for ( auto core = std::begin( this->coreList ); core != std::end( this->coreList ); core++ ) {
     *core = NULL;
   }

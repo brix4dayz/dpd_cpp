@@ -93,6 +93,11 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size ) {
   this->tail_length = tail_length;
   this->pec_length = pec_length;
+  this->avg_agg_num_of_cores = 0;
+  this->percent_stem_chains = 0.0f;
+  this->percent_petal_chains = 0.0f;
+  this->num_cores = 0;
+  this->avg_distance_btwn_cores = 0.0;
 }
 
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
@@ -100,18 +105,29 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 															std::ifstream* inFile ):
 														  TriblockFrame( num_atoms, box_length, chain_length, 
                               bin_size, tail_length, pec_length) {
-  
+  PECTriblock* currentChain = NULL;
+  for ( unsigned short i = 0; i < this->num_chains ; i++ ) {
+    currentChain = new PECTriblock( this->tail_length, this->pec_length, this->chain_length,
+                                    inFile, &box_length );
+    this->addChain( currentChain ); 
+  }
 }
 
 void TriblockFrame::process() {
 
 }
 
-void TriblockFrame::unlink() {
-
+TriblockFrame::~TriblockFrame() {
+  for ( auto micelle = std::begin( this->micelleList ); micelle != std::end( this->micelleList ); micelle++ ) {
+    delete *micelle;
+  }
 }
 
-TriblockFrame::~TriblockFrame() {}
+void TriblockFrame::printChains( FILE* fp ) {
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    this->chainList[ i ]->printChain( fp );
+  }
+}
 
 // Testing
 

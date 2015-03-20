@@ -42,5 +42,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		TriblockFrame();
 		~TriblockFrame();
 		void process();
-  	void unlink();
+		void printChains( FILE* fp );
 };
