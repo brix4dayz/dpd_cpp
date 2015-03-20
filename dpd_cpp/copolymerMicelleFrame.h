@@ -2,7 +2,7 @@
 
 //
 template <class C>
-class CopolymerMicelleFrame : public DPDFrame<C> {
+class CopolymerMicelleFrame : public DPDFrame<C*> {
 	private:
 		idx coordToBin( double coord );
 	public:
@@ -25,7 +25,7 @@ class CopolymerMicelleFrame : public DPDFrame<C> {
     void unlink();
 };
 
-class TriblockFrame : public CopolymerMicelleFrame<PECTriblock> {
+class TriblockFrame : public CopolymerMicelleFrame<PECTriblock*> {
 	public:
 		std::vector< TriblockMicelle* > micelleList;
     idx tail_length;

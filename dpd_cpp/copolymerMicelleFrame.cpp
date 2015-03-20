@@ -28,7 +28,9 @@ CopolymerMicelleFrame<C>::CopolymerMicelleFrame( unsigned int num_atoms, idx box
 TEMPLATE
 CopolymerMicelleFrame<C>::~CopolymerMicelleFrame() {
 	for ( unsigned short i = 0; i < this->num_chains; i++ ) {
-		delete this->chainList[ i ];
+		if ( this->chainList[ i ] ) {
+			delete this->chainList[ i ];	
+		}
 	}
 	delete[] this->chainList;
 
@@ -42,7 +44,6 @@ CopolymerMicelleFrame<C>::~CopolymerMicelleFrame() {
 		delete[] this->box[ i ];
 	}
 	delete[] this->box;
-
 	this->unlink();
 }
 
@@ -121,7 +122,7 @@ TriblockFrame::~TriblockFrame() {}
 #include <iostream> //for TESTING
 
 int main() {
-	CopolymerMicelleFrame<PECTriblock>* frame = new CopolymerMicelleFrame<PECTriblock>( 1, 36, 1, 2 );
+	CopolymerMicelleFrame<PECTriblock*>* frame = new CopolymerMicelleFrame<PECTriblock*>( 1, 36, 1, 2 );
 
 	std::ifstream infile( "bead_test.txt" );
 	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );
