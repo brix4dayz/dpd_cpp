@@ -93,6 +93,7 @@ void PECTriblock::unlink() {
   this->pec_block = NULL;
   this->tail1 = NULL;
   this->tail2 = NULL;
+  this->frame = NULL;
 }
 
 //Deconstructor... clean up

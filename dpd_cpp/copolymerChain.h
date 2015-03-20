@@ -4,7 +4,6 @@ class CopolymerChain : public ObjDPD {
 	public:
 		idx chain_length;
 		PosVect* com;
-		DPDFrame* frame;
 		Micelle* micelle;
     unsigned short id;
     virtual void printChain( FILE* stream ) {}
@@ -15,7 +14,6 @@ class CopolymerChain : public ObjDPD {
       this->unlink();
     }
     void unlink() {
-      this->frame = NULL;
       this->micelle = NULL;
     }
 };
@@ -24,6 +22,7 @@ enum TriblockConfiguration { stem, petal, neither };
 
 class PECTriblock : public CopolymerChain {
 	public:
+		CopolymerMicelleFrame<PECTriblock>* frame;
     PolymerBlock* pec_block;
 		HydrophobicTail* tail1;
 		HydrophobicTail* tail2;

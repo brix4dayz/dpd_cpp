@@ -4,6 +4,7 @@
 // Yinglab labs
 
 
+
 // a single byte to store integer values between 0 - 255
 // when printing must cast to short in order to see integer value
 // we'll have alot of beads so we want to try to minimize their
@@ -46,10 +47,6 @@ class TriblockMicelle;
 
 class DiblockMicelle;
 
-class CopolymerMicelleFrame;
-
-class TriblockFrame;
-
 class TriblockData;
 
 class DPDPolymerData;
@@ -63,11 +60,17 @@ class ObjDPD {
 };
 
 // Abstract class for DPD frame processors to inherent from
-class DPDFrame : public ObjDPD {
+template <class C>
+class DPDFrame {
   public:
-    void unlink() {}
-    ~DPDFrame() {}
+    virtual void unlink() {}
+    virtual ~DPDFrame() {}
 };
+
+template <class C>
+class CopolymerMicelleFrame;
+
+class TriblockFrame;
 
 class DPDTrajectory : public ObjDPD {
   public:

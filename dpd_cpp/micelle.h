@@ -4,9 +4,9 @@ class Micelle : public ObjDPD {
 	public:
 		unsigned short aggreg_num;
 		std::vector< HydrophobicCore* > coreList;
-		DPDFrame* frame;
+		DPDFrame<CopolymerChain>* frame;
 		PosVect* com;
-		Micelle( DPDFrame* frame );
+		Micelle( DPDFrame<CopolymerChain>* frame );
 		Micelle();
 		~Micelle();
 		void addCore( HydrophobicCore* core );
@@ -23,7 +23,7 @@ class TriblockMicelle : public Micelle {
 		std::vector< PECTriblock* > chainList;
 		//double avg_distance_btwn_cores;
 		TriblockMicelle();
-		TriblockMicelle( DPDFrame* frame );
+		TriblockMicelle( DPDFrame<CopolymerChain>* frame );
 		~TriblockMicelle();
 		void printMicelle( FILE* stream );
 		void addChain( PECTriblock* chain );
@@ -42,7 +42,7 @@ class DiblockMicelle : public Micelle {
 		double corona_thickness;
 		std::vector< CopolymerChain* > chainList;
 		DiblockMicelle();
-		DiblockMicelle( DPDFrame* frame );
+		DiblockMicelle( DPDFrame<CopolymerChain>* frame );
 		~DiblockMicelle();
 		void printMicelle( FILE* stream );
 		void deriveChainList();

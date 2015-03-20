@@ -16,7 +16,7 @@ void Bin::unlink() {
 	this->frame = NULL;
 }
 
-void Bin::init( CopolymerMicelleFrame* frame, idx size, idx i, idx j, idx k ) {
+void Bin::init( CopolymerMicelleFrame<PECTriblock>* frame, idx size, idx i, idx j, idx k ) {
 	this->frame = frame;
 	this->size = size;
 	this->i = i;

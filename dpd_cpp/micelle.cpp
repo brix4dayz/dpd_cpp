@@ -1,6 +1,6 @@
 #include "micelle.h"
 
-Micelle::Micelle( DPDFrame* frame ) {
+Micelle::Micelle( DPDFrame<CopolymerChain>* frame ) {
 	this->frame = frame;
 	this->aggreg_num = 0;
   this->com = new PosVect();
@@ -40,7 +40,7 @@ void Micelle::printMicelleCore( FILE* stream ) {
 
 TriblockMicelle::TriblockMicelle() : Micelle() {}
 
-TriblockMicelle::TriblockMicelle( DPDFrame* frame ): Micelle( frame ) {}
+TriblockMicelle::TriblockMicelle( DPDFrame<CopolymerChain>* frame ): Micelle( frame ) {}
 
 void TriblockMicelle::addChain( PECTriblock* chain ) {
 	this->chainList.push_back( chain );
