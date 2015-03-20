@@ -133,6 +133,7 @@ void TriblockFrame::printChains( FILE* fp ) {
 
 #if defined( TESTING )
 #include <iostream> //for TESTING
+#include <cstdlib>
 
 int main() {
 	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2 );
@@ -169,8 +170,29 @@ int main() {
 
 	b2 = NULL;
 
+  infile.close();
+
 	delete frame;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //Triblock frame test
+
+  std::ifstream triblockXYZ("last.xyz"); 
+  std::string line;
+  std::getline(triblockXYZ, line);
+
+  unsigned int num_atoms = atoi( line.c_str() );
+
+  std::getline(triblockXYZ, line);
+
+  TriblockFrame* tframe = new TriblockFrame( num_atoms, 36, 38, 
+                                             2, 4, 30, &triblockXYZ );
+
+  tframe->printChains( stdout );
+
+  delete tframe;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
 
 	return 0;
 }
