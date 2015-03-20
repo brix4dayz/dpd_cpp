@@ -7,6 +7,7 @@ CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_le
 	this->box_length = box_length;
 	this->chain_length = chain_length;
 	this->num_chains = num_atoms / chain_length;
+  fprintf( stdout, "NUMCHAINS: %d\n", this->num_chains);
 	this->chainList = new CopolymerChain*[ this->num_chains ];
 	this->bin_size = bin_size;
 	this->num_bins = box_length / bin_size;
@@ -104,10 +105,10 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 															idx bin_size, idx tail_length, idx pec_length, 
 															std::ifstream* inFile ):
 														  TriblockFrame( num_atoms, box_length, chain_length, 
-                              bin_size, tail_length, pec_length) {
+                              bin_size, tail_length, pec_length ) {
   PECTriblock* currentChain = NULL;
-  for ( unsigned short i = 0; i < this->num_chains ; i++ ) {
-    currentChain = new PECTriblock( this->tail_length, this->pec_length, this->chain_length,
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    currentChain = new PECTriblock( this->pec_length, this->tail_length, this->chain_length,
                                     inFile, &box_length );
     this->addChain( currentChain ); 
   }
@@ -125,7 +126,10 @@ TriblockFrame::~TriblockFrame() {
 
 void TriblockFrame::printChains( FILE* fp ) {
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
-    this->chainList[ i ]->printChain( fp );
+      fprintf( fp, "printing chain %d\n", i );
+      fflush( fp );
+    ( (PECTriblock* ) this->chainList[ i ])->printChain( fp );
+      fflush( fp );
   }
 }
 
@@ -182,12 +186,15 @@ int main() {
   std::getline(triblockXYZ, line);
 
   unsigned int num_atoms = atoi( line.c_str() );
+  std::cout << line << " " << num_atoms << std::endl;
+
 
   std::getline(triblockXYZ, line);
 
   TriblockFrame* tframe = new TriblockFrame( num_atoms, 36, 38, 
                                              2, 4, 30, &triblockXYZ );
 
+  printf( "Printing chains.\n" );
   tframe->printChains( stdout );
 
   delete tframe;

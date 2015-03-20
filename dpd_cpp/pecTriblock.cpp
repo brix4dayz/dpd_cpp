@@ -10,7 +10,7 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) {
   
   this->pec_length = pec_length;
 	this->tail_length = tail_length;
-	this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length );
+	this->pec_block = new ChargedBlock( this, HYDROPHILIC, pec_length );
 	this->tail1 = new HydrophobicTail( this, tail_length );
 	this->tail2 = new HydrophobicTail( this, tail_length );
   this->chain_length = length;
@@ -30,7 +30,7 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
 	this->tail_length = tail_length;
 	this->tail1 = new HydrophobicTail( this, tail_length, 
 	 inFile, box_length );
-	this->pec_block = new PolymerBlock( this, 
+	this->pec_block = new ChargedBlock( this, 
 	 HYDROPHILIC, pec_length, inFile, box_length );
 	this->tail2 = new HydrophobicTail( this, tail_length, 
 	 inFile, box_length );
@@ -61,7 +61,7 @@ PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, i
   // determines first position of pec block using random direction and 
   // last position of tail block
   first = new PosVect( this->tail1->beadList[ tail_length - 1 ]->r, d );
-  this->pec_block = new PolymerBlock( this, HYDROPHILIC, pec_length, d, box_length,
+  this->pec_block = new ChargedBlock( this, HYDROPHILIC, pec_length, d, box_length,
                                       first, idTracker, this->id );
   
 

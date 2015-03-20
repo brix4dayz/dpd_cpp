@@ -49,6 +49,7 @@ Bead::Bead() {
 }
 
 Bead::Bead( std::string line ) {
+  //std::cout << line << std::endl;
 	std::istringstream iss(line);
   double x, y, z;
 	iss >> this->type >> x >> y >> z;

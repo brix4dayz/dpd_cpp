@@ -78,7 +78,7 @@ void PolymerBlock::calcCenterOfMass( idx* box_length ) {
 }
 
 bool PolymerBlock::addBead( Bead *bead ) {
-	if (this->cursor >= this->length || bead->type != this->bead_type )
+	if (this->cursor >= this->length )
 		return false;
 	this->beadList[ this->cursor ] = bead;
 	this->cursor++;
@@ -143,6 +143,29 @@ HydrophobicTail::~HydrophobicTail() {
   // Don't delete the other tail or Bin, let them take care of themselves
 }
 
+ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length, 
+										std::ifstream* inFile, idx* box_length ) :
+										PolymerBlock( chain , type, length, inFile, box_length ) {}
+
+bool HydrophobicTail::addBead( Bead* bead ) {
+	if ( this->cursor >= this->length || this->bead_type != bead->type )
+		return false;
+	this->beadList[ this->cursor ] = bead;
+	this->cursor++;
+	return true;
+}
+
+ChargedBlock::ChargedBlock( CopolymerChain* chain, idx type,
+              							idx length, DirVect* d,
+               							idx* box_length, PosVect* r, unsigned int* id,
+              	 						unsigned int mol_id ) : PolymerBlock( chain, 
+              	 						type, length, d, box_length, r, id, mol_id ) {}
+     
+ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length ) : 
+														PolymerBlock( chain, type, length ) {}
+ 
+ChargedBlock::ChargedBlock() : PolymerBlock() {}
+
 #if defined( TESTING )
 #include <iostream>
 
@@ -171,9 +194,6 @@ int main() {
 
 	// Test add
 	if ( !hydrophobic_block.addBead( b1 ) || hydrophobic_block.cursor != 1 )
-		return 1;
-
-	if ( hydrophobic_block.addBead( b6 ) || hydrophobic_block.cursor != 1 )
 		return 1;
 
 	if ( !hydrophobic_block.addBead( b2 ) || hydrophobic_block.cursor != 2 )
