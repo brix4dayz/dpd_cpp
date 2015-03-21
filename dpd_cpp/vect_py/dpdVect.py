@@ -1,12 +1,13 @@
 from ctypes import *
 
+SO_PATH = "/usr/local/apps/vect_py/"
 # Import custom dynamic library on Mac
-libvect = cdll.LoadLibrary('./libvect.dylib')
+# libvect = cdll.LoadLibrary('./libvect.dylib')
 # Import libc so can use a bunch of useful C functions in Python
 # libc = cdll.LoadLibrary('/usr/lib/libSystem.B.dylib')
 
 # For Unix use `ld` to make libvect.so
-# libvect = cdll.LoadLibrary('./libvect.so')
+libvect = cdll.LoadLibrary( SO_PATH + "libvect.so")
 
 ########################################################
 # Must declare return types of C interface functions
@@ -88,7 +89,7 @@ class PosVect(object):
 
   # Test new functions
   def reset(self):
-    libvect.resetPos(c_void_p(self.obj))
+    `libvect.resetPos(c_void_p(self.obj))
 
   def getPBCCorrectDistanceModForPhobes(self, other, box_length, micelle_cutoff):
     return libvect.getCorrectedDistBtwnPos(c_void_p(self.obj), c_void_p(other.obj), c_ubyte(box_length), c_float(micelle_cutoff))
