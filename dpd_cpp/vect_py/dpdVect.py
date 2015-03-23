@@ -89,7 +89,7 @@ class PosVect(object):
 
   # Test new functions
   def reset(self):
-    `libvect.resetPos(c_void_p(self.obj))
+    libvect.resetPos(c_void_p(self.obj))
 
   def getPBCCorrectDistanceModForPhobes(self, other, box_length, micelle_cutoff):
     return libvect.getCorrectedDistBtwnPos(c_void_p(self.obj), c_void_p(other.obj), c_ubyte(box_length), c_float(micelle_cutoff))
