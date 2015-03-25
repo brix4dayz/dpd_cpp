@@ -25,6 +25,7 @@ class Bin : public ObjDPD {
 		void addTail( HydrophobicTail* tail );
 		void printBin( FILE* stream );
 		void unlink();
+		bool isEmpty();
 };
 
 #endif

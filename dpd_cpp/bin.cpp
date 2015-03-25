@@ -24,6 +24,10 @@ void Bin::init( CopolymerMicelleFrame* frame, idx size, idx i, idx j, idx k ) {
 	this->k = k;
 }
 
+bool Bin::isEmpty() {
+	return ( this->tailList.size() == 0 );
+}
+
 /*void Bin::addBlock( PolymerBlock* block ) {
 	this->blockList.push_back( *block );
 	this->num_chains++;

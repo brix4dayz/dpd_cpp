@@ -117,7 +117,21 @@ void TriblockFrame::deriveMicelleList() {
 
 }
 
-void TriblockFrame::binTails() {
+bool TriblockFrame::areAllFilledBinsGrouped() {
+  Bin* current = NULL;
+  for ( idx i = 0; i < this->num_bins; i++ ) {
+    for ( idx j = 0; j < this->num_bins; j++ ) {
+      for ( idx k = 0; k < this->num_bins; k++ ) {
+        current = this->box[ i ][ j ][ k ];
+        if ( !current->isEmpty() && !current->grouped )
+          return false;
+      }
+    }
+  }
+  return true;
+}
+
+void TriblockFrame::fillBins() {
   Bin* current = NULL;
   PECTriblock* chain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
@@ -225,7 +239,13 @@ int main() {
   printf( "Printing chains.\n" );
   tframe->printChains( stdout );
 
-  tframe->binTails();
+  tframe->fillBins();
+
+  if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
+    printf( "Fail empty\n" );
+
+  if ( tframe->areAllFilledBinsGrouped() )
+    printf( "Fail bins grouped\n" );
 
   printf( "Printing bins.\n" );
   tframe->printBins( stdout );
