@@ -42,5 +42,8 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		TriblockFrame();
 		~TriblockFrame();
 		void process();
+		void deriveMicelleList();
 		void printChains( FILE* fp );
+		void binTails();
+		void printBins( FILE* fp );
 };

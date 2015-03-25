@@ -7,7 +7,6 @@ CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_le
 	this->box_length = box_length;
 	this->chain_length = chain_length;
 	this->num_chains = num_atoms / chain_length;
-  fprintf( stdout, "NUMCHAINS: %d\n", this->num_chains);
 	this->chainList = new CopolymerChain*[ this->num_chains ];
 	this->bin_size = bin_size;
 	this->num_bins = box_length / bin_size;
@@ -114,6 +113,30 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
   }
 }
 
+void TriblockFrame::deriveMicelleList() {
+
+}
+
+void TriblockFrame::binTails() {
+  Bin* current = NULL;
+  PECTriblock* chain = NULL;
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    chain = ( PECTriblock* ) this->chainList[ i ];
+    current = this->binBlock( chain->tail1 );
+    if ( !current ) {
+      fprintf( stdout, "Tail1 in chain %d outside of bins.\n", i );
+      exit( 1 );
+    }
+    current = NULL;
+    current = this->binBlock( chain->tail2 );
+    if ( !current ) {
+      fprintf( stdout, "Tail2 in chain %d outside of bins.\n", i );
+      exit( 1 );
+    }
+    current = NULL;
+  }
+}
+
 void TriblockFrame::process() {
 
 }
@@ -127,9 +150,18 @@ TriblockFrame::~TriblockFrame() {
 void TriblockFrame::printChains( FILE* fp ) {
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
       fprintf( fp, "printing chain %d\n", i );
-      fflush( fp );
-    ( (PECTriblock* ) this->chainList[ i ])->printChain( fp );
-      fflush( fp );
+      this->chainList[ i ]->printChain( fp );
+  }
+}
+
+void TriblockFrame::printBins( FILE* fp ) {
+  for ( idx i = 0; i < this->num_bins; i++ ) {
+    for ( idx j = 0; j < this->num_bins; j++ ) {
+      for ( idx k = 0; k < this->num_bins; k++ ) {
+        fprintf( fp, "printing bin %d %d %d\n", (int) i, (int) j, (int) k );
+        this->box[ i ][ j ][ k ]->printBin( fp );
+      }
+    }    
   }
 }
 
@@ -165,10 +197,6 @@ int main() {
 	Bin* b2 = frame->binBlock( chain->tail2 );
 	// for testing
 	std::cout << ( int ) b2->i << " " << ( int ) b2->j << " " << ( int ) b2->k << std::endl;	
-	
-	//Bin b3 = frame.binBlock( chain->pec_block );
-		// for testing
-	//std::cout << ( int ) b3.i << " " << ( int ) b3.j << " " << ( int ) b3.k << std::endl;
 
 	b1 = NULL;
 
@@ -196,6 +224,11 @@ int main() {
 
   printf( "Printing chains.\n" );
   tframe->printChains( stdout );
+
+  tframe->binTails();
+
+  printf( "Printing bins.\n" );
+  tframe->printBins( stdout );
 
   delete tframe;
 
