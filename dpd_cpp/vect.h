@@ -66,6 +66,15 @@ class DirVect { // Direction Vector class
 #if defined(PYTHON_LIB)
 #include <ctime>
 #include <cstdlib>
+#include <random>
+
+double randomRealCPP() {
+  static std::random_device seed;
+  static std::mt19937 gen(seed());
+  static std::uniform_real_distribution<double> dist(0.0, 1.0);
+  static auto fraction = std::bind( dist, gen );
+  return fraction();
+}
 
 extern "C" {
 
@@ -78,7 +87,11 @@ extern "C" {
     }
 
     double RandomPercentage() {
-        return gauss();
+        #if defined(TESTING)
+        return randomRealC();
+        #else
+        return randomRealCPP();
+        #endif
     }
 
     PosVect* Random_PosVect_In_Box( idx box_length ) {

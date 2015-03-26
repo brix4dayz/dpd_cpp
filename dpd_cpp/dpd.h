@@ -13,7 +13,7 @@ typedef unsigned char idx;
 
 #define FLUID_DENSITY 3
 
-double gauss();
+double randomRealC();
 
 // Class prototypes
 

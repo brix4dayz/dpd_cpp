@@ -1,0 +1,86 @@
+rm -rf *.o
+mv mac_results old_mac_results
+make testBeadFile
+echo "------------ BEAD ---------" >> mac_results
+g++ -Wall -g -std=c++11 -c vect.cpp
+g++ -Wall -g -std=c++11 -DTESTING -o bead vect.o bead.cpp
+./bead >> mac_results
+echo "" >> mac_results
+make testBlockFile
+echo "---------- BLOCK -------------" >> mac_results
+g++ -Wall -g -std=c++11 -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -DTESTING -o polymerBlock vect.o bead.o polymerBlock.cpp
+./polymerBlock >> mac_results
+echo "" >> mac_results
+make testTriblockFile
+echo "---------- TRIBLOCK -----------" >> mac_results
+g++ -Wall -g -std=c++11 -DTESTING -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -c polymerBlock.cpp
+g++ -Wall -g -std=c++11  -DTESTING -o triblock vect.o bead.o polymerBlock.o pecTriblock.cpp
+./triblock >> mac_results
+echo "" >> mac_results
+make testBinFile
+echo "------------ BIN ------------" >> mac_results
+g++ -Wall -g -std=c++11 -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -c polymerBlock.cpp
+g++ -Wall -g -std=c++11 -c pecTriblock.cpp
+g++ -Wall -g -std=c++11  -DTESTING -o binTest vect.o bead.o polymerBlock.o pecTriblock.o bin.cpp
+./binTest >> mac_results
+echo "" >> mac_results
+make testCoreFile
+echo "------------ CORE ---------------" >> mac_results
+g++ -Wall -g -std=c++11 -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -c polymerBlock.cpp
+g++ -Wall -g -std=c++11 -c pecTriblock.cpp
+g++ -Wall -g -std=c++11 -c bin.cpp
+g++ -Wall -g -std=c++11  -DTESTING -o coreTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.cpp
+./coreTest >> mac_results
+echo "" >> mac_results
+make testMicelleFile
+echo "------------ MICELLE ---------------" >> mac_results
+g++ -Wall -g -std=c++11 -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -c polymerBlock.cpp
+g++ -Wall -g -std=c++11 -c pecTriblock.cpp
+g++ -Wall -g -std=c++11 -c bin.cpp
+g++ -Wall -g -std=c++11 -c hydrophobicCore.cpp
+g++ -Wall -g -std=c++11  -DTESTING -o micelleTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.cpp
+./micelleTest >> mac_results
+echo ""	>> mac_results
+make testFrameFile
+echo "------------------ FRAME -------------------" >> mac_results
+g++ -Wall -g -std=c++11 -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -c polymerBlock.cpp
+g++ -Wall -g -std=c++11 -c pecTriblock.cpp
+g++ -Wall -g -std=c++11 -c bin.cpp
+g++ -Wall -g -std=c++11 -c hydrophobicCore.cpp
+g++ -Wall -g -std=c++11 -c micelle.cpp
+g++ -Wall -g -std=c++11  -DTESTING -o frameTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.cpp
+./frameTest >> mac_results
+echo "" >> mac_results
+rm -rf *.o
+diff mac_results old_mac_results
+make testGenerateData
+rm -rf *.o
+g++ -Wall -g -std=c++11 -DTESTING -c vect.cpp
+g++ -Wall -g -std=c++11 -c bead.cpp
+g++ -Wall -g -std=c++11 -c polymerBlock.cpp
+g++ -Wall -g -std=c++11 -c pecTriblock.cpp
+g++ -Wall -g -std=c++11 -c bin.cpp
+g++ -Wall -g -std=c++11  -DTESTING -o dataTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.cpp
+mv newdata formerdata
+mv newdataTest.dat formerdataTest.dat
+./dataTest > newdata
+diff formerdata newdata
+diff newdataTest.dat formerdataTest.dat
+make testDLLInPython
+rm -rf *.o *.dylib
+g++ -Wall -g -std=c++11 -DPYTHON_LIB -DTESTING -c -fPIC vect.cpp -o vect.o && g++ -Wall -g -std=c++11 -DTESTING -shared -Wl -o libvect.dylib vect.o
+mv current_libvect_test former_libvect_test
+python2.7 dpdVect.py > current_libvect_test
+diff current_libvect_test former_libvect_test

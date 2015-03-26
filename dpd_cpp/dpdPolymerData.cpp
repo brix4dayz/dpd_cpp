@@ -1,6 +1,7 @@
 #include "dpdPolymerData.h"
 #include <cstdlib>
 #include <cmath>
+#include <random>
 
 // Consider putting a few of the functions and data in polymerData in dpdData.
 
@@ -251,6 +252,10 @@ ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, fl
 }
 
 void ChargeTriblockData::deriveChainList() {
+  std::random_device seed;
+  std::mt19937 gen(seed());
+  std::uniform_real_distribution<float> dist(0.0, 1.0);
+  auto chargeDice = std::bind( dist, gen );
   PECTriblock* chain = NULL;
   float uncharged_density = 1.0f - this->charge_density;
   idx num_uncharged = uncharged_density*this->pec_length + 1.0f;
@@ -261,7 +266,11 @@ void ChargeTriblockData::deriveChainList() {
     idx uncharged_counter = 0;
     while ( uncharged_counter < num_uncharged ) {
       for ( idx pec_counter = 0; pec_counter < this->pec_length; pec_counter++ ) {
-        if ( gauss() <= uncharged_density ) {
+        #if defined( TESTING )
+        if ( randomRealC() <= uncharged_density ) {
+        #else
+        if ( chargeDice() <= uncharged_density ) { 
+        #endif
           uncharged_counter++;
           chain->pec_block->beadList[ pec_counter ]->type = FLUID_ID_TRIBLOCK;
           if ( uncharged_counter >= num_uncharged )

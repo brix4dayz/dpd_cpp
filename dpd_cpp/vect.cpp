@@ -1,11 +1,12 @@
 #include "vect.h"
 #include <cmath>
 #include <cstdlib>
+#include <random>
 
 // Constants
 #define PI 3.14159265
 
-double gauss() {
+double randomRealC() {
   return ( ( double ) rand() / RAND_MAX );
 }
 
@@ -26,10 +27,23 @@ PosVect::PosVect( PosVect* pos, DirVect* d ) {
 
 // Generates random point within a square box
 // Adapted from gendata2.m
+// sources for static dice: 
+// http://eternallyconfuzzled.com/arts/jsw_art_rand.aspx
+// http://stackoverflow.com/questions/6223355/static-variables-in-class-methods
 PosVect::PosVect( idx* box_length ) {
-  this->x = gauss() * ( *box_length - 2 ) + 1;
-  this->y = gauss() * ( *box_length - 2 ) + 1;
-  this->z = gauss() * ( *box_length - 2 ) + 1;
+  static std::random_device seed;
+  static std::mt19937 gen(seed());
+  static std::uniform_real_distribution<double> dist(0.0, 1.0);
+  static auto posDice = std::bind( dist, gen );
+  #if defined( TESTING )
+  this->x = randomRealC() * ( *box_length - 2 ) + 1;
+  this->y = randomRealC() * ( *box_length - 2 ) + 1;
+  this->z = randomRealC() * ( *box_length - 2 ) + 1;
+  #else
+  this->x = posDice() * ( *box_length - 2 ) + 1;
+  this->y = posDice() * ( *box_length - 2 ) + 1;
+  this->z = posDice() * ( *box_length - 2 ) + 1;
+  #endif
 }
 
 PosVect::~PosVect() {}
@@ -82,8 +96,17 @@ void PosVect::divideCoords( int* value ) {
 // Builds random direction with given length
 // Adapted from random_polymerchain.m
 DirVect::DirVect( float* bond_length ) {
-  float angle1 = gauss() * 2 * PI;
-  float angle2 = gauss() * 2 * PI;
+  static std::random_device Dseed;
+  static std::mt19937 Dgen(Dseed());
+  static std::uniform_real_distribution<float> Ddist(0.0, 360.0);
+  static auto angleDice = std::bind( Ddist, Dgen );
+  #if defined( TESTING )
+  float angle1 = randomRealC() * 2 * PI;
+  float angle2 = randomRealC() * 2 * PI;
+  #else
+  float angle1 = angleDice();
+  float angle2 = angleDice();
+  #endif
   float height = std::cos( angle2 ) * *bond_length;
   this->dx = std::sin( angle1 ) * height;
   this->dy = std::cos( angle1 ) * height;
