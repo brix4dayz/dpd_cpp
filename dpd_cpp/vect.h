@@ -2,13 +2,6 @@
 #include <cstdio>
 #include "dpd.h"
 
-// A position vector is another word for a point in 3d
-// Mathematically a vector is expressed like this: r = < x, y, z >
-// A direction vector is another term for a distance between two 3d points
-// A direction vector can be described as follows: d = r2 - r1 = < dx, dy, dz >
-// where r1 = < x1, y1, z1 > ; r2 = < x2, y2, z2 >
-// and dx = x2 - x1 ; dy = y2 - y1 ; dz = z2 - z1
-
 // Primitive data pointers shold be references
 
 class DPDVect : public ObjDPD {
@@ -23,8 +16,31 @@ class DPDVect : public ObjDPD {
     void print( FILE* fp );
     void add( const DPDVect& v );
     void divideByScalar( const int& value );
+    void multipltByScalar( const int& value );
+    void normalize();
+    float magnitude();
+    float modulus();
 };
 
+class Vect3D : public DPDVect {
+    public:
+        Vect3D( float a1, float a2, float a3 );
+};
+
+class Vect4D : public DPDVect {
+    public:
+        Vect4D( float a1, float a2, float a3, float a4 );
+};
+
+// rotation quaterion or unit quaterion
+class RotQuat : public Vect4D {
+    public:
+        RotQuat( PosVect p1, PosVect p2 );
+        RotQuat( float theta, DirVect n );
+        RotQuat* hamiltonianProdut( RotQuat* other );
+        DirVect* rotate( DirVect* d );
+        void inverse();
+};
 
 class PosVect { // Position Vector class
   private:
