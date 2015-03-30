@@ -114,7 +114,34 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 }
 
 void TriblockFrame::deriveMicelleList() {
+  this->fillBins();
 
+  std::queue<Bin*> ungroupedBinsQ;
+  Bin* current = NULL;
+
+  for ( idx i = 0; i < this->num_bins; i++ ) {
+    for ( idx j = 0; j < this->num_bins; j++ ) {
+      for ( idx k = 0; k < this->num_bins; k++ ) {
+        current = box[ i ][ j ][ k ];
+        if ( !current->isEmpty() && !current->grouped )
+          ungroupedBinsQ.push(current);
+      }
+    }
+  }
+
+  // Test
+  printf("Ungrouped q size: %lu\n", ungroupedBinsQ.size() );
+  if ( ungroupedBinsQ.size() != this->numFilledBinsArentGrouped() ) {
+    printf("Fail.\n");
+  }
+
+  std::queue<HydrophobicCore*> coreList;
+  HydrophobicCore* newCore = NULL;
+  Bin* other = NULL;
+
+  /*while ( !ungroupedBinsQ.empty() ) {
+    
+  }*/
 }
 
 bool TriblockFrame::areAllFilledBinsGrouped() {
@@ -129,6 +156,21 @@ bool TriblockFrame::areAllFilledBinsGrouped() {
     }
   }
   return true;
+}
+
+int TriblockFrame::numFilledBinsArentGrouped() {
+  Bin* current = NULL;
+  int counter = 0;
+  for ( idx i = 0; i < this->num_bins; i++ ) {
+    for ( idx j = 0; j < this->num_bins; j++ ) {
+      for ( idx k = 0; k < this->num_bins; k++ ) {
+        current = this->box[ i ][ j ][ k ];
+        if ( !current->isEmpty() && !current->grouped )
+          counter++;
+      }
+    }
+  }
+  return counter;
 }
 
 void TriblockFrame::fillBins() {
@@ -239,7 +281,7 @@ int main() {
   printf( "Printing chains.\n" );
   tframe->printChains( stdout );
 
-  tframe->fillBins();
+  tframe->deriveMicelleList();
 
   if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
     printf( "Fail empty\n" );

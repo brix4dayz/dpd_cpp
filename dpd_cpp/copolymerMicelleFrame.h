@@ -1,4 +1,5 @@
 #include "micelle.h"
+#include <queue>
 
 //
 class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
@@ -47,4 +48,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void fillBins();
 		void printBins( FILE* fp );
 		bool areAllFilledBinsGrouped();
+		int numFilledBinsArentGrouped();
 };
