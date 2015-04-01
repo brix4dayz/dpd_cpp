@@ -1,8 +1,9 @@
 #include "copolymerMicelleFrame.h"
 
 CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
-	                                            idx chain_length, idx bin_size ) {
-	this->chainCursor = 0;
+	                                            idx chain_length, idx bin_size, float* micelle_cutoff ) {
+	this->micelle_cutoff = micelle_cutoff;
+  this->chainCursor = 0;
 	this->num_atoms = num_atoms;
 	this->box_length = box_length;
 	this->chain_length = chain_length;
@@ -89,8 +90,8 @@ void CopolymerMicelleFrame::unlink() {
 
 // Triblock
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
-	                            idx bin_size, idx tail_length, idx pec_length ): 
-															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size ) {
+	                            idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length ): 
+															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size, micelle_cutoff ) {
   this->tail_length = tail_length;
   this->pec_length = pec_length;
   this->avg_agg_num_of_cores = 0;
@@ -101,15 +102,39 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 }
 
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
-															idx bin_size, idx tail_length, idx pec_length, 
+															idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length, 
 															std::ifstream* inFile ):
 														  TriblockFrame( num_atoms, box_length, chain_length, 
-                              bin_size, tail_length, pec_length ) {
+                              bin_size, micelle_cutoff, tail_length, pec_length ) {
   PECTriblock* currentChain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     currentChain = new PECTriblock( this->pec_length, this->tail_length, this->chain_length,
                                     inFile, &box_length );
     this->addChain( currentChain ); 
+  }
+}
+
+void TriblockFrame::compareBin( Bin* b, HydrophobicCore* core ) {
+  Bin* current = NULL;
+  int i, j, k;
+  for ( int di = -1; di < 2; di++ ) {
+    for ( int dj = -1; dj < 2; dj++ ) {
+      for ( int dk = -1; dk < 2; dk++ ) {
+        i = ( ( (int) b->i ) + di ) % this->num_bins;
+        if ( i < 0 ) i += this->num_bins;
+        j = ( ( (int) b->j ) + dj ) % this->num_bins;
+        if ( j < 0 ) j += this->num_bins;
+        k = ( ( (int) b->k ) + dk ) % this->num_bins;
+        if ( k < 0 ) k += this->num_bins;
+        //printf("%u %u %u\n", i, j, k );
+        current = box[ i ][ j ][ k ];
+        if ( !current->isEmpty() && !current->grouped && 
+              b->groupBins( current, &(this->box_length), 
+              this->micelle_cutoff ) ) {
+          // do stuff
+        }
+      }
+    }
   }
 }
 
@@ -120,13 +145,30 @@ void TriblockFrame::deriveMicelleList() {
 
   //this->buildCorePool();
 
+  Bin* current = NULL;
+  HydrophobicCore* core = NULL;
+
+  for ( idx i = 0; i < this->num_bins; i++ ) {
+    for ( idx j = 0; j < this->num_bins; j++ ) {
+      for ( idx k = 0; k < this->num_bins; k++ ) {
+        current = box[ i ][ j ][ k ];
+        if ( !current->isEmpty() && !current->grouped ) {
+          core = new HydrophobicCore();
+          core->addBin( current );
+          this->compareBin( current, core );
+        }
+          
+      }
+    }
+  }
+
   // this->deriveEdgeList();
 
   // Determine micelles from edgeList and corePool and maybe edgeQueue?
 
   /////////////////////////////////////////////////////////////////////
   // Eh old stuff
-
+  /*
   std::queue<Bin*> ungroupedBinsQ;
   Bin* current = NULL;
 
@@ -150,7 +192,7 @@ void TriblockFrame::deriveMicelleList() {
   HydrophobicCore* newCore = NULL;
   Bin* other = NULL;
 
-  /*while ( !ungroupedBinsQ.empty() ) {
+  while ( !ungroupedBinsQ.empty() ) {
     
   }*/
   /////////////////////////////////////////////////////////////////////
@@ -241,7 +283,9 @@ void TriblockFrame::printBins( FILE* fp ) {
 #include <cstdlib>
 
 int main() {
-	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2 );
+  float micelle_cutoff = 3.25;
+
+	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2, &micelle_cutoff );
 
 	std::ifstream infile( "bead_test.txt" );
 	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );
@@ -289,7 +333,7 @@ int main() {
   std::getline(triblockXYZ, line);
 
   TriblockFrame* tframe = new TriblockFrame( num_atoms, 36, 38, 
-                                             2, 4, 30, &triblockXYZ );
+                                             2, &micelle_cutoff, 4, 30, &triblockXYZ );
 
   printf( "Printing chains.\n" );
   tframe->printChains( stdout );
@@ -299,8 +343,8 @@ int main() {
   if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
     printf( "Fail empty\n" );
 
-  if ( tframe->areAllFilledBinsGrouped() )
-    printf( "Fail bins grouped\n" );
+  //if ( tframe->areAllFilledBinsGrouped() )
+  //  printf( "Fail bins grouped\n" );
 
   printf( "Printing bins.\n" );
   tframe->printBins( stdout );

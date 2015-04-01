@@ -14,9 +14,10 @@ class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
 		unsigned short num_chains;
 		CopolymerChain** chainList;
 		unsigned short chainCursor;
+		float* micelle_cutoff;
 		Bin**** box; //3d array of bin pointers making up simulation box
 		CopolymerMicelleFrame( unsigned int num_atoms, idx box_length, 
-			idx chain_length, idx bin_size );
+			idx chain_length, idx bin_size, float* micelle_cutoff );
 		CopolymerMicelleFrame();
 		~CopolymerMicelleFrame();
 		//Bin binBlock( PolymerBlock* block );
@@ -37,9 +38,9 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		idx num_cores;
 		double avg_distance_btwn_cores;
 		TriblockFrame( unsigned int num_atoms, idx box_length, 
-			idx chain_length, idx bin_size, idx tail_length, idx pec_length );
+			idx chain_length, idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length );
 		TriblockFrame( unsigned int num_atoms, idx box_length, 
-			idx chain_length, idx bin_size, idx tail_length, idx pec_length, std::ifstream* inFile );
+			idx chain_length, idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length, std::ifstream* inFile );
 		TriblockFrame();
 		~TriblockFrame();
 		void process();
@@ -49,4 +50,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void printBins( FILE* fp );
 		bool areAllFilledBinsGrouped();
 		int numFilledBinsArentGrouped();
+		void compareBin( Bin* b, HydrophobicCore* core );
 };
