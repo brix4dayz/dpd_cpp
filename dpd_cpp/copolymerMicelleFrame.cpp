@@ -116,6 +116,17 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 void TriblockFrame::deriveMicelleList() {
   this->fillBins();
 
+  // calculate mic_cutoff_sqrd in frame or even processor?
+
+  //this->buildCorePool();
+
+  // this->deriveEdgeList();
+
+  // Determine micelles from edgeList and corePool and maybe edgeQueue?
+
+  /////////////////////////////////////////////////////////////////////
+  // Eh old stuff
+
   std::queue<Bin*> ungroupedBinsQ;
   Bin* current = NULL;
 
@@ -142,6 +153,8 @@ void TriblockFrame::deriveMicelleList() {
   /*while ( !ungroupedBinsQ.empty() ) {
     
   }*/
+  /////////////////////////////////////////////////////////////////////
+
 }
 
 bool TriblockFrame::areAllFilledBinsGrouped() {

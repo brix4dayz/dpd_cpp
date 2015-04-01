@@ -104,7 +104,7 @@ PECTriblock::~PECTriblock() {
   this->unlink();
 }
 
-// has been redone, needs to be tested...
+// maybe builds "edge"
 void PECTriblock::determineConfiguration() {
   Bin* bin1 = this->tail1->bin;
   Bin* bin2 = this->tail2->bin;

@@ -40,17 +40,23 @@ void Bin::addTail( HydrophobicTail* tail ) {
 		this->num_chains++;
 }
 
+// calculate mic_cutoff_sqrd in frame or even processor?
 bool Bin::groupBins( Bin* other, idx* box_length, 
 			float* micelle_cutoff ) {
 	other->checked = true;
+	float mic_cutoff_sqrd = ( *micelle_cutoff ) * ( *micelle_cutoff );
+	PosVect* thisComI = NULL;
 	for ( idx i = 0 ; i < this->tailList.size() ; i++ ) {
+		thisComI = this->tailList[ i ]->com;
 		for ( idx j = 0 ; j < other->tailList.size() ; j++ ) {
-			if ( this->tailList[ i ]->com->getCorrectedDist( other->tailList[ j ]->com, box_length,
-			 micelle_cutoff ) <= ( *micelle_cutoff ) * ( *micelle_cutoff ) ) {
+			if ( thisComI->getCorrectedDist( other->tailList[ j ]->com, box_length,
+			 micelle_cutoff ) <= mic_cutoff_sqrd ) {
+				thisComI = NULL;
 				return true;
 			}
 		}
 	}
+	thisComI = NULL;
 	return false;
 }
 
