@@ -53,6 +53,8 @@ class DPDPolymerData;
 
 class ChargeTriblockData;
 
+class Stem;
+
 class ObjDPD {
   public:
     virtual void unlink() {}

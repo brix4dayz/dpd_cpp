@@ -1,5 +1,6 @@
 #include "micelle.h"
-#include <queue>
+#include <map>
+
 
 //
 class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {

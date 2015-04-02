@@ -141,6 +141,25 @@ int main() {
 	HydrophobicCore* core1 = new HydrophobicCore();
 	HydrophobicCore* core2 = new HydrophobicCore();
 
+	uintptr_t hashedCores = (uintptr_t) core2 ^ (uintptr_t) core1;
+
+	/* Test XOR
+	HydrophobicCore* core3 = new HydrophobicCore();
+
+	uintptr_t hashedCores2 = (uintptr_t) core2 ^ (uintptr_t) core3;
+
+	uintptr_t hashedCores3 = (uintptr_t) core3 ^ (uintptr_t) core1;
+
+	printf( "core1 address: %lx  core2 address: %lx  xored: %lx\n", 
+	        (uintptr_t) core1, (uintptr_t) core2, hashedCores );
+
+	printf( "core2 address: %lx  core3 address: %lx  xored: %lx\n", 
+	        (uintptr_t) core2, (uintptr_t) core3, hashedCores2 );
+
+	printf( "core3 address: %lx  core1 address: %lx  xored: %lx\n", 
+	        (uintptr_t) core3, (uintptr_t) core1, hashedCores3 );
+	*/
+
 	// Initialize two new bins
 	Bin* b3 = new Bin();
 	Bin* b4 = new Bin();
@@ -168,12 +187,12 @@ int main() {
 	if ( core1->groupCores( core2 ) )
 		std::cout << "Group works again" << std::endl;
     
-  chain2->determineConfiguration();
-  if ( chain2->config != stem )
+  uintptr_t hash2 = chain2->determineConfiguration();
+  if ( chain2->config != stem || hash2 != hashedCores )
     std::cout << "Fail" << std::endl;
     
-  chain1->determineConfiguration();
-  if ( chain1->config != petal )
+  uintptr_t hash1 = chain1->determineConfiguration();
+  if ( chain1->config != petal || hash1 != (uintptr_t) NULL )
     std::cout << "Fail" << std::endl;
 
   delete chain1;

@@ -1,4 +1,5 @@
 #include "polymerBlock.h"
+#include <cstdint>
 
 class CopolymerChain : public ObjDPD {
 	public:
@@ -29,7 +30,6 @@ class PECTriblock : public CopolymerChain {
 		TriblockConfiguration config;
 		idx tail_length;
 		idx pec_length;
-		// Should I add a void ptr to the frame as a parameter?
 		PECTriblock();
 		PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length,
                        unsigned int* idTracker, unsigned short id);
@@ -39,5 +39,19 @@ class PECTriblock : public CopolymerChain {
     void unlink();
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
-		void determineConfiguration();
+		uintptr_t determineConfiguration();
+};
+
+// XOR ptrs source: http://stackoverflow.com/questions/3531972/c-code-for-xor-linked-list
+class Stem : public ObjDPD {
+	public:
+		unsigned short count;
+		HydrophobicCore* core1;
+		HydrophobicCore* core2;
+		Stem( HydrophobicCore* c1, HydrophobicCore* c2 );
+		void unlink();
+		~Stem();
+		void inc();
+		uintptr_t getKey();
+		static uintptr_t hashCores( HydrophobicCore* c1, HydrophobicCore* c2 );
 };

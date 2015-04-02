@@ -1,4 +1,4 @@
-#include "polymerBlock.h"
+#include "bin.h"
 
 PolymerBlock::PolymerBlock() {
   this->com = new PosVect();
@@ -136,6 +136,12 @@ HydrophobicTail::HydrophobicTail() : PolymerBlock() {
 void HydrophobicTail::unlink() {
   this->other = NULL;
   this->bin = NULL;
+}
+
+HydrophobicCore* HydrophobicTail::getCore() {
+	if ( this->bin && this->bin->core )
+		return this->bin->core;
+	return NULL;
 }
 
 HydrophobicTail::~HydrophobicTail() {

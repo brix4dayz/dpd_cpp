@@ -105,19 +105,49 @@ PECTriblock::~PECTriblock() {
 }
 
 // maybe builds "edge"
-void PECTriblock::determineConfiguration() {
-  Bin* bin1 = this->tail1->bin;
-  Bin* bin2 = this->tail2->bin;
-  if (bin1 && bin2) {
-    if ( bin1->core == bin2->core && bin1->core )
-      this->config = petal;
-    else if ( bin1->core || bin2->core )
-      this->config = stem;
-    else
-      this->config = neither;
-  } else
-  	this->config = neither;
+uintptr_t PECTriblock::determineConfiguration() {
+  HydrophobicCore* core1 = this->tail1->getCore();
+  HydrophobicCore* core2 = this->tail2->getCore();
+  if ( core1 == core2 && core1 ) {
+    this->config = petal;
+    return (uintptr_t) NULL;
+  }
+  else if ( core1 && core2 ) {
+    this->config = stem;
+    return Stem::hashCores( core1, core2 ); 
+  } else {
+    this->config = neither;
+    return (uintptr_t) NULL;
+  }
 }
+
+Stem::Stem( HydrophobicCore* c1, HydrophobicCore* c2 ) {
+  this->core1 = c1;
+  this->core2 = c2;
+  this->count = 1;
+}
+
+void Stem::unlink() {
+  this->core1 = NULL;
+  this->core2 = NULL;
+}
+
+Stem::~Stem() {
+  this->unlink();
+}
+
+void Stem::inc() {
+  this->count++;
+}
+
+uintptr_t Stem::getKey() {
+  return Stem::hashCores( this->core1, this->core2 );
+}
+
+uintptr_t Stem::hashCores( HydrophobicCore* c1, HydrophobicCore* c2 ) {
+  return ( (uintptr_t) c1 ) ^ ( (uintptr_t) c2 );
+}
+
 
 #if defined( TESTING )
 #include <iostream>

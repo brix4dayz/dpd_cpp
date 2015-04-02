@@ -40,6 +40,7 @@ class HydrophobicTail : public PolymerBlock {
 		HydrophobicTail();
 		bool addBead( Bead* bead );
 		~HydrophobicTail();
+		HydrophobicCore* getCore();
     void unlink();
 };
 
@@ -48,9 +49,9 @@ class ChargedBlock : public PolymerBlock {
 			ChargedBlock( CopolymerChain *chain, idx type, idx length, 
 										std::ifstream* inFile, idx* box_length );
       ChargedBlock( CopolymerChain* chain, idx type,
-               idx length, DirVect* d,
-               idx* box_length, PosVect* r, unsigned int* id,
-               unsigned int mold_id );
+                    idx length, DirVect* d,
+                    idx* box_length, PosVect* r, unsigned int* id,
+                    unsigned int mold_id );
       ChargedBlock( CopolymerChain *chain, idx type, idx length );
       ChargedBlock();
 };
