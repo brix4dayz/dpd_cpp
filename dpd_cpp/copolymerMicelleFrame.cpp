@@ -131,8 +131,33 @@ void TriblockFrame::compareBin( Bin* b, HydrophobicCore* core ) {
         if ( !current->isEmpty() && !current->grouped && 
               b->groupBins( current, &(this->box_length), 
               this->micelle_cutoff ) ) {
-          // do stuff
+          core->addBin( current );
+          this->compareBin( current, core );
         }
+      }
+    }
+  }
+}
+
+void TriblockFrame::deriveStems() {
+  PECTriblock* chain = NULL;
+  uintptr_t stemIdx = (uintptr_t) NULL;
+  Stem* newStem = NULL;
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    chain = (PECTriblock*) this->chainList[ i ];
+    stemIdx = chain->determineConfiguration();
+    if ( stemIdx != (uintptr_t) NULL ) {
+      // chain->printChain( stdout );  
+      auto it = this->stems.find( stemIdx );
+      if ( it == this->stems.end() ) {
+        newStem = new Stem( chain->tail1->getCore(), chain->tail2->getCore() );
+        if ( stemIdx != newStem->getKey() ) {
+          fprintf( stdout, "Core mismatch.\n" );
+          exit( 1 );
+        }
+        this->stems.insert( this->stems.begin(), std::pair< uintptr_t, Stem* >( stemIdx, newStem ) );
+      } else {
+        it->second->inc();
       }
     }
   }
@@ -148,6 +173,8 @@ void TriblockFrame::deriveMicelleList() {
   Bin* current = NULL;
   HydrophobicCore* core = NULL;
 
+  std::vector<HydrophobicCore*> corePool;
+
   for ( idx i = 0; i < this->num_bins; i++ ) {
     for ( idx j = 0; j < this->num_bins; j++ ) {
       for ( idx k = 0; k < this->num_bins; k++ ) {
@@ -156,13 +183,32 @@ void TriblockFrame::deriveMicelleList() {
           core = new HydrophobicCore();
           core->addBin( current );
           this->compareBin( current, core );
+          corePool.push_back( core );
         }
-          
       }
     }
   }
 
-  // this->deriveEdgeList();
+  //Test
+  printf( "Number of cores: %lu\n", corePool.size() );
+  int counter = 0;
+  for ( auto it = corePool.begin() ; it != corePool.end(); it++) {
+      char* filename = new char[ 10 ];
+      sprintf( filename, "core%d.xyz", counter++ );
+      FILE* fp = fopen( filename, "w" );
+      core = *it;
+      int numAtoms = core->num_tails * this->tail_length;
+      fprintf( fp, "%d\nAtoms. Timestep: 4300\n", numAtoms );
+      core->printCore( fp );
+  }
+
+  this->deriveStems();
+
+  //Test
+  printf( "Number of linked cores (aka stems): %lu\n", this->stems.size() );
+  /*for ( auto it = this->stems.begin(); it != this->stems.end(); it++) {
+    printf( "Stem %lu: %hu\n", it->first, it->second->count );
+  }*/
 
   // Determine micelles from edgeList and corePool and maybe edgeQueue?
 
@@ -283,7 +329,7 @@ void TriblockFrame::printBins( FILE* fp ) {
 #include <cstdlib>
 
 int main() {
-  float micelle_cutoff = 3.25;
+  float micelle_cutoff = 1.5f;
 
 	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2, &micelle_cutoff );
 

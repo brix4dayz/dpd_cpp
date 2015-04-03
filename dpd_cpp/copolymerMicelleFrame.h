@@ -1,7 +1,6 @@
 #include "micelle.h"
 #include <map>
 
-
 //
 class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
 	private:
@@ -33,6 +32,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		std::vector< TriblockMicelle* > micelleList;
     idx tail_length;
     idx pec_length;
+    std::map< uintptr_t, Stem* > stems;
 		unsigned short avg_agg_num_of_cores;
 		float percent_stem_chains;
 		float percent_petal_chains;
@@ -52,4 +52,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		bool areAllFilledBinsGrouped();
 		int numFilledBinsArentGrouped();
 		void compareBin( Bin* b, HydrophobicCore* core );
+		void deriveStems();
 };

@@ -65,22 +65,5 @@ g++ -Wall -g -std=c++11  -DTESTING -o frameTest vect.o bead.o polymerBlock.o pec
 echo "" >> mac_results
 rm -rf *.o
 diff mac_results old_mac_results
-make testGenerateData
-rm -rf *.o
-g++ -Wall -g -std=c++11 -DTESTING -c vect.cpp
-g++ -Wall -g -std=c++11 -c bead.cpp
-g++ -Wall -g -std=c++11 -c polymerBlock.cpp
-g++ -Wall -g -std=c++11 -c pecTriblock.cpp
-g++ -Wall -g -std=c++11 -c bin.cpp
-g++ -Wall -g -std=c++11  -DTESTING -o dataTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.cpp
-mv newdata formerdata
-mv newdataTest.dat formerdataTest.dat
-./dataTest > newdata
-diff formerdata newdata
-diff newdataTest.dat formerdataTest.dat
-make testDLLInPython
-rm -rf *.o *.dylib
-g++ -Wall -g -std=c++11 -DPYTHON_LIB -DTESTING -c -fPIC vect.cpp -o vect.o && g++ -Wall -g -std=c++11 -DTESTING -shared -Wl -o libvect.dylib vect.o
-mv current_libvect_test former_libvect_test
-python2.7 dpdVect.py > current_libvect_test
-diff current_libvect_test former_libvect_test
+15150d15149
+< Number of linked cores (aka stems): 2
