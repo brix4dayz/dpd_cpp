@@ -93,6 +93,13 @@ void PosVect::divideCoords( int* value ) {
   this->z /= *value;
 }
 
+double PosVect::getDistSquared( PosVect* p ) {
+  DirVect* d = new DirVect( this, p );
+  double distSquared = d->modulus;
+  delete d;
+  return distSquared;
+}
+
 // Builds random direction with given length
 // Adapted from random_polymerchain.m
 DirVect::DirVect( float* bond_length ) {

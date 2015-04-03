@@ -60,6 +60,7 @@ class PosVect { // Position Vector class
     void addCoords( PosVect* r );
     void divideCoords( int* value );
     double getCorrectedDist( PosVect* r, idx* box_length, float* micelle_cutoff );
+    double getDistSquared( PosVect* p );
 };
 
 class DirVect { // Direction Vector class

@@ -38,7 +38,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		float percent_stem_chains;
 		float percent_petal_chains;
 		idx num_cores;
-		double avg_distance_btwn_cores;
+		double rms_distance_btwn_cores;
 		TriblockFrame( unsigned int num_atoms, idx box_length, 
 			idx chain_length, idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length );
 		TriblockFrame( unsigned int num_atoms, idx box_length, 
@@ -56,4 +56,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void deriveStems();
 		void compareCore( HydrophobicCore* core, TriblockMicelle* micelle );
 		void printData( FILE* fp );
+		void calcChainConfigFractions();
+		void calcAvgAggNum();
+		void calcRMSDistBtwnCores();
 };

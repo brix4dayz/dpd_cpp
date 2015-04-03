@@ -1,4 +1,5 @@
 #include "copolymerMicelleFrame.h"
+#include <cmath>
 
 CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
 	                                            idx chain_length, idx bin_size, float* micelle_cutoff ) {
@@ -99,7 +100,7 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
   this->percent_stem_chains = 0.0f;
   this->percent_petal_chains = 0.0f;
   this->num_cores = 0;
-  this->avg_distance_btwn_cores = 0.0;
+  this->rms_distance_btwn_cores = 0.0;
 }
 
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
@@ -213,6 +214,7 @@ void TriblockFrame::deriveMicelleList() {
 
   this->num_cores = (idx) corePool.size();
 
+  #if defined(TESTING)
   //Test
   printf( "Number of cores: %d\n", this->num_cores );
   int counter = 0;
@@ -227,14 +229,17 @@ void TriblockFrame::deriveMicelleList() {
       delete filename;
       fclose( fp );
   }
+  #endif
 
   this->deriveStems();
 
+  #if defined(TESTING)
   //Test
   printf( "Number of linked cores (aka stems): %lu\n", this->stems.size() );
   /*for ( auto it = this->stems.begin(); it != this->stems.end(); it++) {
     printf( "Stem %lu: %hu\n", it->first, it->second->count );
   }*/
+  #endif
 
   TriblockMicelle* micelle = NULL;
 
@@ -272,6 +277,7 @@ void TriblockFrame::deriveMicelleList() {
 
   }
 
+  #if defined(TESTING)
   // Test
   printf( "Number of micelles: %lu\n", this->micelleList.size() );
   counter = 0;
@@ -286,6 +292,7 @@ void TriblockFrame::deriveMicelleList() {
       delete filename;
       fclose( fp );
   }
+  #endif
 
 }
 
@@ -339,9 +346,59 @@ void TriblockFrame::fillBins() {
 }
 
 void TriblockFrame::process() {
-  // calcPercentages
-  // calcAvgAggNum
-  // calcAvgDistBtwnCores
+  this->calcChainConfigFractions();
+  this->calcAvgAggNum();
+  this->calcRMSDistBtwnCores();
+}
+
+void TriblockFrame::calcChainConfigFractions() {
+  this->percent_neither_chains = 0.0f;
+  this->percent_stem_chains = 0.0f;
+  this->percent_petal_chains = 0.0f;
+  PECTriblock* current = NULL;
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    current = (PECTriblock*) this->chainList[ i ];
+    switch( current->config ) {
+      case neither:
+        this->percent_neither_chains++;
+        break;
+      case petal:
+        this->percent_petal_chains++;
+        break;
+      case stem:
+        this->percent_stem_chains++;
+        break;
+      default:
+        fprintf( stdout, "Error invalid chain configuration.\n" );
+        exit( 1 );
+    } 
+  }
+  this->percent_neither_chains /= this->num_chains;
+  this->percent_stem_chains /= this->num_chains;
+  this->percent_petal_chains /= this->num_chains;
+}
+
+void TriblockFrame::calcAvgAggNum() {
+  this->avg_agg_number = 0.0f;
+  for( auto it = this->micelleList.begin(); it != this->micelleList.end(); it++ ) {
+    this->avg_agg_number += ( *it )->chainList.size();
+  }
+  this->avg_agg_number /= this->micelleList.size();
+}
+
+void TriblockFrame::calcRMSDistBtwnCores() {
+  HydrophobicCore* c1 = NULL;
+  HydrophobicCore* c2 = NULL;
+  this->rms_distance_btwn_cores = 0.0;
+  for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
+    c1 = it->second->core1;
+    c2 = it->second->core2;
+    this->rms_distance_btwn_cores += c1->com->getDistSquared( c2->com );
+  }
+  if ( this->rms_distance_btwn_cores != 0.0 ) {
+    this->rms_distance_btwn_cores /= this->stems.size();
+    this->rms_distance_btwn_cores = sqrt( this->rms_distance_btwn_cores );
+  }
 }
 
 TriblockFrame::~TriblockFrame() {
@@ -369,7 +426,9 @@ void TriblockFrame::printBins( FILE* fp ) {
 }
 
 void TriblockFrame::printData( FILE* fp ) {
-
+  fprintf( fp, "%10d %10.4f %10.4f %10.4f %10.4f %10.4f\n", (int) this->num_cores, this->avg_agg_number,
+           this->rms_distance_btwn_cores, this->percent_stem_chains, this->percent_petal_chains, 
+           this->percent_neither_chains );
 }
 
 // Testing
@@ -437,6 +496,8 @@ int main() {
   tframe->deriveMicelleList();
 
   tframe->process();
+  fprintf( stdout, "   Cores      AvgAgg      RMSDistCores      Stem     Petal   Neither  \n" );
+  tframe->printData( stdout );
 
   if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
     printf( "Fail empty\n" );
