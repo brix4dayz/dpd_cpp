@@ -199,7 +199,12 @@ void TriblockFrame::deriveMicelleList() {
           core = new HydrophobicCore();
           core->addBin( current );
           this->compareBin( current, core );
-          corePool.push_back( core );
+          if ( core->num_tails > 1 )
+            corePool.push_back( core );
+          else {
+            delete core;
+            core = NULL;
+          }
         }
       }
     }
@@ -230,21 +235,34 @@ void TriblockFrame::deriveMicelleList() {
 
   TriblockMicelle* micelle = NULL;
 
-  for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
-    if ( !it->second->grouped ) {
-      it->second->grouped = true;
+  if ( this->stems.size() == 0 ) {
+    for ( auto it = corePool.begin(); it != corePool.end(); it++ ) {
       micelle = new TriblockMicelle();
-      micelle->addCore( it->second->core1 );
-      micelle->addCore( it->second->core2 );
-
-      this->compareCore( it->second->core1, micelle );
-      this->compareCore( it->second->core2, micelle );
+      micelle->addCore( *it );
 
       micelle->deriveChainList();
       micelle->pbcCorrectMicelle( &(this->box_length) );
 
       this->micelleList.push_back( micelle );
     }
+  } else {
+    for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
+      if ( !it->second->grouped ) {
+        it->second->grouped = true;
+        micelle = new TriblockMicelle();
+        micelle->addCore( it->second->core1 );
+        micelle->addCore( it->second->core2 );
+
+        this->compareCore( it->second->core1, micelle );
+        this->compareCore( it->second->core2, micelle );
+
+        micelle->deriveChainList();
+        micelle->pbcCorrectMicelle( &(this->box_length) );
+
+        this->micelleList.push_back( micelle );
+      }
+  }
+
   }
 
   // Test

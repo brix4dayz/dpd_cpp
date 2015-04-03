@@ -9,6 +9,7 @@ HydrophobicCore::HydrophobicCore() {
 void HydrophobicCore::unlink() {
 	this->micelle = NULL;
 	for ( auto bin = std::begin( this->binList ); bin != std::end( this->binList ); bin++ ) {
+		( *bin )->core = NULL;
 		( *bin ) = NULL;
 	}
 }

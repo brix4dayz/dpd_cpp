@@ -15146,8 +15146,8 @@ printing chain 367
 1    3.56987    0.21407   29.81290
 1    3.43741    0.21857   30.09270
 1    3.23785    0.10288   30.13140
-Number of cores: 4
-Number of linked cores (aka stems): 3
+Number of cores: 1
+Number of linked cores (aka stems): 0
 Error in deriving chain in micelle.
 Number of micelles: 1
 Printing bins.
