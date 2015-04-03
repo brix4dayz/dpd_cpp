@@ -163,6 +163,22 @@ void TriblockFrame::deriveStems() {
   }
 }
 
+void TriblockFrame::compareCore( HydrophobicCore* core, TriblockMicelle* micelle ) {
+  for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
+    if ( !it->second->grouped ) {
+      if ( it->second->core1 == core ) {
+        it->second->grouped = true;
+        micelle->addCore( it->second->core2 );
+        this->compareCore( it->second->core2, micelle );
+      } else if ( it->second->core2 == core ) {
+        it->second->grouped = true;
+        micelle->addCore( it->second->core1 );
+        this->compareCore( it->second->core1, micelle );
+      }
+    }
+  }
+}
+
 void TriblockFrame::deriveMicelleList() {
   this->fillBins();
 
@@ -200,6 +216,8 @@ void TriblockFrame::deriveMicelleList() {
       int numAtoms = core->num_tails * this->tail_length;
       fprintf( fp, "%d\nAtoms. Timestep: 4300\n", numAtoms );
       core->printCore( fp );
+      delete filename;
+      fclose( fp );
   }
 
   this->deriveStems();
@@ -210,38 +228,39 @@ void TriblockFrame::deriveMicelleList() {
     printf( "Stem %lu: %hu\n", it->first, it->second->count );
   }*/
 
-  // Determine micelles from edgeList and corePool and maybe edgeQueue?
+  TriblockMicelle* micelle = NULL;
 
-  /////////////////////////////////////////////////////////////////////
-  // Eh old stuff
-  /*
-  std::queue<Bin*> ungroupedBinsQ;
-  Bin* current = NULL;
+  for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
+    if ( !it->second->grouped ) {
+      it->second->grouped = true;
+      micelle = new TriblockMicelle();
+      micelle->addCore( it->second->core1 );
+      micelle->addCore( it->second->core2 );
 
-  for ( idx i = 0; i < this->num_bins; i++ ) {
-    for ( idx j = 0; j < this->num_bins; j++ ) {
-      for ( idx k = 0; k < this->num_bins; k++ ) {
-        current = box[ i ][ j ][ k ];
-        if ( !current->isEmpty() && !current->grouped )
-          ungroupedBinsQ.push(current);
-      }
+      this->compareCore( it->second->core1, micelle );
+      this->compareCore( it->second->core2, micelle );
+
+      micelle->deriveChainList();
+      micelle->pbcCorrectMicelle( &(this->box_length) );
+
+      this->micelleList.push_back( micelle );
     }
   }
 
   // Test
-  printf("Ungrouped q size: %lu\n", ungroupedBinsQ.size() );
-  if ( ungroupedBinsQ.size() != this->numFilledBinsArentGrouped() ) {
-    printf("Fail.\n");
+  printf( "Number of micelles: %lu\n", this->micelleList.size() );
+  counter = 0;
+  for ( auto it = this->micelleList.begin() ; it != this->micelleList.end(); it++) {
+      char* filename = new char[ 12 ];
+      sprintf( filename, "micelle%d.xyz", counter++ );
+      FILE* fp = fopen( filename, "w" );
+      micelle = *it;
+      int numAtoms = micelle->chainList.size() * this->chain_length;
+      fprintf( fp, "%d\nAtoms. Timestep: 4300\n", numAtoms );
+      micelle->printMicelle( fp );
+      delete filename;
+      fclose( fp );
   }
-
-  std::queue<HydrophobicCore*> coreList;
-  HydrophobicCore* newCore = NULL;
-  Bin* other = NULL;
-
-  while ( !ungroupedBinsQ.empty() ) {
-    
-  }*/
-  /////////////////////////////////////////////////////////////////////
 
 }
 
@@ -329,7 +348,7 @@ void TriblockFrame::printBins( FILE* fp ) {
 #include <cstdlib>
 
 int main() {
-  float micelle_cutoff = 1.5f;
+  float micelle_cutoff = 1.25f;
 
 	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2, &micelle_cutoff );
 

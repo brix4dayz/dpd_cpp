@@ -53,4 +53,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		int numFilledBinsArentGrouped();
 		void compareBin( Bin* b, HydrophobicCore* core );
 		void deriveStems();
+		void compareCore( HydrophobicCore* core, TriblockMicelle* micelle );
 };

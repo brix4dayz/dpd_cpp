@@ -125,6 +125,7 @@ Stem::Stem( HydrophobicCore* c1, HydrophobicCore* c2 ) {
   this->core1 = c1;
   this->core2 = c2;
   this->count = 1;
+  this->grouped = false;
 }
 
 void Stem::unlink() {

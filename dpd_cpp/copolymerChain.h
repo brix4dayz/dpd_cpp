@@ -48,6 +48,7 @@ class Stem : public ObjDPD {
 		unsigned short count;
 		HydrophobicCore* core1;
 		HydrophobicCore* core2;
+		bool grouped;
 		Stem( HydrophobicCore* c1, HydrophobicCore* c2 );
 		void unlink();
 		~Stem();
