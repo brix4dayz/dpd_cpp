@@ -33,7 +33,8 @@ class TriblockFrame : public CopolymerMicelleFrame {
     idx tail_length;
     idx pec_length;
     std::map< uintptr_t, Stem* > stems;
-		unsigned short avg_agg_num_of_cores;
+    float avg_agg_number;
+    float percent_neither_chains;
 		float percent_stem_chains;
 		float percent_petal_chains;
 		idx num_cores;
@@ -54,4 +55,5 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void compareBin( Bin* b, HydrophobicCore* core );
 		void deriveStems();
 		void compareCore( HydrophobicCore* core, TriblockMicelle* micelle );
+		void printData( FILE* fp );
 };

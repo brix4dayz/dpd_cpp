@@ -21,7 +21,6 @@ class Micelle : public ObjDPD {
 class TriblockMicelle : public Micelle {
 	public:
 		std::vector< PECTriblock* > chainList;
-		//double avg_distance_btwn_cores;
 		TriblockMicelle();
 		TriblockMicelle( DPDFrame<CopolymerChain>* frame );
 		~TriblockMicelle();

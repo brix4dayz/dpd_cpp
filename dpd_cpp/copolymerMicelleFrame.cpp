@@ -94,7 +94,8 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size, micelle_cutoff ) {
   this->tail_length = tail_length;
   this->pec_length = pec_length;
-  this->avg_agg_num_of_cores = 0;
+  this->avg_agg_number = 0.0f;
+  this->percent_neither_chains = 0.0f;
   this->percent_stem_chains = 0.0f;
   this->percent_petal_chains = 0.0f;
   this->num_cores = 0;
@@ -210,8 +211,10 @@ void TriblockFrame::deriveMicelleList() {
     }
   }
 
+  this->num_cores = (idx) corePool.size();
+
   //Test
-  printf( "Number of cores: %lu\n", corePool.size() );
+  printf( "Number of cores: %d\n", this->num_cores );
   int counter = 0;
   for ( auto it = corePool.begin() ; it != corePool.end(); it++) {
       char* filename = new char[ 10 ];
@@ -242,6 +245,7 @@ void TriblockFrame::deriveMicelleList() {
 
       micelle->deriveChainList();
       micelle->pbcCorrectMicelle( &(this->box_length) );
+      ( *it )->calcCenterOfMass( &(this->box_length) );
 
       this->micelleList.push_back( micelle );
     }
@@ -258,6 +262,9 @@ void TriblockFrame::deriveMicelleList() {
 
         micelle->deriveChainList();
         micelle->pbcCorrectMicelle( &(this->box_length) );
+        for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
+          ( *core )->calcCenterOfMass( &(this->box_length) );
+        }
 
         this->micelleList.push_back( micelle );
       }
@@ -332,7 +339,9 @@ void TriblockFrame::fillBins() {
 }
 
 void TriblockFrame::process() {
-
+  // calcPercentages
+  // calcAvgAggNum
+  // calcAvgDistBtwnCores
 }
 
 TriblockFrame::~TriblockFrame() {
@@ -357,6 +366,10 @@ void TriblockFrame::printBins( FILE* fp ) {
       }
     }    
   }
+}
+
+void TriblockFrame::printData( FILE* fp ) {
+
 }
 
 // Testing
@@ -423,11 +436,13 @@ int main() {
 
   tframe->deriveMicelleList();
 
+  tframe->process();
+
   if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
     printf( "Fail empty\n" );
 
-  //if ( tframe->areAllFilledBinsGrouped() )
-  //  printf( "Fail bins grouped\n" );
+  if ( !tframe->areAllFilledBinsGrouped() )
+    printf( "Fail bins grouped\n" );
 
   printf( "Printing bins.\n" );
   tframe->printBins( stdout );
