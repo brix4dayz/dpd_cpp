@@ -402,8 +402,13 @@ void TriblockFrame::calcRMSDistBtwnCores() {
 }
 
 TriblockFrame::~TriblockFrame() {
+  for ( auto stemObj = this->stems.begin(); stemObj != this->stems.end(); stemObj++ ) {
+    delete stemObj->second;
+    stemObj->second = NULL;
+  }
   for ( auto micelle = std::begin( this->micelleList ); micelle != std::end( this->micelleList ); micelle++ ) {
     delete *micelle;
+    *micelle = NULL;
   }
 }
 
@@ -483,7 +488,6 @@ int main() {
 
   unsigned int num_atoms = atoi( line.c_str() );
   std::cout << line << " " << num_atoms << std::endl;
-
 
   std::getline(triblockXYZ, line);
 
