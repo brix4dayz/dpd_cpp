@@ -226,7 +226,7 @@ void TriblockFrame::deriveMicelleList() {
       int numAtoms = core->num_tails * this->tail_length;
       fprintf( fp, "%d\nAtoms. Timestep: 4300\n", numAtoms );
       core->printCore( fp );
-      delete filename;
+      delete[] filename;
       fclose( fp );
   }
   #endif
@@ -282,14 +282,14 @@ void TriblockFrame::deriveMicelleList() {
   printf( "Number of micelles: %lu\n", this->micelleList.size() );
   counter = 0;
   for ( auto it = this->micelleList.begin() ; it != this->micelleList.end(); it++) {
-      char* filename = new char[ 12 ];
+      char* filename = new char[ 13 ];
       sprintf( filename, "micelle%d.xyz", counter++ );
       FILE* fp = fopen( filename, "w" );
       micelle = *it;
       int numAtoms = micelle->chainList.size() * this->chain_length;
       fprintf( fp, "%d\nAtoms. Timestep: 4300\n", numAtoms );
       micelle->printMicelle( fp );
-      delete filename;
+      delete[] filename;
       fclose( fp );
   }
   #endif
