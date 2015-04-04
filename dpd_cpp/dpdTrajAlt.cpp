@@ -38,17 +38,6 @@ unsigned int determineNumFrames( std::string filename ) {
 
     unsigned long bytesInTraj = numBytesInFile( filename );
 
-    if ( bytesInTraj/bytesPerFrame > 11 ) {
-        for ( int j = 0; j < 10; j++ ) {
-            for ( int i = 0; i < num_atoms + 2; i++ ) {
-                std::getline( infile, line );
-                bytesPerFrame += line.length() + 1;
-            }
-        }
-
-        bytesPerFrame /= 11;
-    }
-
     std::cout << "Bytes Per Frame: " << bytesPerFrame << std::endl;
 
     infile.close();
@@ -56,6 +45,11 @@ unsigned int determineNumFrames( std::string filename ) {
     std::cout << "Bytes In Traj: " << bytesInTraj << std::endl;
 
     unsigned int numFrames = bytesInTraj / bytesPerFrame;
+
+    if ( numFrames >= 1000 ) {
+        numFrames /= 1000;
+        numFrames *= 1000;
+    }
 
     std::cout << "Number of atoms: " << num_atoms << std::endl;
 
