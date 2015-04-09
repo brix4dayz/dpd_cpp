@@ -4,6 +4,9 @@
 #include <fstream> 
 #include <cstdlib>
 
+
+// NEED TO SUPPORT MULTIPLE FILES
+
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
 unsigned long numBytesInFile( std::string filename ) {
   FILE * pFile;
@@ -64,10 +67,21 @@ unsigned int determineNumFrames( std::string filename ) {
 
     std::string filename;
 
-    std::cout << "Enter trajectory filename: \n";
-    std::cin >> filename;
+    std::string* fileNames;
 
-    determineNumFrames( filename );
+    unsigned int numFiles;
+
+    std::cout << "Enter number of files: ";
+    std::cin >> numFiles;
+
+    fileNames = new std::string[ numFiles ];
+
+    for ( unsigned int i = 0; i < numFiles; i++ ) {
+        std::cout << "Enter trajectory " << i << " filename: \n";
+        std::cin >> fileNames[ i ];
+    }
+
+    determineNumFrames( fileNames[ 0 ] );
 
     return 0;
 }

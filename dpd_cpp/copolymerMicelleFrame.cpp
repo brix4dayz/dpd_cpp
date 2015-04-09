@@ -482,7 +482,7 @@ int main() {
   /////////////////////////////////////////////////////////////////////////////////////////
   //Triblock frame test
 
-  std::ifstream triblockXYZ("last.xyz"); 
+  std::ifstream triblockXYZ("lastONETHIRD.xyz"); 
   std::string line;
   std::getline(triblockXYZ, line);
 
