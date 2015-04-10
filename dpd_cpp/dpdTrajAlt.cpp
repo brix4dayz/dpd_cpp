@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <fstream> 
 #include <cstdlib>
+#include <ctime>
 
 
 // NEED TO SUPPORT MULTIPLE FILES
@@ -22,9 +23,14 @@ unsigned long numBytesInFile( std::string filename ) {
   return size;
 }
 
-unsigned int determineNumFrames( std::string filename ) {
+unsigned int determineNumFrames( std::string* filenames, unsigned int numFiles ) {
+    srand(time(NULL));
+
+    int randFile = rand() % numFiles;
+    std::cout << "Reading frame from file" << randFile << "..." << std::endl;
+
     std::string line;
-    std::ifstream infile( filename.c_str() );
+    std::ifstream infile( filenames[ randFile ].c_str() );
 
     unsigned long bytesPerFrame = 0;
 
@@ -39,7 +45,11 @@ unsigned int determineNumFrames( std::string filename ) {
         bytesPerFrame += line.length() + 1;
     }
 
-    unsigned long bytesInTraj = numBytesInFile( filename );
+
+    unsigned long bytesInTraj = 0;
+    for ( unsigned int i = 0; i < numFiles; i++ ) {
+        bytesInTraj += numBytesInFile( filenames[ i ] );
+    }
 
     std::cout << "Bytes Per Frame: " << bytesPerFrame << std::endl;
 
@@ -81,7 +91,7 @@ unsigned int determineNumFrames( std::string filename ) {
         std::cin >> fileNames[ i ];
     }
 
-    determineNumFrames( fileNames[ 0 ] );
+    determineNumFrames( fileNames, numFiles );
 
     return 0;
 }
