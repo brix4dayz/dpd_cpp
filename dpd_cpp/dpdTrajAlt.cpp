@@ -59,9 +59,10 @@ unsigned int determineNumFrames( std::string* filenames, unsigned int numFiles )
 
     unsigned int numFrames = bytesInTraj / bytesPerFrame;
 
-    if ( numFrames >= 10 ) {
-        numFrames /= 10;
-        numFrames *= 10;
+    // Round to the nearest 100
+    if ( numFrames >= 1000 ) {
+        numFrames /= 100;
+        numFrames *= 100;
     }
 
     std::cout << "Number of atoms: " << num_atoms << std::endl;
