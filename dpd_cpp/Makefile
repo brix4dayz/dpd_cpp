@@ -1,7 +1,11 @@
 
 ifdef LINUX
 STDFLAG=-std=gnu++11
-CC=g++-4.8
+ifdef HPC
+CC=/usr/local/apps/gcc/473/bin/g++
+else
+cc=g++-4.8
+endif
 else
 STDFLAG=-std=c++11
 CC=g++
