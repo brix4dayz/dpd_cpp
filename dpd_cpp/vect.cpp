@@ -64,7 +64,7 @@ void PosVect::reset() {
 
 void PosVect::pbcCorrectDistanceCompForCluster( double* d, 
  idx* box_length, float* micelle_cutoff ) {
-  float absD = fabsf( *d );
+  float absD = std::abs( *d );
   if ( absD >= ( *box_length - *micelle_cutoff ) )
     *d = *box_length - absD;
 }

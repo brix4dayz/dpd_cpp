@@ -15,6 +15,8 @@ class DPDTrajectory : public ObjDPD {
     DPDTrajectory();
     ~DPDTrajectory();
     void unlink();
+    void process();
+    virtual void consume();
 };
 
 class TriblockTrajectory : public DPDTrajectory {
@@ -23,4 +25,7 @@ class TriblockTrajectory : public DPDTrajectory {
     idx tail_length;
     idx chain_length;
     float micelle_cutoff;
+    void consume();
+    TriblockTrajectory();
+    ~TriblockTrajectory();
 };

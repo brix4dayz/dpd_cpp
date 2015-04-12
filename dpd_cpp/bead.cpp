@@ -12,7 +12,7 @@ double Bead::getDistanceModulus( Bead* other ) {
 
 void Bead::pbcCorrectDistanceCompInChain( double* d, double* coord, 
  idx* box_length ) {
-	if ( fabsf( *d ) >= ( *box_length )*.5 ) {
+	if ( std::abs( *d ) >= ( *box_length )*.5 ) {
 		if ( *d > 0 )
 			*coord -= *box_length;
 		else
