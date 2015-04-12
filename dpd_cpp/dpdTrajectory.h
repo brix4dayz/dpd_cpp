@@ -23,4 +23,4 @@ class TriblockTrajectory : public DPDTrajectory {
     idx tail_length;
     idx chain_length;
     float micelle_cutoff;
-}
+};

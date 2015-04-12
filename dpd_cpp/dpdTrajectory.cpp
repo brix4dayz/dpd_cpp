@@ -67,6 +67,8 @@ void DPDTrajectory::determineNumFrames() {
     std::cout << "Number of atoms: " << this->num_atoms << std::endl;
 
     std::cout << "Number of frames: " << this->numFrames << std::endl;
+
+    // calc start file and offset
 }
 
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
