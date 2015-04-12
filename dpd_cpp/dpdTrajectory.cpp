@@ -1,52 +1,87 @@
-#include <iostream>
-#include <string>
-#include <cstdio>
-#include <fstream> 
-#include <cstdlib>
+#include "dpdTrajectory.h"
 
-// source for reading input from bash command: 
-// http://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c
- int main() {
+DPDTrajectory::DPDTrajectory() {
+    std::cout << "Enter number of files: ";
+    std::cin >> this->numFiles;
 
-    std::string filename;
+    this->fileNames = new std::string[ this->numFiles ];
 
-    std::cout << "Enter trajectory filename: ";
-    std::cin >> filename;
-
-    char* cmd = new char[ 27 ];
-
-    sprintf( cmd, "wc -l %20s", filename.c_str() );
-
-    FILE* pipe = popen(cmd, "r");
-    if (!pipe) return 0;
-    char buffer[128];
-    std::string result = "";
-    while(!feof(pipe)) {
-      if(fgets(buffer, 128, pipe) != NULL)
-        result += buffer;
+    for ( unsigned int i = 0; i < this->numFiles; i++ ) {
+        std::cout << "Enter trajectory " << i << " filename: \n";
+        std::cin >> this->fileNames[ i ];
     }
-    pclose(pipe);
 
-    delete[] cmd;
+    this->determineNumFrames();
+}
 
-    int numLines = atoi( result.c_str() );
+DPDTrajectory::~DPDTrajectory() {
 
-    std::cout << "File contains " << numLines << " lines." << std::endl;
+}
+
+void DPDTrajectory::determineNumFrames() {
+    srand(time(NULL));
+
+    int randFile = rand() % this->numFiles;
+    std::cout << "Reading frame from file" << randFile << "..." << std::endl;
 
     std::string line;
-    std::ifstream infile( filename.c_str() );
+    std::ifstream infile( this->fileNames[ randFile ].c_str() );
+
+    unsigned long bytesPerFrame = 0;
 
     std::getline( infile, line );
 
-    unsigned int num_atoms = atoi( line.c_str() );
+    this->num_atoms = atoi( line.c_str() );
 
-    std::cout << "Number of atoms: " << num_atoms << std::endl;
+    bytesPerFrame += line.length() + 1; // + 1 for extra byte in newline that is lost when \n is replaced with \0
 
-    unsigned short numFrames = ( numLines )/( num_atoms + 2 );
-
-    std::cout << "Number of frames: " << numFrames << std::endl;
+    for ( int i = 0; i < this->num_atoms + 1; i++ ) {
+        std::getline( infile, line );
+        bytesPerFrame += line.length() + 1;
+    }
 
     infile.close();
 
-    return 0;
+    unsigned long bytesInTraj = 0;
+    for ( unsigned int i = 0; i < this->numFiles; i++ ) {
+        bytesInTraj += this->numBytesInFile( this->fileNames[ i ] );
+    }
+
+    std::cout << "Bytes Per Frame: " << bytesPerFrame << std::endl;
+
+    std::cout << "Bytes In Traj: " << bytesInTraj << std::endl;
+
+    this->numFrames = bytesInTraj / bytesPerFrame;
+
+    // Round to the nearest 100
+    if ( this->numFrames >= 1000 ) {
+        this->numFrames /= 100;
+        this->numFrames *= 100;
+    }
+
+    std::cout << "Number of atoms: " << this->num_atoms << std::endl;
+
+    std::cout << "Number of frames: " << this->numFrames << std::endl;
+}
+
+// source: http://www.cplusplus.com/reference/cstdio/ftell/
+unsigned long DPDTrajectory::numBytesInFile( std::string filename ) {
+    FILE * pFile;
+  unsigned long size = 0;
+
+  pFile = fopen( filename.c_str(),"rb" );
+  if ( pFile == NULL) perror ( "Error opening file" );
+  else {
+    fseek( pFile, 0, SEEK_END );   // non-portable
+    size = ftell( pFile );
+    fclose( pFile );
+  }
+  return size;
+}
+
+int main() {
+
+  DPDTrajectory* traj = new DPDTrajectory();
+
+  return 0;
 }

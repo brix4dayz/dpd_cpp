@@ -5,9 +5,6 @@
 #include <cstdlib>
 #include <ctime>
 
-
-// NEED TO SUPPORT MULTIPLE FILES
-
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
 unsigned long numBytesInFile( std::string filename ) {
   FILE * pFile;
@@ -75,8 +72,6 @@ unsigned int determineNumFrames( std::string* filenames, unsigned int numFiles )
 // source for reading input from bash command: 
 // http://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c
  int main() {
-
-    std::string filename;
 
     std::string* fileNames;
 
