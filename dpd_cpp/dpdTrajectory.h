@@ -16,7 +16,8 @@ class DPDTrajectory : public ObjDPD {
     ~DPDTrajectory();
     void unlink();
     void process();
-    virtual void consume();
+    virtual void consume( std::ifstream& inFile );
+    void skipFrame( std::ifstream& inFile );
 };
 
 class TriblockTrajectory : public DPDTrajectory {
@@ -25,7 +26,7 @@ class TriblockTrajectory : public DPDTrajectory {
     idx tail_length;
     idx chain_length;
     float micelle_cutoff;
-    void consume();
+    void consume( std::ifstream& inFile );
     TriblockTrajectory();
     ~TriblockTrajectory();
 };

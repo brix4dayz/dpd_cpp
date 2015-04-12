@@ -109,9 +109,44 @@ void DPDTrajectory::determineNumFrames() {
 
 }
 
-void DPDTrajectory::process() {}
+void DPDTrajectory::process() {
+  unsigned int frameCount = 0;
+  unsigned int filePtr = this->startFile;
+  std::string line;
 
-void DPDTrajectory::consume() {}
+  while ( filePtr < this->numFiles ) {
+
+    std::ifstream inFile( this->fileNames[ filePtr ].c_str() );
+    filePtr++;
+
+    while ( std::getline( inFile, line ) ) {
+      std::getline( inFile, line );
+      if ( frameCount >= this->startFrameOffset && ( frameCount - this->startFrameOffset ) % 10 == 0 )
+        this->consume( inFile );
+      else
+        this->skipFrame( inFile );
+      frameCount++;
+    }
+
+    inFile.close();
+
+  }
+
+
+}
+
+void DPDTrajectory::consume( std::ifstream& inFile ) {
+  static int counter = 1;
+  std::cout << "Consumed " << counter++ << " frames..." << std::endl;
+  this->skipFrame( inFile );
+}
+
+void DPDTrajectory::skipFrame( std::ifstream& inFile ) {
+  std::string line;
+  for ( unsigned int i = 0; i < this->num_atoms; i++ ) {
+    std::getline( inFile, line );
+  }
+}
 
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
 unsigned long DPDTrajectory::numBytesInFile( std::string filename ) {
@@ -134,11 +169,17 @@ TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
 
 TriblockTrajectory::~TriblockTrajectory() {}
 
-void TriblockTrajectory::consume() {}
+void TriblockTrajectory::consume( std::ifstream& inFile ) {
+  static int counter = 1;
+  std::cout << "Consumed " << counter++ << " frames..." << std::endl;
+  this->skipFrame( inFile );
+}
 
 int main() {
 
   TriblockTrajectory* traj = new TriblockTrajectory();
+
+  traj->process();
 
   delete traj;
 
