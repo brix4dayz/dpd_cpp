@@ -9,7 +9,7 @@ class DPDTrajectory : public ObjDPD {
     idx bin_length;
     unsigned int numFrames;
     unsigned int startFile;
-    unsigned int startFileOffset;
+    unsigned int startFrameOffset;
     unsigned long numBytesInFile( std::string filename );
     void determineNumFrames();
     DPDTrajectory();

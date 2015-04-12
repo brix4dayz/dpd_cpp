@@ -47,9 +47,11 @@ void DPDTrajectory::determineNumFrames() {
 
     infile.close();
 
+    unsigned long* bytesInEachFile = new unsigned long[ numFiles ];
     unsigned long bytesInTraj = 0;
     for ( unsigned int i = 0; i < this->numFiles; i++ ) {
-        bytesInTraj += this->numBytesInFile( this->fileNames[ i ] );
+        bytesInEachFile[ i ] = this->numBytesInFile( this->fileNames[ i ] );
+        bytesInTraj += bytesInEachFile[ i ];
     }
 
     std::cout << "Bytes Per Frame: " << bytesPerFrame << std::endl;
@@ -69,6 +71,26 @@ void DPDTrajectory::determineNumFrames() {
     std::cout << "Number of frames: " << this->numFrames << std::endl;
 
     // calc start file and offset
+    if ( this->numFrames > 1000 ) {
+      this->startFrameOffset = this->numFrames - 1000;
+      unsigned int frames = 0;
+      for ( unsigned int i = 0; i < this->numFiles; i++ ) {
+        frames += bytesInEachFile[ i ]/bytesPerFrame;
+        if ( this->startFrameOffset < frames ) {
+          this->startFrameOffset = this->startFrameOffset - ( frames - bytesInEachFile[ i ]/bytesPerFrame );
+          this->startFile = i;
+          break;
+        }
+      }
+    } else {
+      this->startFrameOffset = 0;
+      this->startFile = 0;
+    }
+
+    std::cout << "Start file: " << this->fileNames[ this->startFile ] << std::endl;
+
+    std::cout << "Frame offset: " << this->startFrameOffset << std::endl;
+
 }
 
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
