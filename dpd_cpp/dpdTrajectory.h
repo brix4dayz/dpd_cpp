@@ -25,6 +25,7 @@ class DPDTrajectory : public ObjDPD {
 
 class TriblockTrajectory : public DPDTrajectory {
   public:
+    std::vector< TriblockFrameData* > frameData;
     idx pec_length;
     idx tail_length;
     idx chain_length;

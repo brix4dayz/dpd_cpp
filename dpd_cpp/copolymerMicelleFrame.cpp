@@ -436,6 +436,15 @@ void TriblockFrame::printData( FILE* fp ) {
            this->percent_neither_chains );
 }
 
+TriblockFrameData::TriblockFrameData( TriblockFrame* f ) {
+  this->avg_agg_number = f->avg_agg_number;
+  this->percent_petal_chains = f->percent_petal_chains;
+  this->percent_neither_chains = f->percent_neither_chains;
+  this->percent_stem_chains = f->percent_stem_chains;
+  this->num_cores = f->num_cores;
+  this->rms_distance_btwn_cores = f->rms_distance_btwn_cores;
+} 
+
 // Testing
 
 #if defined( TESTING )

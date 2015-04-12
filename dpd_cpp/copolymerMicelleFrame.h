@@ -60,3 +60,16 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void calcAvgAggNum();
 		void calcRMSDistBtwnCores();
 };
+
+class TriblockFrameData : public ObjDPD {
+  public:
+    float avg_agg_number;
+    float percent_neither_chains;
+    float percent_stem_chains;
+    float percent_petal_chains;
+    idx num_cores;
+    double rms_distance_btwn_cores;
+    TriblockFrameData( TriblockFrame* f );
+    void unlink() {}
+    ~TriblockFrameData() {}
+};
