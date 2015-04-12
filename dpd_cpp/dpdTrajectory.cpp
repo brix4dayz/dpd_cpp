@@ -119,14 +119,22 @@ void DPDTrajectory::process() {
     std::ifstream inFile( this->fileNames[ filePtr ].c_str() );
     filePtr++;
 
-    while ( std::getline( inFile, line ) ) {
-      std::getline( inFile, line );
-      if ( frameCount >= this->startFrameOffset && ( frameCount - this->startFrameOffset ) % 10 == 0 )
+    if ( this->numFrames > 100 ) {
+      while ( std::getline( inFile, line ) ) {
+        std::getline( inFile, line );
+        if ( frameCount >= this->startFrameOffset && ( frameCount - this->startFrameOffset ) % 10 == 0 )
+          this->consume( inFile );
+        else
+          this->skipFrame( inFile );
+        frameCount++;
+      }
+    } else {
+      while ( std::getline( inFile, line ) ) {
+        std::getline( inFile, line );
         this->consume( inFile );
-      else
-        this->skipFrame( inFile );
-      frameCount++;
+      }
     }
+
 
     inFile.close();
 
