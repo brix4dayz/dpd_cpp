@@ -5,6 +5,14 @@
 
 DPDTrajectory::DPDTrajectory() {
     unsigned int temp = 0;
+    this->numFiles = 0;
+    this->num_atoms = 0;
+    this->box_length = 0;
+    this->bin_length = 0;
+    this->numFrames = 0;
+    this->startFile = 0;
+    this->startFrameOffset = 0;
+    this->framesAnalyzed = 0;
 
     std::cout << "Enter box length: ";
     std::cin >> temp;
@@ -20,9 +28,12 @@ DPDTrajectory::DPDTrajectory() {
     this->fileNames = new std::string[ this->numFiles ];
 
     for ( unsigned int i = 0; i < this->numFiles; i++ ) {
-        std::cout << "Enter trajectory " << i << " filename: \n";
-        std::cin >> this->fileNames[ i ];
+      std::cout << "Enter trajectory " << i << " filename: \n";
+      std::cin >> this->fileNames[ i ];
     }
+
+    std::cout << "Enter main output file name: " << std::endl;
+    std::cin >> this->outFile;
 
     this->determineNumFrames();
 }
@@ -109,10 +120,17 @@ void DPDTrajectory::determineNumFrames() {
 
 }
 
+void DPDTrajectory::setupOutputFile( FILE* fp ) {
+  std::cout << "Setting up outfile..." << std::endl;
+}
+
 void DPDTrajectory::process() {
   unsigned int frameCount = 0;
   unsigned int filePtr = this->startFile;
   std::string line;
+
+  FILE* output = NULL;
+  this->setupOutputFile( output );
 
   while ( filePtr < this->numFiles ) {
 
@@ -123,33 +141,30 @@ void DPDTrajectory::process() {
       while ( std::getline( inFile, line ) ) {
         std::getline( inFile, line );
         if ( frameCount >= this->startFrameOffset && ( frameCount - this->startFrameOffset ) % 10 == 0 )
-          this->consume( inFile );
+          this->analyze( inFile, output );
         else
-          this->skipFrame( inFile );
+          this->skip( inFile );
         frameCount++;
       }
     } else {
       while ( std::getline( inFile, line ) ) {
         std::getline( inFile, line );
-        this->consume( inFile );
+        this->analyze( inFile, output );
       }
     }
-
 
     inFile.close();
 
   }
 
-
 }
 
-void DPDTrajectory::consume( std::ifstream& inFile ) {
-  static int counter = 1;
-  std::cout << "Consumed " << counter++ << " frames..." << std::endl;
-  this->skipFrame( inFile );
+void DPDTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
+  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
+  this->skip( inFile );
 }
 
-void DPDTrajectory::skipFrame( std::ifstream& inFile ) {
+void DPDTrajectory::skip( std::ifstream& inFile ) {
   std::string line;
   for ( unsigned int i = 0; i < this->num_atoms; i++ ) {
     std::getline( inFile, line );
@@ -177,10 +192,13 @@ TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
 
 TriblockTrajectory::~TriblockTrajectory() {}
 
-void TriblockTrajectory::consume( std::ifstream& inFile ) {
-  static int counter = 1;
-  std::cout << "Consumed " << counter++ << " frames..." << std::endl;
-  this->skipFrame( inFile );
+void TriblockTrajectory::setupOutputFile( FILE* fp ) {
+  std::cout << "Setting up outfile..." << std::endl;
+}
+
+void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
+  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
+  this->skip( inFile );
 }
 
 int main() {
