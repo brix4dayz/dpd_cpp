@@ -1,4 +1,7 @@
 #include "dpdTrajectory.h"
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 DPDTrajectory::DPDTrajectory() {
     std::cout << "Enter number of files: ";
@@ -15,8 +18,10 @@ DPDTrajectory::DPDTrajectory() {
 }
 
 DPDTrajectory::~DPDTrajectory() {
-
+  delete[] this->fileNames;
 }
+
+void DPDTrajectory::unlink() {}
 
 void DPDTrajectory::determineNumFrames() {
     srand(time(NULL));
@@ -82,6 +87,8 @@ unsigned long DPDTrajectory::numBytesInFile( std::string filename ) {
 int main() {
 
   DPDTrajectory* traj = new DPDTrajectory();
+
+  delete traj;
 
   return 0;
 }

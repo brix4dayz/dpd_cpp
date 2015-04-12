@@ -73,11 +73,7 @@ class CopolymerMicelleFrame;
 
 class TriblockFrame;
 
-class DPDTrajectory : public ObjDPD {
-  public:
-    void unlink() {}
-    ~DPDTrajectory() {}
-};
+class DPDTrajectory;
 
 class DPDData : public ObjDPD {
   public:

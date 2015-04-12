@@ -1,17 +1,12 @@
-#include <iostream>
-#include <string>
-#include <cstdio>
-#include <fstream> 
-#include <cstdlib>
-#include <ctime>
+#include "copolymerMicelleFrame.h"
 
-class DPDTrajectory {
+class DPDTrajectory : public ObjDPD {
   public:
     std::string* fileNames;
     unsigned int numFiles;
     unsigned int num_atoms;
-    //idx box_length;
-    //idx bin_length;
+    idx box_length;
+    idx bin_length;
     unsigned int numFrames;
     unsigned int startFile;
     unsigned int startFileOffset;
@@ -19,4 +14,13 @@ class DPDTrajectory {
     void determineNumFrames();
     DPDTrajectory();
     ~DPDTrajectory();
+    void unlink();
 };
+
+class TriblockTrajectory : public DPDTrajectory {
+  public:
+    idx pec_length;
+    idx tail_length;
+    idx chain_length;
+    float micelle_cutoff;
+}
