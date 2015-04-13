@@ -248,6 +248,8 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   TriblockFrameData* data = new TriblockFrameData( tframe );
   this->frameData.push_back( data );
 
+  delete tframe;
+
   this->AVG_avg_agg_number += data->avg_agg_number;
   this->AVG_percent_petal_chains += data->percent_petal_chains;
   this->AVG_percent_stem_chains += data->percent_stem_chains;
