@@ -10,6 +10,7 @@ double Bead::getDistanceModulus( Bead* other ) {
   return dist;
 }
 
+// change this method?????
 void Bead::pbcCorrectDistanceCompInChain( double* d, double* coord, 
  idx* box_length ) {
 	if ( std::abs( *d ) >= ( *box_length )*.5 ) {
@@ -25,6 +26,8 @@ double Bead::getPbcCorrectedDistance( Bead* other, idx* box_length,
   return this->r->getCorrectedDist( other->r, box_length, micelle_cutoff );
 }
 
+
+// Change here??????
 void Bead::pbcCorrectBeadInChain( Bead* base, idx* box_length ) {
   DirVect* d = new DirVect( base->r, this->r );
 	pbcCorrectDistanceCompInChain( &( d->dx ), &( this->r->x ), box_length );

@@ -70,7 +70,7 @@ void TriblockMicelle::printMicelle( FILE* stream ) {
 	}
 }
 
-// Looks good but should test a little more to be sure...
+// Multiple base beads?? Randomly chosen???
 void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
   Bead* baseBead = this->chainList.at( 0 )->tail1->beadList[ 0 ];
   PECTriblock* triblock = NULL;
