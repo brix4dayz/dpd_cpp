@@ -4,6 +4,7 @@ HydrophobicCore::HydrophobicCore() {
 	this->aggregation_num = 0;
 	this->num_tails = 0;
 	this->com = new PosVect();
+	this->grouped = false;
 }
 
 void HydrophobicCore::unlink() {

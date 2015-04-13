@@ -26,9 +26,12 @@ Micelle::~Micelle() {
 }
 
 void Micelle::addCore( HydrophobicCore* core ) {
-	this->aggreg_num += core->aggregation_num;
-	core->micelle = this;
-	this->coreList.push_back( core );
+	if ( !core->grouped ) {
+    core->grouped = true;
+    this->aggreg_num += core->aggregation_num;
+    core->micelle = this;
+    this->coreList.push_back( core );
+  }
 }
 
 void Micelle::printMicelleCore( FILE* stream ) {
@@ -57,8 +60,8 @@ void TriblockMicelle::deriveChainList() {
 			}
 		}
 	}
-	if ( this->chainList.size() != this->aggreg_num )
-		printf( "Error in deriving chain in micelle.\n" );
+	//if ( this->chainList.size() != this->aggreg_num )
+		//printf( "Error in deriving chain in micelle.\n" );
 }
 
 void TriblockMicelle::printMicelle( FILE* stream ) {

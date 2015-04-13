@@ -5,6 +5,7 @@ class HydrophobicCore : public ObjDPD {
 		Micelle* micelle;
 		std::vector< Bin* > binList;
 		PosVect* com;
+		bool grouped;
 		unsigned short aggregation_num;
 		unsigned short num_tails;
 		double radius_of_gyration;
