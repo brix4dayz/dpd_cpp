@@ -129,7 +129,7 @@ void DPDTrajectory::process() {
   unsigned int filePtr = this->startFile;
   std::string line;
 
-  FILE* output = NULL;
+  FILE* output = fopen( this->outFile.c_str(), "w" );
   this->setupOutputFile( output );
 
   while ( filePtr < this->numFiles ) {
@@ -157,6 +157,10 @@ void DPDTrajectory::process() {
 
   }
 
+  fclose( output );
+
+  this->calcData();
+
 }
 
 void DPDTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
@@ -169,6 +173,10 @@ void DPDTrajectory::skip( std::ifstream& inFile ) {
   for ( unsigned int i = 0; i < this->num_atoms; i++ ) {
     std::getline( inFile, line );
   }
+}
+
+void DPDTrajectory::calcData() {
+  std::cout << "Calculating final trajectory data..." << std::endl; 
 }
 
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
@@ -187,18 +195,86 @@ unsigned long DPDTrajectory::numBytesInFile( std::string filename ) {
 }
 
 TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
+  int temp;
+
+  std::cout << "Enter tail length: ";
+  std::cin >> temp;
+  this->tail_length = (idx) temp;
+
+  std::cout << "Enter pec length: ";
+  std::cin >> temp;
+  this->pec_length = (idx) temp;
+
+  this->chain_length = this->pec_length + 2*this->tail_length;
+
+  std::cout << "Enter micelle cutoff: ";
+  std::cin >> this->micelle_cutoff;
+
+  this->AVG_avg_agg_number = 0.0f;
+  this->STDDEV_avg_agg_number = 0.0f;
+  this->AVG_percent_neither_chains = 0.0f;
+  this->STDDEV_percent_neither_chains = 0.0f;
+  this->AVG_percent_stem_chains = 0.0f;
+  this->STDDEV_percent_stem_chains = 0.0f;
+  this->AVG_percent_petal_chains = 0.0f;
+  this->STDDEV_percent_petal_chains = 0.0f;
+  this->AVG_num_cores = 0.0f;
+  this->STDDEV_num_cores = 0.0f;
+  this->AVG_rms_distance_btwn_cores = 0.0;
+  this->STDDEV_rms_distance_btwn_cores = 0.0;
 
 }
 
-TriblockTrajectory::~TriblockTrajectory() {}
+TriblockTrajectory::~TriblockTrajectory() {
+  for ( auto it = this->frameData.begin(); it != this->frameData.end(); it++ ) {
+    delete *it;
+  }
+}
 
 void TriblockTrajectory::setupOutputFile( FILE* fp ) {
   std::cout << "Setting up outfile..." << std::endl;
+  fprintf( fp, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   Neither  \n" );
 }
 
 void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
-  this->skip( inFile );
+  TriblockFrame* tframe = new TriblockFrame( this->num_atoms, this->box_length, this->chain_length, 
+                                             this->bin_length, &( this->micelle_cutoff ), this->tail_length, this->pec_length, &inFile );
+  tframe->deriveMicelleList();
+  tframe->process();
+
+  tframe->printData( fp );
+
+  TriblockFrameData* data = new TriblockFrameData( tframe );
+  this->frameData.push_back( data );
+
+  this->AVG_avg_agg_number += data->avg_agg_number;
+  this->AVG_percent_petal_chains += data->percent_petal_chains;
+  this->AVG_percent_stem_chains += data->percent_stem_chains;
+  this->AVG_percent_neither_chains += data->percent_neither_chains;
+  this->AVG_num_cores += data->num_cores;
+  this->AVG_rms_distance_btwn_cores += data->rms_distance_btwn_cores;
+}
+
+void TriblockTrajectory::calcData() {
+  std::cout << "Calculating final trajectory data..." << std::endl;
+
+  if ( this->framesAnalyzed != this->frameData.size() ) {
+    fprintf( stdout, "Error in frame data and number analyzed." );
+    exit( 1 );
+  }
+
+  this->AVG_avg_agg_number /= this->framesAnalyzed;
+  this->AVG_percent_petal_chains /= this->framesAnalyzed;
+  this->AVG_percent_stem_chains /= this->framesAnalyzed;
+  this->AVG_percent_neither_chains /= this->framesAnalyzed;
+  this->AVG_num_cores /= this->framesAnalyzed; 
+  this->AVG_rms_distance_btwn_cores /= this->framesAnalyzed;
+
+  fprintf( stdout, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   Neither  \n" );
+  fprintf( stdout, "AVG: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->AVG_num_cores, this->AVG_avg_agg_number, 
+           this->AVG_rms_distance_btwn_cores, this->AVG_percent_stem_chains, this->AVG_percent_petal_chains,
+           this->AVG_percent_neither_chains );
 }
 
 int main() {
