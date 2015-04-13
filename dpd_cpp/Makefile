@@ -183,3 +183,28 @@ testDLLInPython:
 	mv current_libvect_test former_libvect_test
 	python2.7 dpdVect.py > current_libvect_test
 	diff current_libvect_test former_libvect_test
+
+testTriblockProcessor:
+	rm -rf *.o
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c hydrophobicCore.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c micelle.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c copolymerMicelleFrame.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+
+triblockProcessor:	
+	rm -rf *.o
+	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(STDFLAG) -c hydrophobicCore.cpp
+	$(CC) $(WARN) $(STDFLAG) -c micelle.cpp
+	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
+	$(CC) $(WARN) $(STDFLAG) -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+

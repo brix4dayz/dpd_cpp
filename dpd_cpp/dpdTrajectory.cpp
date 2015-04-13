@@ -76,7 +76,7 @@ void DPDTrajectory::determineNumFrames() {
     bytesInTraj += bytesInEachFile[ i ];
   }
 
-  std::cout << "Bytes Per Frame: " << bytesPerFrame << std::endl;
+  std::cout << "Estimated bytes Per Frame: " << bytesPerFrame << std::endl;
 
   std::cout << "Bytes In Traj: " << bytesInTraj << std::endl;
 
@@ -90,7 +90,7 @@ void DPDTrajectory::determineNumFrames() {
 
   std::cout << "Number of atoms: " << this->num_atoms << std::endl;
 
-  std::cout << "Number of frames: " << this->numFrames << std::endl;
+  std::cout << "Estimated number of frames: " << this->numFrames << std::endl;
 
   // calc start file and offset
   if ( this->numFrames > 1000 ) {
@@ -123,6 +123,7 @@ void DPDTrajectory::determineNumFrames() {
 
 void DPDTrajectory::setupOutputFile( FILE* fp ) {
   std::cout << "Setting up outfile..." << std::endl;
+  std::cout << "Output file initialized." << std::endl;
 }
 
 void DPDTrajectory::process() {
@@ -132,6 +133,8 @@ void DPDTrajectory::process() {
 
   FILE* output = fopen( this->outFile.c_str(), "w" );
   this->setupOutputFile( output );
+
+  std::cout << "Processing trajectory..." << std::endl;
 
   while ( filePtr < this->numFiles ) {
 
@@ -159,6 +162,8 @@ void DPDTrajectory::process() {
   }
 
   fclose( output );
+
+  std::cout << "Trajectory processing complete." << std::endl;
 
   this->calcData();
 
@@ -235,10 +240,10 @@ TriblockTrajectory::~TriblockTrajectory() {
 void TriblockTrajectory::setupOutputFile( FILE* fp ) {
   std::cout << "Setting up outfile..." << std::endl;
   fprintf( fp, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   Neither  \n" );
+  std::cout << "Output file initialized." << std::endl;
 }
 
 void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
-  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
   TriblockFrame* tframe = new TriblockFrame( this->num_atoms, this->box_length, this->chain_length, 
                                              this->bin_length, &( this->micelle_cutoff ), this->tail_length, this->pec_length, &inFile );
   tframe->deriveMicelleList();
@@ -257,6 +262,8 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   this->AVG_percent_neither_chains += data->percent_neither_chains;
   this->AVG_num_cores += data->num_cores;
   this->AVG_rms_distance_btwn_cores += data->rms_distance_btwn_cores;
+
+  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
 }
 
 void TriblockTrajectory::calcData() {
@@ -302,7 +309,7 @@ void TriblockTrajectory::calcData() {
   this->STDDEV_num_cores = sqrt( this->STDDEV_num_cores );  
   this->STDDEV_rms_distance_btwn_cores = sqrt( this->STDDEV_rms_distance_btwn_cores ); 
 
-    fprintf( stdout, "STDDEV: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->STDDEV_num_cores, this->STDDEV_avg_agg_number, 
+  fprintf( stdout, "STDDEV: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->STDDEV_num_cores, this->STDDEV_avg_agg_number, 
            this->STDDEV_rms_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains,
            this->STDDEV_percent_neither_chains );
 }
