@@ -76,9 +76,9 @@ void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
   PECTriblock* triblock = NULL;
   for ( auto chain = std::begin( this->chainList ) ; chain != std::end( this->chainList ) ; chain++ ) {
     triblock = ( *chain );
-    triblock->pec_block->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
     triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
-    triblock->tail2->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
+    triblock->pec_block->beadList[ 0 ]->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
+    triblock->tail2->beadList[ 0 ]->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
     
     for ( idx i = 1 ; i < triblock->pec_block->length ; i ++ ) {
       ( triblock->pec_block->getBead( i )  )->pbcCorrectBeadInChain( triblock->pec_block->beadList[ 0 ], box_length );
