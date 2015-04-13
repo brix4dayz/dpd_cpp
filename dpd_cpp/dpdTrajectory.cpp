@@ -62,7 +62,7 @@ void DPDTrajectory::determineNumFrames() {
 
   bytesPerFrame += line.length() + 1; // + 1 for extra byte in newline that is lost when \n is replaced with \0
 
-  for ( int i = 0; i < this->num_atoms + 1; i++ ) {
+  for ( unsigned int i = 0; i < this->num_atoms + 1; i++ ) {
     std::getline( infile, line );
     bytesPerFrame += line.length() + 1;
   }
