@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 
 DPDTrajectory::DPDTrajectory() {
     unsigned int temp = 0;
@@ -277,6 +278,33 @@ void TriblockTrajectory::calcData() {
   fprintf( stdout, "AVG: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->AVG_num_cores, this->AVG_avg_agg_number, 
            this->AVG_rms_distance_btwn_cores, this->AVG_percent_stem_chains, this->AVG_percent_petal_chains,
            this->AVG_percent_neither_chains );
+
+  for ( auto it = this->frameData.begin(); it != this->frameData.end(); it++ ) {
+    this->STDDEV_num_cores += ( this->AVG_num_cores - (*it)->num_cores )*( this->AVG_num_cores - (*it)->num_cores );
+    this->STDDEV_percent_petal_chains += ( this->AVG_percent_petal_chains - (*it)->percent_petal_chains )*( this->AVG_percent_petal_chains - (*it)->percent_petal_chains );
+    this->STDDEV_percent_stem_chains += ( this->AVG_percent_stem_chains - (*it)->percent_stem_chains )*( this->AVG_percent_stem_chains - (*it)->percent_stem_chains );
+    this->STDDEV_percent_neither_chains += ( this->AVG_percent_neither_chains - (*it)->percent_neither_chains )*( this->AVG_percent_neither_chains - (*it)->percent_neither_chains );
+    this->STDDEV_avg_agg_number += ( this->AVG_avg_agg_number - (*it)->avg_agg_number )*( this->AVG_avg_agg_number - (*it)->avg_agg_number );
+    this->STDDEV_rms_distance_btwn_cores += ( this->AVG_rms_distance_btwn_cores - (*it)->rms_distance_btwn_cores )*( this->AVG_rms_distance_btwn_cores - (*it)->rms_distance_btwn_cores );
+  }
+
+  this->STDDEV_avg_agg_number /= this->framesAnalyzed;
+  this->STDDEV_percent_petal_chains /= this->framesAnalyzed;
+  this->STDDEV_percent_stem_chains /= this->framesAnalyzed;
+  this->STDDEV_percent_neither_chains /= this->framesAnalyzed;
+  this->STDDEV_num_cores /= this->framesAnalyzed; 
+  this->STDDEV_rms_distance_btwn_cores /= this->framesAnalyzed;
+
+  this->STDDEV_avg_agg_number = sqrt( this->STDDEV_avg_agg_number ); 
+  this->STDDEV_percent_petal_chains = sqrt( this->STDDEV_percent_petal_chains ); 
+  this->STDDEV_percent_stem_chains = sqrt( this->STDDEV_percent_stem_chains ); 
+  this->STDDEV_percent_neither_chains = sqrt( this->STDDEV_percent_neither_chains ); 
+  this->STDDEV_num_cores = sqrt( this->STDDEV_num_cores );  
+  this->STDDEV_rms_distance_btwn_cores = sqrt( this->STDDEV_rms_distance_btwn_cores ); 
+
+    fprintf( stdout, "STDDEV: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->STDDEV_num_cores, this->STDDEV_avg_agg_number, 
+           this->STDDEV_rms_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains,
+           this->STDDEV_percent_neither_chains );
 }
 
 int main() {
