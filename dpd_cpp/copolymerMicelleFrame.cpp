@@ -414,7 +414,9 @@ TriblockFrame::~TriblockFrame() {
 
 void TriblockFrame::printChains( FILE* fp ) {
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+      #if defined(TESTING)
       fprintf( fp, "printing chain %d\n", i );
+      #endif
       this->chainList[ i ]->printChain( fp );
   }
 }

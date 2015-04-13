@@ -254,6 +254,15 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   TriblockFrameData* data = new TriblockFrameData( tframe );
   this->frameData.push_back( data );
 
+  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
+
+  if ( this->framesAnalyzed >= 100 ) {
+    FILE* fp = fopen("lastFrameWrapped.xyz", "w" );
+
+    fprintf( fp, "%d\nTime: 1\n", tframe->num_atoms );
+    tframe->printChains( fp );
+  }
+
   delete tframe;
 
   this->AVG_avg_agg_number += data->avg_agg_number;
@@ -262,8 +271,6 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   this->AVG_percent_neither_chains += data->percent_neither_chains;
   this->AVG_num_cores += data->num_cores;
   this->AVG_rms_distance_btwn_cores += data->rms_distance_btwn_cores;
-
-  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
 }
 
 void TriblockTrajectory::calcData() {
