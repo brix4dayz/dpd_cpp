@@ -72,7 +72,7 @@ void TriblockMicelle::printMicelle( FILE* stream ) {
 
 // Multiple base beads?? Randomly chosen???
 void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
-  Bead* baseBeads[ 3 ];
+  /*Bead* baseBeads[ 3 ];
   baseBeads[ 0 ] = this->chainList.at( 0 )->tail1->beadList[ 0 ];
   
   PECTriblock* triblock = this->chainList.at( this->chainList.size() - 1 );
@@ -86,21 +86,24 @@ void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
   baseBeads[ 1 ]->pbcCorrectBeadInChain( baseBeads[ 0 ], box_length );
   baseBeads[ 2 ]->pbcCorrectBeadInChain( baseBeads[ 1 ], box_length );
   baseBeads[ 2 ]->pbcCorrectBeadInChain( baseBeads[ 0 ], box_length );
+*/
 
-  triblock = NULL;
+  Bead* baseBead = this->chainList.at( 0 )->tail1->beadList[ 0 ];
+  PECTriblock* triblock = NULL;
   for ( auto chain = std::begin( this->chainList ) ; chain != std::end( this->chainList ) ; chain++ ) {
     triblock = ( *chain );
-    for ( int i = 0 ; i < 3; i++ ) {
+    /*for ( int i = 0 ; i < 3; i++ ) {
       triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBeads[ i ], box_length );
-    }
+    }*/
+    triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
     
     for ( idx i = 0 ; i < triblock->pec_block->length ; i ++ ) {
-      ( triblock->pec_block->getBead( i )  )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
+      ( triblock->pec_block->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
     }
     
     for ( idx i = 0 ; i < triblock->tail1->length ; i++ ) {
       ( triblock->tail1->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
-      ( triblock->tail2->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail2->beadList[ 0 ], box_length );
+      ( triblock->tail2->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
     }
   
   }
