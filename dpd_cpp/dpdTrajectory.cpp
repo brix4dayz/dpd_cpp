@@ -257,7 +257,14 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
 
   if ( this->framesAnalyzed >= 100 ) {
-    FILE* fp = fopen("lastFrameWrapped.xyz", "w" );
+    FILE* fp = fopen( "lastFrameWrapped.xyz", "w" );
+
+    if ( fp == NULL ) {
+      fprintf( stdout, "Error in opening lastFrameWrapped.xyz...\n" );
+      exit( 1 );
+    }
+
+    std::cout << "Printing last frame..." << std::endl;
 
     fprintf( fp, "%d\nTime: 1\n", tframe->num_atoms );
     tframe->printChains( fp );
