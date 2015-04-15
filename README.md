@@ -1,3 +1,7 @@
+This file is a little outdated and needs to be updated when I'm done debugging **TriblockProcessor**.
+
+See **Issues** for the current bugs and tasks in **dpd_cpp** and **TriblockProcessor**, and for more information on the current state of **TriblockProcessor** see `TRIBLOCK.md`
+
 ## dpd_cpp
 ##### _Copyright (c) 2015, Yingling labs_
 ##### author: _Hayden Fuss_
