@@ -1,8 +1,9 @@
 #### Triblock Processor
 
 ##### ToDo's
- - Look into Stem collisions with xor hashing.
+ - Correct avg aggregation number.
  - Remove neither counter and change it to stem.
+ - Look into Stem collisions with xor hashing.
 
 ##### Analysis Parameters
 
