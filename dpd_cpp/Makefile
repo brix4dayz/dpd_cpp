@@ -177,6 +177,16 @@ testGenerateData:
 	diff formerdata newdata
 	diff newdataTest.dat formerdataTest.dat
 
+triblockBuilder:
+	rm -rf *.o
+	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(STDFLAG) -c dpdPolymerData.cpp
+	$(CC) $(WARN) $(STDFLAG) -o triblockBuilder vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.o chargeTriblockBuilder.cpp
+
 testDLLInPython:
 	rm -rf *.o *.dylib
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DPYTHON_LIB $(TEST) -c -fPIC vect.cpp -o vect.o && $(CC) $(WARN) $(DEBUG) $(STDFLAG) $(TEST) -shared -Wl -o libvect.dylib vect.o

@@ -1,5 +1,7 @@
 #include "dpdPolymerData.h"
 #include <ctime>
+#include <iostream>
+#include <string>
 
 int main() {
 
