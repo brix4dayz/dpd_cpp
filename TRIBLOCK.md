@@ -21,7 +21,7 @@
 	+ **90's** --> 90
 - Groups with issues:
 	+ **PBC "dismemberment"** --> 10's 25 through 50, 30_40
-	+ **Illegal instruction fault when deleting cores** --> 70_70
+	+ **Illegal instruction fault when deleting cores** --> 70_90
 - Fixed issues:
 	+ **Illegal instruction fault when deleting cores** --> cores were being added multiple times to the same micelle so cores were being deleted multiple times, added grouped field to cores just like bins 
 
