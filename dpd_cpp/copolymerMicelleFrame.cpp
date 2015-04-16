@@ -159,6 +159,7 @@ void TriblockFrame::deriveStems() {
         }
         this->stems.insert( this->stems.begin(), std::pair< uintptr_t, Stem* >( stemIdx, newStem ) );
       } else {
+      	//// THIS IS WHERE YOU CAN MAKE A COLLISION CHECK
         it->second->inc();
       }
     }
