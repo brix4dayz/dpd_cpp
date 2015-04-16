@@ -18,7 +18,7 @@ int main() {
 
   srand( time( NULL ) );
   
-  std::cout << "Enter boxlength: ";
+  std::cout << "Enter box length: ";
   std::cin >> temp;
   box_length = (idx) temp;
   
