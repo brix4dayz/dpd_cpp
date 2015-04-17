@@ -10,17 +10,18 @@ class PolymerBlock : public ObjDPD {
 		PosVect* com;
 		CopolymerChain* chain;
 		PolymerBlock( CopolymerChain* chain, idx type, 
-	                idx length, DirVect* d, 
-	                idx* box_length, PosVect* r, unsigned int* id, 
-	                unsigned int mold_id );
+	                          idx length, DirVect* d, 
+	                          idx* box_length, PosVect* r, unsigned int* idTracker,
+	                          unsigned int mol_id );
 		PolymerBlock( CopolymerChain *chain, idx type, idx length );
 		PolymerBlock();
-		PolymerBlock( CopolymerChain *chain, idx type, idx length, 
-			std::ifstream* inFile, idx* box_length );
+		PolymerBlock( CopolymerChain*chain, idx type, idx length,
+                            		std::ifstream* inFile, idx* box_length, 
+                            		const float& pbc_correction_factor );
 		~PolymerBlock();
 		void printBlock( FILE *stream );
 		void printData( FILE* stream );
-		void calcCenterOfMass( idx* box_length );
+		void calcCenterOfMass( idx* box_length, const float& pbc_correction_factor );
 		bool addBead( Bead* bead );
 		Bead* getBead( idx idx );
     void unlink();
@@ -31,12 +32,12 @@ class HydrophobicTail : public PolymerBlock {
 		HydrophobicTail* other;
 		Bin* bin;
 		HydrophobicTail( CopolymerChain* chain, idx length,
-		                 DirVect* d, idx* box_length, 
+		                 DirVect* d, idx* box_length,
 		                 PosVect* r, unsigned int* idTracker,
 		                 unsigned int mold_id );
 		HydrophobicTail( CopolymerChain* chain, idx length );
 		HydrophobicTail( CopolymerChain* chain, idx length, 
-			std::ifstream* inFile, idx* box_length );
+			std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor );
 		HydrophobicTail();
 		bool addBead( Bead* bead );
 		~HydrophobicTail();
@@ -47,7 +48,7 @@ class HydrophobicTail : public PolymerBlock {
 class ChargedBlock : public PolymerBlock {
 	public:
 			ChargedBlock( CopolymerChain *chain, idx type, idx length, 
-										std::ifstream* inFile, idx* box_length );
+										std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor );
       ChargedBlock( CopolymerChain* chain, idx type,
                     idx length, DirVect* d,
                     idx* box_length, PosVect* r, unsigned int* id,

@@ -32,7 +32,7 @@ class BeadGyration : public Gyration {
 class Bead : public ObjDPD {
 	private:
 		void pbcCorrectDistanceCompInChain( double* d, double* coord, 
-			                                  idx* box_length );
+			                                  idx* box_length, const float& pbc_correction_factor );
 		void pbcCorrectDistanceCompForCluster( double* d, idx* box_length,
 		 	                                     float* micelle_cutoff );
 	public:
@@ -53,7 +53,7 @@ class Bead : public ObjDPD {
 		~Bead();
 		//Functions
 		double getDistanceModulus( Bead* other );
-		void pbcCorrectBeadInChain( Bead* base, idx* box_length );
+		void pbcCorrectBeadInChain( Bead* base, idx* box_length, const float& pbc_correction_factor );
 		double getPbcCorrectedDistance( Bead* other, idx* box_length, 
 			                              float* micelle_cutoff );
 		void printBead( FILE* stream );

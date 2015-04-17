@@ -218,6 +218,9 @@ TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
   std::cout << "Enter micelle cutoff: ";
   std::cin >> this->micelle_cutoff;
 
+  std::cout << "Enter PBC correction factor: ";
+  std::cin >> this->pbc_correction_factor;
+
   this->AVG_avg_agg_number = 0.0f;
   this->STDDEV_avg_agg_number = 0.0f;
   this->AVG_percent_stem_chains = 0.0f;
@@ -243,7 +246,8 @@ void TriblockTrajectory::setupHelp( FILE* fp ) {
 
 void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
   TriblockFrame* tframe = new TriblockFrame( this->num_atoms, this->box_length, this->chain_length, 
-                                             this->bin_length, &( this->micelle_cutoff ), this->tail_length, this->pec_length, &inFile );
+                                             this->bin_length, &( this->micelle_cutoff ),
+                                             ( const float ) this->pbc_correction_factor,  this->tail_length, this->pec_length, &inFile );
   tframe->deriveMicelleList();
   tframe->process();
 

@@ -72,16 +72,18 @@ void Bin::printBin( FILE* stream ) {
 
 int main() {
 
+	const float pbc_correction_factor = 0.5f;
+
 	std::ifstream infile( "bin_test.txt" );
 	idx box_length = 36;
 	// Make two triblocks from file
 	std::cout << "Chain1: " << std::endl;
-	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_correction_factor );
 	chain1->printChain( stdout );
 	std::cout << ( short ) chain1->chain_length << std::endl;	
 
 	std::cout << "Chain2: " << std::endl;
-	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_correction_factor );
 	chain2->printChain( stdout );
 	std::cout << ( short ) chain2->chain_length << std::endl;
 

@@ -1,5 +1,7 @@
 #include "bin.h"
 
+const float default_correction_factor = DEFAULT_PBC;
+
 PolymerBlock::PolymerBlock() {
   this->com = new PosVect();
   this->cursor = 0;
@@ -14,7 +16,7 @@ PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, idx length )	:
 }
 
 PolymerBlock::PolymerBlock( CopolymerChain*chain, idx type, idx length, 
-                            std::ifstream* inFile, idx* box_length ) :
+                            std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor ) :
                             PolymerBlock( chain, type, length ) {
 	std::string line;
 	for (idx i = 0; i < length; i++ ) {
@@ -23,7 +25,7 @@ PolymerBlock::PolymerBlock( CopolymerChain*chain, idx type, idx length,
 		this->addBead( b );
 	}
 
-	this->calcCenterOfMass( box_length );
+	this->calcCenterOfMass( box_length, pbc_correction_factor );
 }
 
 PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, 
@@ -40,7 +42,7 @@ PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type,
 		this->addBead( b );
 	}
 
-	this->calcCenterOfMass( box_length );
+	this->calcCenterOfMass( box_length, default_correction_factor );
 }
 
 PolymerBlock::~PolymerBlock() {
@@ -65,12 +67,12 @@ void PolymerBlock::unlink() {
   this->chain = NULL;
 }
 
-void PolymerBlock::calcCenterOfMass( idx* box_length ) {
+void PolymerBlock::calcCenterOfMass( idx* box_length, const float& pbc_correction_factor ) {
 	Bead* b;
 	this->com->reset();
 	for ( idx i = 0; i < this->length; i++ ) {
 		b = this->beadList[ i ];
-		b->pbcCorrectBeadInChain( this->beadList[ 0 ], box_length );
+		b->pbcCorrectBeadInChain( this->beadList[ 0 ], box_length, pbc_correction_factor );
     this->com->addCoords( b->r );
 	}
   int block_length = this->length;
@@ -111,15 +113,15 @@ HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length ) :
 }
 
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length, 
-	                                std::ifstream* inFile, idx* box_length ) : 
+	                                std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor ) :
                                   PolymerBlock( chain, HYDROPHOBIC, length,
-	                                inFile, box_length ) {
+	                                inFile, box_length, pbc_correction_factor ) {
   this->bin = NULL;
   this->other = NULL;
 }
 
 HydrophobicTail::HydrophobicTail( CopolymerChain* chain, idx length, 
-	                                DirVect* d, idx* box_length, 
+	                                DirVect* d, idx* box_length,
 	                                PosVect* r, unsigned int* idTracker,
 	                                unsigned int mol_id ) :
 	                                PolymerBlock( chain,
@@ -150,8 +152,8 @@ HydrophobicTail::~HydrophobicTail() {
 }
 
 ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length, 
-										std::ifstream* inFile, idx* box_length ) :
-										PolymerBlock( chain , type, length, inFile, box_length ) {}
+										std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor ) :
+										PolymerBlock( chain , type, length, inFile, box_length, pbc_correction_factor ) {}
 
 bool HydrophobicTail::addBead( Bead* bead ) {
 	if ( this->cursor >= this->length || this->bead_type != bead->type )
@@ -176,6 +178,8 @@ ChargedBlock::ChargedBlock() : PolymerBlock() {}
 #include <iostream>
 
 int main() {
+
+	float pbc_correction_factor = 0.5f;
 
 	//Setup test
 	Bead* b1 = new Bead(-1, 2, -1, 1);
@@ -215,7 +219,7 @@ int main() {
 		return 1;
 
 	// Test com
-	hydrophobic_block.calcCenterOfMass( &test_box_length );
+	hydrophobic_block.calcCenterOfMass( &test_box_length, pbc_correction_factor );
 
 	hydrophobic_block.com->print( stdout );
 
@@ -255,7 +259,7 @@ int main() {
 		return 1;
 
 	// Test com
-	hydrophobic_block1.calcCenterOfMass( &test_box_length );
+	hydrophobic_block1.calcCenterOfMass( &test_box_length, pbc_correction_factor );
 
 	hydrophobic_block1.com->print( stdout );
 
@@ -276,7 +280,7 @@ int main() {
 	idx box_length = 36;
 	std::ifstream infile("bead_test.txt");
 
-	HydrophobicTail test( NULL, 4, &infile, &box_length );
+	HydrophobicTail test( NULL, 4, &infile, &box_length, pbc_correction_factor );
 	test.com->print( stdout );
 
 	test.printBlock( stdout );

@@ -13,6 +13,8 @@ typedef unsigned char idx;
 
 #define FLUID_DENSITY 3
 
+#define DEFAULT_PBC 0.5f
+
 double randomRealC();
 
 // Class prototypes

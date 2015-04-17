@@ -80,7 +80,7 @@ void TriblockMicelle::printMicelle( FILE* stream ) {
 }
 
 // Multiple base beads?? Randomly chosen???
-void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
+void TriblockMicelle::pbcCorrectMicelle( idx* box_length, const float& pbc_correction_factor ) {
   /*Bead* baseBeads[ 3 ];
   baseBeads[ 0 ] = this->chainList.at( 0 )->tail1->beadList[ 0 ];
   
@@ -104,24 +104,24 @@ void TriblockMicelle::pbcCorrectMicelle( idx* box_length ) {
     /*for ( int i = 0 ; i < 3; i++ ) {
       triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBeads[ i ], box_length );
     }*/
-    triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length );
+    triblock->tail1->beadList[ 0 ]->pbcCorrectBeadInChain( baseBead, box_length, pbc_correction_factor );
     
     for ( idx i = 0 ; i < triblock->pec_block->length ; i ++ ) {
-      ( triblock->pec_block->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
+      ( triblock->pec_block->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length, pbc_correction_factor );
     }
     
     for ( idx i = 0 ; i < triblock->tail1->length ; i++ ) {
-      ( triblock->tail1->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
-      ( triblock->tail2->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length );
+      ( triblock->tail1->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length, pbc_correction_factor );
+      ( triblock->tail2->getBead( i ) )->pbcCorrectBeadInChain( triblock->tail1->beadList[ 0 ], box_length, pbc_correction_factor );
     }
   
   }
 }
 
 // Needs to be reviewed before I write tests, not a crucical function though
-void TriblockMicelle::calcCenterOfMass( idx* box_length ) {
+void TriblockMicelle::calcCenterOfMass( idx* box_length, const float& pbc_correction_factor ) {
   this->com->reset();
-  this->pbcCorrectMicelle( box_length );
+  this->pbcCorrectMicelle( box_length, pbc_correction_factor );
   
   PECTriblock* triblock = NULL;
   Bead *current = NULL;
@@ -161,16 +161,18 @@ TriblockMicelle::~TriblockMicelle() {
 
 int main() {
 
+  const float pbc_correction_factor = 0.5f;
+
 	std::ifstream infile( "bin_test.txt" );
 	idx box_length = 36;
 	// Make two triblocks from file
 	std::cout << "Chain1: " << std::endl;
-	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_correction_factor );
 	chain1->printChain( stdout );
 	std::cout << ( short ) chain1->chain_length << std::endl;
 
 	std::cout << "Chain2: " << std::endl;
-	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_correction_factor );
 	chain2->printChain( stdout );
 	std::cout << ( short ) chain2->chain_length << std::endl;
 
@@ -217,7 +219,7 @@ int main() {
 	micelle->printMicelle( stdout );
   
   // Only test so far for pbcCorrectMicelle
-  micelle->pbcCorrectMicelle( &box_length );
+  micelle->pbcCorrectMicelle( &box_length, pbc_correction_factor );
   std::cout << "Micelle (corrected): " << std::endl;
   micelle->printMicelle( stdout );
 

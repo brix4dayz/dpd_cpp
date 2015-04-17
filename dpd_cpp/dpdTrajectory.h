@@ -44,6 +44,7 @@ class TriblockTrajectory : public DPDTrajectory {
     idx tail_length;
     idx chain_length;
     float micelle_cutoff;
+    float pbc_correction_factor;
     void analyzeHelp( std::ifstream& inFile, FILE* fp );
     void setupHelp( FILE* fp );
     void calcHelp();

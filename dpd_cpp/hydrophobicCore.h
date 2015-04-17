@@ -17,7 +17,7 @@ class HydrophobicCore : public ObjDPD {
 		bool groupCores( HydrophobicCore* core ); //go through all tails in this core,
 		// if tail's other's bin doesn't match theirs, then see if their other's bin
 		// matches any of the bins in the other core
-		void calcCenterOfMass( idx* box_length );
+		void calcCenterOfMass( idx* box_length, const float& pbc_cor_factor );
 		void printCore( FILE* stream );
 		void unlink();
 };

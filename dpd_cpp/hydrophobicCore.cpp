@@ -27,14 +27,14 @@ void HydrophobicCore::addBin( Bin* bin ) {
 	bin->core = this;
 }
 
-void HydrophobicCore::calcCenterOfMass( idx* box_length ) {
+void HydrophobicCore::calcCenterOfMass( idx* box_length, const float& pbc_cor_factor ) {
 	this->com->reset();
 	// First bead in core
 	Bead* base = this->binList[ 0 ]->tailList[ 0 ]->beadList[ 0 ];
 	for ( auto bin = std::begin( this->binList ) ; bin != std::end( this->binList ) ; bin++ ) {
 		for ( auto tail = std::begin( ( *bin )->tailList ) ; tail != std::end( ( *bin )->tailList ) ; tail++ ) {
-			( *tail )->beadList[ 0 ]->pbcCorrectBeadInChain( base, box_length );
-			( *tail )->calcCenterOfMass( box_length );
+			( *tail )->beadList[ 0 ]->pbcCorrectBeadInChain( base, box_length, pbc_cor_factor );
+			( *tail )->calcCenterOfMass( box_length, pbc_cor_factor );
       this->com->addCoords( (*tail )->com );
 		}
 	}
@@ -66,11 +66,13 @@ bool HydrophobicCore::groupCores( HydrophobicCore* core ) {
 
 int main() {
 
+	const float pbc_cor_factor = 0.5f;
+
 	std::ifstream infile( "bin_test.txt" );
 	idx box_length = 36;
 	// Make two triblocks from file
 	std::cout << "Chain1: " << std::endl;
-	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain1 = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_cor_factor );
 	chain1->printChain( stdout );
 	std::cout << ( short ) chain1->chain_length << std::endl;
 	std::cout << "Chain1 Tail1 com: ";
@@ -79,7 +81,7 @@ int main() {
 	chain1->tail2->com->print( stdout );	
 
 	std::cout << "Chain2: " << std::endl;
-	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain2 = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_cor_factor );
 	chain2->printChain( stdout );
 	std::cout << ( short ) chain2->chain_length << std::endl;
 	std::cout << "Chain2 Tail1 com: ";
@@ -119,7 +121,7 @@ int main() {
 	//std::cout << "Core agg num: " << core->aggregation_num << std::endl;
 	std::cout << "Core num of blocks: " << core->num_tails << std::endl;
 
-	core->calcCenterOfMass( &box_length );
+	core->calcCenterOfMass( &box_length, pbc_cor_factor );
 
 	std::cout << "Core com: ";
 	core->com->print( stdout );

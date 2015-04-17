@@ -10,10 +10,9 @@ double Bead::getDistanceModulus( Bead* other ) {
   return dist;
 }
 
-// change this method?????
 void Bead::pbcCorrectDistanceCompInChain( double* d, double* coord, 
- idx* box_length ) {
-	if ( std::abs( *d ) >= ( *box_length )*.5 ) {
+ idx* box_length, const float& pbc_correction_factor ) {
+	if ( std::abs( *d ) >= ( *box_length )*pbc_correction_factor ) {
 		if ( *d > 0 )
 			*coord -= *box_length;
 		else
@@ -26,13 +25,11 @@ double Bead::getPbcCorrectedDistance( Bead* other, idx* box_length,
   return this->r->getCorrectedDist( other->r, box_length, micelle_cutoff );
 }
 
-
-// Change here??????
-void Bead::pbcCorrectBeadInChain( Bead* base, idx* box_length ) {
+void Bead::pbcCorrectBeadInChain( Bead* base, idx* box_length, const float& pbc_correction_factor ) {
   DirVect* d = new DirVect( base->r, this->r );
-	pbcCorrectDistanceCompInChain( &( d->dx ), &( this->r->x ), box_length );
-	pbcCorrectDistanceCompInChain( &( d->dy ), &( this->r->y ), box_length );
-	pbcCorrectDistanceCompInChain( &( d->dz ), &( this->r->z ), box_length );
+	pbcCorrectDistanceCompInChain( &( d->dx ), &( this->r->x ), box_length, pbc_correction_factor );
+	pbcCorrectDistanceCompInChain( &( d->dy ), &( this->r->y ), box_length, pbc_correction_factor );
+	pbcCorrectDistanceCompInChain( &( d->dz ), &( this->r->z ), box_length, pbc_correction_factor );
   delete d;
 }
 
@@ -180,6 +177,7 @@ int main() {
 	Bead *b1 = new Bead(0, 3, 4, 1);
 	Bead *b2 = new Bead(0, 3, -4, 1);
 	Bead *com = new Bead(0.0, 0.0, 0.0, 1);
+  float pbc_correction_factor = 0.5f;
 
 	//Test Distance Modulus
 	printf("%10.5f %10.5f\n", b1->getDistanceModulus( com ), 
@@ -194,8 +192,8 @@ int main() {
 
 	//Test PBC-Bead Correct
 	idx *box_length = new idx(7);
-	b1->pbcCorrectBeadInChain( com, box_length ); //should now be (0, 3, -3)
-	b2->pbcCorrectBeadInChain( com, box_length ); //should now be (0, 3, 3)
+	b1->pbcCorrectBeadInChain( com, box_length, pbc_correction_factor ); //should now be (0, 3, -3)
+	b2->pbcCorrectBeadInChain( com, box_length, pbc_correction_factor ); //should now be (0, 3, 3)
 
 	b1->printBead( stdout );
 	b2->printBead( stdout );

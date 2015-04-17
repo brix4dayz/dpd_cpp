@@ -2,7 +2,8 @@
 #include <cmath>
 
 CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
-	                                            idx chain_length, idx bin_size, float* micelle_cutoff ) {
+	                                            idx chain_length, idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor ): pbc_correction_factor( pbc_correction_factor ) {
+  //this->pbc_correction_factor = pbc_correction_factor;
 	this->micelle_cutoff = micelle_cutoff;
   this->chainCursor = 0;
 	this->num_atoms = num_atoms;
@@ -91,8 +92,8 @@ void CopolymerMicelleFrame::unlink() {
 
 // Triblock
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
-	                            idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length ): 
-															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size, micelle_cutoff ) {
+	                            idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor, idx tail_length, idx pec_length ):
+															CopolymerMicelleFrame( num_atoms, box_length, chain_length, bin_size, micelle_cutoff, pbc_correction_factor ) {
   this->tail_length = tail_length;
   this->pec_length = pec_length;
   this->avg_agg_number = 0.0f;
@@ -103,14 +104,14 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
 }
 
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
-															idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length, 
+															idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor, idx tail_length, idx pec_length,
 															std::ifstream* inFile ):
 														  TriblockFrame( num_atoms, box_length, chain_length, 
-                              bin_size, micelle_cutoff, tail_length, pec_length ) {
+                              bin_size, micelle_cutoff, pbc_correction_factor, tail_length, pec_length ) {
   PECTriblock* currentChain = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     currentChain = new PECTriblock( this->pec_length, this->tail_length, this->chain_length,
-                                    inFile, &box_length );
+                                    inFile, &box_length, pbc_correction_factor );
     this->addChain( currentChain ); 
   }
 }
@@ -265,8 +266,8 @@ void TriblockFrame::deriveMicelleList() {
       micelle->addCore( *it );
 
       micelle->deriveChainList();
-      micelle->pbcCorrectMicelle( &(this->box_length) );
-      ( *it )->calcCenterOfMass( &(this->box_length) );
+      micelle->pbcCorrectMicelle( &(this->box_length), this->pbc_correction_factor );
+      ( *it )->calcCenterOfMass( &(this->box_length), this->pbc_correction_factor );
 
       this->micelleList.push_back( micelle );
     }
@@ -284,9 +285,9 @@ void TriblockFrame::deriveMicelleList() {
           this->compareCore( currentStem->core2, micelle );
 
           micelle->deriveChainList();
-          micelle->pbcCorrectMicelle( &(this->box_length) );
+          micelle->pbcCorrectMicelle( &(this->box_length), this->pbc_correction_factor );
           for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
-            ( *core )->calcCenterOfMass( &(this->box_length) );
+            ( *core )->calcCenterOfMass( &(this->box_length), this->pbc_correction_factor );
           }
 
           this->micelleList.push_back( micelle );
@@ -480,11 +481,13 @@ TriblockFrameData::TriblockFrameData( TriblockFrame* f ) {
 
 int main() {
   float micelle_cutoff = 1.25f;
+  
+  const float pbc_correction_factor = 0.5f;
 
-	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2, &micelle_cutoff );
+	CopolymerMicelleFrame* frame = new CopolymerMicelleFrame( 1, 36, 1, 2, &micelle_cutoff, pbc_correction_factor );
 
 	std::ifstream infile( "bead_test.txt" );
-	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ) );
+	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &( frame->box_length ), pbc_correction_factor );
 
 	frame->addChain( (CopolymerChain*) chain );
 
@@ -528,7 +531,7 @@ int main() {
   std::getline(triblockXYZ, line);
 
   TriblockFrame* tframe = new TriblockFrame( num_atoms, 36, 38, 
-                                             2, &micelle_cutoff, 4, 30, &triblockXYZ );
+                                             2, &micelle_cutoff, pbc_correction_factor, 4, 30, &triblockXYZ );
 
   printf( "Printing chains.\n" );
   tframe->printChains( stdout );

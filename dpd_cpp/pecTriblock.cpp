@@ -23,17 +23,17 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) {
 // Should I add a void ptr to the frame as a parameter?
 PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
                           std::ifstream* inFile,
-                          idx* box_length ) {
+                          idx* box_length, const float& pbc_correction_factor ) {
 	this->com = new PosVect();
   
   this->pec_length = pec_length;
 	this->tail_length = tail_length;
 	this->tail1 = new HydrophobicTail( this, tail_length, 
-	 inFile, box_length );
+	 inFile, box_length, pbc_correction_factor );
 	this->pec_block = new ChargedBlock( this, 
-	 HYDROPHILIC, pec_length, inFile, box_length );
+	 HYDROPHILIC, pec_length, inFile, box_length, pbc_correction_factor );
 	this->tail2 = new HydrophobicTail( this, tail_length, 
-	 inFile, box_length );
+	 inFile, box_length, pbc_correction_factor );
   this->chain_length = length;
 	this->tail1->other = this->tail2;
 	this->tail2->other = this->tail1;
@@ -155,9 +155,11 @@ uintptr_t Stem::hashCores( HydrophobicCore* c1, HydrophobicCore* c2 ) {
 #include <ctime>
 
 int main() {
-	std::ifstream infile( "bead_test.txt" );
+	const float pbc_correction_factor = 0.5f;
+
+  std::ifstream infile( "bead_test.txt" );
 	idx box_length = 36;
-	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &box_length );
+	PECTriblock* chain = new PECTriblock( 50, 4, 58, &infile, &box_length, pbc_correction_factor );
 	chain->printChain( stdout );
 	std::cout << (short) chain->chain_length << std::endl;
 	

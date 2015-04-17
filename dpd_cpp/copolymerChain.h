@@ -34,7 +34,7 @@ class PECTriblock : public CopolymerChain {
 		PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length,
                        unsigned int* idTracker, unsigned short id);
 		PECTriblock( idx tail_length, idx pec_length, idx length );
-		PECTriblock( idx tail_length, idx pec_length, idx length, std::ifstream* inFile, idx* box_length );
+		PECTriblock( idx tail_length, idx pec_length, idx length, std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor );
 		~PECTriblock();
     void unlink();
 		void printChain( FILE* stream );

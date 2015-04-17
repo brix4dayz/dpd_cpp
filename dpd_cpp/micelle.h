@@ -12,8 +12,8 @@ class Micelle : public ObjDPD {
 		void addCore( HydrophobicCore* core );
 		void printMicelleCore( FILE* stream );
 		void unlink();
-		virtual void pbcCorrectMicelle( idx* box_length ) {}
-		virtual void calcCenterOfMass( idx* box_length ) {}
+		virtual void pbcCorrectMicelle( idx* box_length, const float& pbc_correction_factor ) {}
+		virtual void calcCenterOfMass( idx* box_length, const float& pbc_correction_factor ) {}
 		virtual void printMicelle( FILE* stream ) {}
 		virtual void deriveChainList() {}
 };
@@ -27,8 +27,8 @@ class TriblockMicelle : public Micelle {
 		void printMicelle( FILE* stream );
 		void addChain( PECTriblock* chain );
 		void deriveChainList();
-    void pbcCorrectMicelle( idx* box_length );
-		void calcCenterOfMass( idx* box_length );
+    void pbcCorrectMicelle( idx* box_length, const float& pbc_correction_factor );
+		void calcCenterOfMass( idx* box_length, const float& pbc_correction_factor );
 		void unlink();
 };
 
@@ -45,6 +45,6 @@ class DiblockMicelle : public Micelle {
 		~DiblockMicelle();
 		void printMicelle( FILE* stream );
 		void deriveChainList();
-    void pbcCorrectMicelle( idx* box_length );
-		void calcCenterOfMass( idx* box_length );
+    void pbcCorrectMicelle( idx* box_length, const float& pbc_correction_factor );
+		void calcCenterOfMass( idx* box_length, const float& pbc_correction_factor );
 };

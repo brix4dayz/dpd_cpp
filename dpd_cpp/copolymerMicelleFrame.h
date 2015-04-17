@@ -6,6 +6,7 @@ class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
 	private:
 		idx coordToBin( double coord );
 	public:
+    const float& pbc_correction_factor;
 		unsigned int num_atoms;
 		idx box_length;
 		idx chain_length;
@@ -17,7 +18,7 @@ class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
 		float* micelle_cutoff;
 		Bin**** box; //3d array of bin pointers making up simulation box
 		CopolymerMicelleFrame( unsigned int num_atoms, idx box_length, 
-			idx chain_length, idx bin_size, float* micelle_cutoff );
+			idx chain_length, idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor );
 		CopolymerMicelleFrame();
 		~CopolymerMicelleFrame();
 		//Bin binBlock( PolymerBlock* block );
@@ -39,9 +40,9 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		idx num_cores;
 		double avg_distance_btwn_cores;
 		TriblockFrame( unsigned int num_atoms, idx box_length, 
-			idx chain_length, idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length );
+			idx chain_length, idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor, idx tail_length, idx pec_length );
 		TriblockFrame( unsigned int num_atoms, idx box_length, 
-			idx chain_length, idx bin_size, float* micelle_cutoff, idx tail_length, idx pec_length, std::ifstream* inFile );
+			idx chain_length, idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor, idx tail_length, idx pec_length, std::ifstream* inFile );
 		TriblockFrame();
 		~TriblockFrame();
 		void process();
