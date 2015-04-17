@@ -366,7 +366,10 @@ void TriblockFrame::fillBins() {
   }
 }
 
+// void TriblockFrame::colorChains() {}
+
 void TriblockFrame::process() {
+  // this->correctFrame();
   this->calcChainConfigFractions();
   this->calcAvgAggNum();
   this->calcAvgDistBtwnCores();
