@@ -28,7 +28,6 @@ Micelle::~Micelle() {
 void Micelle::addCore( HydrophobicCore* core ) {
 	if ( !core->grouped ) {
     core->grouped = true;
-    this->aggreg_num += core->aggregation_num;
     core->micelle = this;
     this->coreList.push_back( core );
   }
@@ -51,12 +50,22 @@ void TriblockMicelle::addChain( PECTriblock* chain ) {
 
 void TriblockMicelle::deriveChainList() {
 	PECTriblock* chain;
+  HydrophobicCore* c1;
+  HydrophobicCore* c2;
 	for ( auto core = std::begin( this->coreList ) ; core != std::end( this->coreList ) ; core++ ) {
 		for ( auto bin = std::begin( ( *core )->binList ) ; bin != std::end( ( *core )->binList ) ; bin++ ) {
 			for ( auto tail = std::begin( ( *bin )->tailList ) ; tail != std::end( ( *bin )->tailList ) ; tail++ ) {
 				chain = ( PECTriblock* ) ( *tail )->chain;
-				if ( chain && !chain->micelle )
-					this->addChain( chain );
+				if ( chain && !chain->micelle ) {
+          this->addChain( chain );
+          c1 = chain->tail1->getCore();
+          c2 = chain->tail2->getCore();
+          if ( c1 )
+            c1->aggregation_num++;
+          if ( c2 && c1 != c2 )
+            c2->aggregation_num++;        
+        }
+
 			}
 		}
 	}
@@ -195,8 +204,7 @@ int main() {
 	std::cout << "MicelleCore: " << std::endl;
 	micelle->printMicelleCore( stdout );
 
-	if ( core1->micelle != micelle || core2->micelle != micelle || 
-	 micelle->aggreg_num != 2 )
+	if ( core1->micelle != micelle || core2->micelle != micelle )
 		std::cout << "Fail" << std::endl;
 
 	// Test chain functionality

@@ -398,10 +398,14 @@ void TriblockFrame::calcChainConfigFractions() {
 
 void TriblockFrame::calcAvgAggNum() {
   this->avg_agg_number = 0.0f;
+  float numCores = 0.0f;
   for( auto it = this->micelleList.begin(); it != this->micelleList.end(); it++ ) {
-    this->avg_agg_number += ( *it )->chainList.size();
+    for ( auto core = ( *it )->coreList.begin(); core != ( *it )->coreList.end(); core++ ) {
+      this->avg_agg_number += ( *core )->aggregation_num;
+      numCores++; 
+    }
   }
-  this->avg_agg_number /= this->micelleList.size();
+  this->avg_agg_number /= numCores;
 }
 
 void TriblockFrame::calcAvgDistBtwnCores() {

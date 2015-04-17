@@ -21,7 +21,6 @@ HydrophobicCore::~HydrophobicCore() {
 }
 
 void HydrophobicCore::addBin( Bin* bin ) {
-	this->aggregation_num += bin->num_chains;
 	this->num_tails += bin->tailList.size();
 	this->binList.push_back( bin );
 	bin->grouped = true;
@@ -117,7 +116,7 @@ int main() {
         std::cout << "Fail" << std::endl;
     
 	// Should be 2 and 4 ( two chains, four tails/blocks )
-	std::cout << "Core agg num: " << core->aggregation_num << std::endl;
+	//std::cout << "Core agg num: " << core->aggregation_num << std::endl;
 	std::cout << "Core num of blocks: " << core->num_tails << std::endl;
 
 	core->calcCenterOfMass( &box_length );
