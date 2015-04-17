@@ -37,8 +37,8 @@ class TriblockTrajectory : public DPDTrajectory {
     float STDDEV_percent_petal_chains;
     float AVG_num_cores;
     float STDDEV_num_cores;
-    double AVG_rms_distance_btwn_cores;
-    double STDDEV_rms_distance_btwn_cores;
+    double AVG_avg_distance_btwn_cores;
+    double STDDEV_avg_distance_btwn_cores;
     std::vector< TriblockFrameData* > frameData;
     idx pec_length;
     idx tail_length;

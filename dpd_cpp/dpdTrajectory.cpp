@@ -226,8 +226,8 @@ TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
   this->STDDEV_percent_petal_chains = 0.0f;
   this->AVG_num_cores = 0.0f;
   this->STDDEV_num_cores = 0.0f;
-  this->AVG_rms_distance_btwn_cores = 0.0;
-  this->STDDEV_rms_distance_btwn_cores = 0.0;
+  this->AVG_avg_distance_btwn_cores = 0.0;
+  this->STDDEV_avg_distance_btwn_cores = 0.0;
 
 }
 
@@ -238,7 +238,7 @@ TriblockTrajectory::~TriblockTrajectory() {
 }
 
 void TriblockTrajectory::setupHelp( FILE* fp ) {
-  fprintf( fp, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   Neither  \n" );
+  fprintf( fp, "   Cores     AvgAgg     AvgDistCores     Stem     Petal\n" );
 }
 
 void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
@@ -253,14 +253,18 @@ void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
   this->frameData.push_back( data );
 
   if ( this->framesAnalyzed + 1 >= 100 ) {
-    FILE* fp = fopen( "lastFrameWrapped.xyz", "w" );
+    FILE* fp;
+    if ( this->framesAnalyzed == 100 )
+      fp = fopen( "lastFrameWrapped.xyz", "w" );
+    else
+      fp = fopen( "lastFrameWrapped.xyz", "a" );
 
     if ( fp == NULL ) {
       fprintf( stdout, "Error in opening lastFrameWrapped.xyz...\n" );
       exit( 1 );
     }
 
-    std::cout << "Printing last frame..." << std::endl;
+    std::cout << "Printing frame " << ( this->framesAnalyzed + 1 ) << " ..." << std::endl;
 
     fprintf( fp, "%d\nTime: 1\n", tframe->num_atoms );
     tframe->printChains( fp );
@@ -272,7 +276,7 @@ void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
   this->AVG_percent_petal_chains += data->percent_petal_chains;
   this->AVG_percent_stem_chains += data->percent_stem_chains;
   this->AVG_num_cores += data->num_cores;
-  this->AVG_rms_distance_btwn_cores += data->rms_distance_btwn_cores;
+  this->AVG_avg_distance_btwn_cores += data->avg_distance_btwn_cores;
 }
 
 void TriblockTrajectory::calcHelp() {
@@ -286,34 +290,34 @@ void TriblockTrajectory::calcHelp() {
   this->AVG_percent_petal_chains /= this->framesAnalyzed;
   this->AVG_percent_stem_chains /= this->framesAnalyzed;
   this->AVG_num_cores /= this->framesAnalyzed; 
-  this->AVG_rms_distance_btwn_cores /= this->framesAnalyzed;
+  this->AVG_avg_distance_btwn_cores /= this->framesAnalyzed;
 
-  fprintf( stdout, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   \n" );
+  this->setupHelp( stdout );
   fprintf( stdout, "AVG: %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->AVG_num_cores, this->AVG_avg_agg_number, 
-           this->AVG_rms_distance_btwn_cores, this->AVG_percent_stem_chains, this->AVG_percent_petal_chains );
+           this->AVG_avg_distance_btwn_cores, this->AVG_percent_stem_chains, this->AVG_percent_petal_chains );
 
   for ( auto it = this->frameData.begin(); it != this->frameData.end(); it++ ) {
     this->STDDEV_num_cores += ( this->AVG_num_cores - (*it)->num_cores )*( this->AVG_num_cores - (*it)->num_cores );
     this->STDDEV_percent_petal_chains += ( this->AVG_percent_petal_chains - (*it)->percent_petal_chains )*( this->AVG_percent_petal_chains - (*it)->percent_petal_chains );
     this->STDDEV_percent_stem_chains += ( this->AVG_percent_stem_chains - (*it)->percent_stem_chains )*( this->AVG_percent_stem_chains - (*it)->percent_stem_chains );
     this->STDDEV_avg_agg_number += ( this->AVG_avg_agg_number - (*it)->avg_agg_number )*( this->AVG_avg_agg_number - (*it)->avg_agg_number );
-    this->STDDEV_rms_distance_btwn_cores += ( this->AVG_rms_distance_btwn_cores - (*it)->rms_distance_btwn_cores )*( this->AVG_rms_distance_btwn_cores - (*it)->rms_distance_btwn_cores );
+    this->STDDEV_avg_distance_btwn_cores += ( this->AVG_avg_distance_btwn_cores - (*it)->avg_distance_btwn_cores )*( this->AVG_avg_distance_btwn_cores - (*it)->avg_distance_btwn_cores );
   }
 
   this->STDDEV_avg_agg_number /= this->framesAnalyzed;
   this->STDDEV_percent_petal_chains /= this->framesAnalyzed;
   this->STDDEV_percent_stem_chains /= this->framesAnalyzed;
   this->STDDEV_num_cores /= this->framesAnalyzed; 
-  this->STDDEV_rms_distance_btwn_cores /= this->framesAnalyzed;
+  this->STDDEV_avg_distance_btwn_cores /= this->framesAnalyzed;
 
   this->STDDEV_avg_agg_number = sqrt( this->STDDEV_avg_agg_number ); 
   this->STDDEV_percent_petal_chains = sqrt( this->STDDEV_percent_petal_chains ); 
   this->STDDEV_percent_stem_chains = sqrt( this->STDDEV_percent_stem_chains ); 
   this->STDDEV_num_cores = sqrt( this->STDDEV_num_cores );  
-  this->STDDEV_rms_distance_btwn_cores = sqrt( this->STDDEV_rms_distance_btwn_cores ); 
+  this->STDDEV_avg_distance_btwn_cores = sqrt( this->STDDEV_avg_distance_btwn_cores ); 
 
   fprintf( stdout, "STDDEV: %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->STDDEV_num_cores, this->STDDEV_avg_agg_number, 
-           this->STDDEV_rms_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains );
+           this->STDDEV_avg_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains );
 }
 
 int main() {

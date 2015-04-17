@@ -99,7 +99,7 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
   this->percent_stem_chains = 0.0f;
   this->percent_petal_chains = 0.0f;
   this->num_cores = 0;
-  this->rms_distance_btwn_cores = 0.0;
+  this->avg_distance_btwn_cores = 0.0;
 }
 
 TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_length, 
@@ -368,7 +368,7 @@ void TriblockFrame::fillBins() {
 void TriblockFrame::process() {
   this->calcChainConfigFractions();
   this->calcAvgAggNum();
-  this->calcRMSDistBtwnCores();
+  this->calcAvgDistBtwnCores();
 }
 
 void TriblockFrame::calcChainConfigFractions() {
@@ -404,22 +404,21 @@ void TriblockFrame::calcAvgAggNum() {
   this->avg_agg_number /= this->micelleList.size();
 }
 
-void TriblockFrame::calcRMSDistBtwnCores() {
+void TriblockFrame::calcAvgDistBtwnCores() {
   HydrophobicCore* c1 = NULL;
   HydrophobicCore* c2 = NULL;
   Stem* currentStem = NULL;
-  this->rms_distance_btwn_cores = 0.0;
+  this->avg_distance_btwn_cores = 0.0;
   for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
     for ( auto stem = it->second.begin(); stem != it->second.end(); stem++ ) {
       currentStem = *stem;
       c1 = currentStem->core1;
       c2 = currentStem->core2;
-      this->rms_distance_btwn_cores += c1->com->getDistSquared( c2->com ); 
+      this->avg_distance_btwn_cores += sqrt( c1->com->getDistSquared( c2->com ) ); 
     }
   }
-  if ( this->rms_distance_btwn_cores != 0.0 ) {
-    this->rms_distance_btwn_cores /= this->stems.size();
-    this->rms_distance_btwn_cores = sqrt( this->rms_distance_btwn_cores );
+  if ( this->avg_distance_btwn_cores != 0.0 ) {
+    this->avg_distance_btwn_cores /= this->stems.size();
   }
 }
 
@@ -458,7 +457,7 @@ void TriblockFrame::printBins( FILE* fp ) {
 
 void TriblockFrame::printData( FILE* fp ) {
   fprintf( fp, "%10d %10.4f %10.4f %10.4f %10.4f\n", (int) this->num_cores, this->avg_agg_number,
-           this->rms_distance_btwn_cores, this->percent_stem_chains, this->percent_petal_chains );
+           this->avg_distance_btwn_cores, this->percent_stem_chains, this->percent_petal_chains );
 }
 
 TriblockFrameData::TriblockFrameData( TriblockFrame* f ) {
@@ -466,7 +465,7 @@ TriblockFrameData::TriblockFrameData( TriblockFrame* f ) {
   this->percent_petal_chains = f->percent_petal_chains;
   this->percent_stem_chains = f->percent_stem_chains;
   this->num_cores = f->num_cores;
-  this->rms_distance_btwn_cores = f->rms_distance_btwn_cores;
+  this->avg_distance_btwn_cores = f->avg_distance_btwn_cores;
 } 
 
 // Testing
@@ -533,7 +532,7 @@ int main() {
   tframe->deriveMicelleList();
 
   tframe->process();
-  fprintf( stdout, "   Cores      AvgAgg      RMSDistCores      Stem     Petal   \n" );
+  fprintf( stdout, "   Cores      AvgAgg      AvgDistCores      Stem     Petal   \n" );
   tframe->printData( stdout );
 
   if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
