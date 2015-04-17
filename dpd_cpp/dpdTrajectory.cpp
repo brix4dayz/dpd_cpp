@@ -258,7 +258,7 @@ void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
 
   if ( this->framesAnalyzed + 1 >= 100 ) {
     FILE* fp;
-    if ( this->framesAnalyzed == 100 )
+    if ( this->framesAnalyzed + 1 == 100 )
       fp = fopen( "lastFrameWrapped.xyz", "w" );
     else
       fp = fopen( "lastFrameWrapped.xyz", "a" );
