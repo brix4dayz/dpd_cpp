@@ -220,8 +220,6 @@ TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
 
   this->AVG_avg_agg_number = 0.0f;
   this->STDDEV_avg_agg_number = 0.0f;
-  this->AVG_percent_neither_chains = 0.0f;
-  this->STDDEV_percent_neither_chains = 0.0f;
   this->AVG_percent_stem_chains = 0.0f;
   this->STDDEV_percent_stem_chains = 0.0f;
   this->AVG_percent_petal_chains = 0.0f;
@@ -273,7 +271,6 @@ void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
   this->AVG_avg_agg_number += data->avg_agg_number;
   this->AVG_percent_petal_chains += data->percent_petal_chains;
   this->AVG_percent_stem_chains += data->percent_stem_chains;
-  this->AVG_percent_neither_chains += data->percent_neither_chains;
   this->AVG_num_cores += data->num_cores;
   this->AVG_rms_distance_btwn_cores += data->rms_distance_btwn_cores;
 }
@@ -288,20 +285,17 @@ void TriblockTrajectory::calcHelp() {
   this->AVG_avg_agg_number /= this->framesAnalyzed;
   this->AVG_percent_petal_chains /= this->framesAnalyzed;
   this->AVG_percent_stem_chains /= this->framesAnalyzed;
-  this->AVG_percent_neither_chains /= this->framesAnalyzed;
   this->AVG_num_cores /= this->framesAnalyzed; 
   this->AVG_rms_distance_btwn_cores /= this->framesAnalyzed;
 
-  fprintf( stdout, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   Neither  \n" );
-  fprintf( stdout, "AVG: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->AVG_num_cores, this->AVG_avg_agg_number, 
-           this->AVG_rms_distance_btwn_cores, this->AVG_percent_stem_chains, this->AVG_percent_petal_chains,
-           this->AVG_percent_neither_chains );
+  fprintf( stdout, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   \n" );
+  fprintf( stdout, "AVG: %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->AVG_num_cores, this->AVG_avg_agg_number, 
+           this->AVG_rms_distance_btwn_cores, this->AVG_percent_stem_chains, this->AVG_percent_petal_chains );
 
   for ( auto it = this->frameData.begin(); it != this->frameData.end(); it++ ) {
     this->STDDEV_num_cores += ( this->AVG_num_cores - (*it)->num_cores )*( this->AVG_num_cores - (*it)->num_cores );
     this->STDDEV_percent_petal_chains += ( this->AVG_percent_petal_chains - (*it)->percent_petal_chains )*( this->AVG_percent_petal_chains - (*it)->percent_petal_chains );
     this->STDDEV_percent_stem_chains += ( this->AVG_percent_stem_chains - (*it)->percent_stem_chains )*( this->AVG_percent_stem_chains - (*it)->percent_stem_chains );
-    this->STDDEV_percent_neither_chains += ( this->AVG_percent_neither_chains - (*it)->percent_neither_chains )*( this->AVG_percent_neither_chains - (*it)->percent_neither_chains );
     this->STDDEV_avg_agg_number += ( this->AVG_avg_agg_number - (*it)->avg_agg_number )*( this->AVG_avg_agg_number - (*it)->avg_agg_number );
     this->STDDEV_rms_distance_btwn_cores += ( this->AVG_rms_distance_btwn_cores - (*it)->rms_distance_btwn_cores )*( this->AVG_rms_distance_btwn_cores - (*it)->rms_distance_btwn_cores );
   }
@@ -309,20 +303,17 @@ void TriblockTrajectory::calcHelp() {
   this->STDDEV_avg_agg_number /= this->framesAnalyzed;
   this->STDDEV_percent_petal_chains /= this->framesAnalyzed;
   this->STDDEV_percent_stem_chains /= this->framesAnalyzed;
-  this->STDDEV_percent_neither_chains /= this->framesAnalyzed;
   this->STDDEV_num_cores /= this->framesAnalyzed; 
   this->STDDEV_rms_distance_btwn_cores /= this->framesAnalyzed;
 
   this->STDDEV_avg_agg_number = sqrt( this->STDDEV_avg_agg_number ); 
   this->STDDEV_percent_petal_chains = sqrt( this->STDDEV_percent_petal_chains ); 
   this->STDDEV_percent_stem_chains = sqrt( this->STDDEV_percent_stem_chains ); 
-  this->STDDEV_percent_neither_chains = sqrt( this->STDDEV_percent_neither_chains ); 
   this->STDDEV_num_cores = sqrt( this->STDDEV_num_cores );  
   this->STDDEV_rms_distance_btwn_cores = sqrt( this->STDDEV_rms_distance_btwn_cores ); 
 
-  fprintf( stdout, "STDDEV: %8.4f %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->STDDEV_num_cores, this->STDDEV_avg_agg_number, 
-           this->STDDEV_rms_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains,
-           this->STDDEV_percent_neither_chains );
+  fprintf( stdout, "STDDEV: %8.4f %8.4f %8.4f %8.4f %8.4f\n", this->STDDEV_num_cores, this->STDDEV_avg_agg_number, 
+           this->STDDEV_rms_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains );
 }
 
 int main() {

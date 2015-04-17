@@ -34,7 +34,6 @@ class TriblockFrame : public CopolymerMicelleFrame {
     idx pec_length;
     std::map< uintptr_t, std::vector< Stem* > > stems;
     float avg_agg_number;
-    float percent_neither_chains;
 		float percent_stem_chains;
 		float percent_petal_chains;
 		idx num_cores;
@@ -64,7 +63,6 @@ class TriblockFrame : public CopolymerMicelleFrame {
 class TriblockFrameData : public ObjDPD {
   public:
     float avg_agg_number;
-    float percent_neither_chains;
     float percent_stem_chains;
     float percent_petal_chains;
     idx num_cores;

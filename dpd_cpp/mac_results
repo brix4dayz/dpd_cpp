@@ -15149,8 +15149,8 @@ printing chain 367
 Number of cores: 1
 Number of linked cores (aka stems): 0
 Number of micelles: 1
-   Cores      AvgAgg      RMSDistCores      Stem     Petal   Neither  
-         1   368.0000     0.0000     0.0000     0.9918     0.0082
+   Cores      AvgAgg      RMSDistCores      Stem     Petal   
+         1   368.0000     0.0000     0.0082     0.9918
 Printing bins.
 printing bin 0 0 0
 printing bin 0 0 1

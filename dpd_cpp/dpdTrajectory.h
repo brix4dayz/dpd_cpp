@@ -31,8 +31,6 @@ class TriblockTrajectory : public DPDTrajectory {
   public:
     float AVG_avg_agg_number;
     float STDDEV_avg_agg_number;
-    float AVG_percent_neither_chains;
-    float STDDEV_percent_neither_chains;
     float AVG_percent_stem_chains;
     float STDDEV_percent_stem_chains;
     float AVG_percent_petal_chains;

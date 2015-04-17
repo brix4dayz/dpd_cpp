@@ -96,7 +96,6 @@ TriblockFrame::TriblockFrame( unsigned int num_atoms, idx box_length, idx chain_
   this->tail_length = tail_length;
   this->pec_length = pec_length;
   this->avg_agg_number = 0.0f;
-  this->percent_neither_chains = 0.0f;
   this->percent_stem_chains = 0.0f;
   this->percent_petal_chains = 0.0f;
   this->num_cores = 0;
@@ -207,7 +206,7 @@ void TriblockFrame::deriveMicelleList() {
   Bin* current = NULL;
   HydrophobicCore* core = NULL;
 
-  std::vector<HydrophobicCore*> corePool;
+  std::vector< HydrophobicCore* > corePool;
 
   for ( idx i = 0; i < this->num_bins; i++ ) {
     for ( idx j = 0; j < this->num_bins; j++ ) {
@@ -373,7 +372,6 @@ void TriblockFrame::process() {
 }
 
 void TriblockFrame::calcChainConfigFractions() {
-  this->percent_neither_chains = 0.0f;
   this->percent_stem_chains = 0.0f;
   this->percent_petal_chains = 0.0f;
   PECTriblock* current = NULL;
@@ -381,7 +379,7 @@ void TriblockFrame::calcChainConfigFractions() {
     current = (PECTriblock*) this->chainList[ i ];
     switch( current->config ) {
       case neither:
-        this->percent_neither_chains++;
+        this->percent_stem_chains++;
         break;
       case petal:
         this->percent_petal_chains++;
@@ -394,7 +392,6 @@ void TriblockFrame::calcChainConfigFractions() {
         exit( 1 );
     } 
   }
-  this->percent_neither_chains /= this->num_chains;
   this->percent_stem_chains /= this->num_chains;
   this->percent_petal_chains /= this->num_chains;
 }
@@ -460,15 +457,13 @@ void TriblockFrame::printBins( FILE* fp ) {
 }
 
 void TriblockFrame::printData( FILE* fp ) {
-  fprintf( fp, "%10d %10.4f %10.4f %10.4f %10.4f %10.4f\n", (int) this->num_cores, this->avg_agg_number,
-           this->rms_distance_btwn_cores, this->percent_stem_chains, this->percent_petal_chains, 
-           this->percent_neither_chains );
+  fprintf( fp, "%10d %10.4f %10.4f %10.4f %10.4f\n", (int) this->num_cores, this->avg_agg_number,
+           this->rms_distance_btwn_cores, this->percent_stem_chains, this->percent_petal_chains );
 }
 
 TriblockFrameData::TriblockFrameData( TriblockFrame* f ) {
   this->avg_agg_number = f->avg_agg_number;
   this->percent_petal_chains = f->percent_petal_chains;
-  this->percent_neither_chains = f->percent_neither_chains;
   this->percent_stem_chains = f->percent_stem_chains;
   this->num_cores = f->num_cores;
   this->rms_distance_btwn_cores = f->rms_distance_btwn_cores;
@@ -538,7 +533,7 @@ int main() {
   tframe->deriveMicelleList();
 
   tframe->process();
-  fprintf( stdout, "   Cores      AvgAgg      RMSDistCores      Stem     Petal   Neither  \n" );
+  fprintf( stdout, "   Cores      AvgAgg      RMSDistCores      Stem     Petal   \n" );
   tframe->printData( stdout );
 
   if ( !tframe->box[ 0 ][ 0 ][ 0 ]->isEmpty() )
