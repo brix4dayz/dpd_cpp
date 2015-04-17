@@ -104,6 +104,17 @@ PECTriblock::~PECTriblock() {
   this->unlink();
 }
 
+void PECTriblock::colorChain( idx type ) {
+  for ( idx i = 0; i < this->pec_length; i++ ) {
+    this->pec_block->getBead( i )->type = type;
+  }
+
+  for ( idx i = 0; i < this->tail_length; i++ ) {
+    this->tail1->getBead( i )->type = type;
+    this->tail2->getBead( i )->type = type;
+  }
+}
+
 // maybe builds "edge"
 uintptr_t PECTriblock::determineConfiguration() {
   HydrophobicCore* core1 = this->tail1->getCore();

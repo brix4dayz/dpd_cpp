@@ -1,6 +1,9 @@
 #include "micelle.h"
 #include <map>
 
+#define STEM 1
+#define PETAL 2
+
 //
 class CopolymerMicelleFrame : public DPDFrame<CopolymerChain> {
 	private:
@@ -59,6 +62,8 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void calcChainConfigFractions();
 		void calcAvgAggNum();
 		void calcAvgDistBtwnCores();
+    void colorChains();
+    void correctFrame();
 };
 
 class TriblockFrameData : public ObjDPD {

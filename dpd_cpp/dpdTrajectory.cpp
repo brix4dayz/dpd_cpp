@@ -244,14 +244,14 @@ void TriblockTrajectory::setupHelp( FILE* fp ) {
   fprintf( fp, "   Cores     AvgAgg     AvgDistCores     Stem     Petal\n" );
 }
 
-void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
+void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* output ) {
   TriblockFrame* tframe = new TriblockFrame( this->num_atoms, this->box_length, this->chain_length, 
                                              this->bin_length, &( this->micelle_cutoff ),
                                              ( const float ) this->pbc_correction_factor,  this->tail_length, this->pec_length, &inFile );
   tframe->deriveMicelleList();
   tframe->process();
 
-  tframe->printData( fp );
+  tframe->printData( output );
 
   TriblockFrameData* data = new TriblockFrameData( tframe );
   this->frameData.push_back( data );
@@ -272,6 +272,8 @@ void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
 
     fprintf( fp, "%d\nTime: 1\n", tframe->num_atoms );
     tframe->printChains( fp );
+
+    fclose( fp );
   }
 
   delete tframe;
@@ -324,6 +326,27 @@ void TriblockTrajectory::calcHelp() {
            this->STDDEV_avg_distance_btwn_cores, this->STDDEV_percent_stem_chains, this->STDDEV_percent_petal_chains );
 }
 
+void ColorTriblockTraj::setupHelp( FILE* fp ) {}
+
+void ColorTriblockTraj::calcHelp() {}
+
+void ColorTriblockTraj::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
+  TriblockFrame* tframe = new TriblockFrame( this->num_atoms, this->box_length, this->chain_length, 
+                                             this->bin_length, &( this->micelle_cutoff ),
+                                             ( const float ) this->pbc_correction_factor,  this->tail_length, this->pec_length, &inFile );
+  tframe->deriveMicelleList();
+  tframe->colorChains();
+
+  std::cout << "Printing frame " << ( this->framesAnalyzed + 1 ) << " ..." << std::endl;
+
+  fprintf( fp, "%d\nTime: 1\n", tframe->num_atoms );
+  tframe->printChains( fp );
+
+  delete tframe;
+}
+
+#if defined(USING)
+
 int main() {
 
   TriblockTrajectory* traj = new TriblockTrajectory();
@@ -334,3 +357,5 @@ int main() {
 
   return 0;
 }
+
+#endif

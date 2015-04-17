@@ -266,8 +266,6 @@ void TriblockFrame::deriveMicelleList() {
       micelle->addCore( *it );
 
       micelle->deriveChainList();
-      micelle->pbcCorrectMicelle( &(this->box_length), this->pbc_correction_factor );
-      ( *it )->calcCenterOfMass( &(this->box_length), this->pbc_correction_factor );
 
       this->micelleList.push_back( micelle );
     }
@@ -285,10 +283,6 @@ void TriblockFrame::deriveMicelleList() {
           this->compareCore( currentStem->core2, micelle );
 
           micelle->deriveChainList();
-          micelle->pbcCorrectMicelle( &(this->box_length), this->pbc_correction_factor );
-          for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
-            ( *core )->calcCenterOfMass( &(this->box_length), this->pbc_correction_factor );
-          }
 
           this->micelleList.push_back( micelle );
         }
@@ -366,10 +360,30 @@ void TriblockFrame::fillBins() {
   }
 }
 
-// void TriblockFrame::colorChains() {}
+void TriblockFrame::correctFrame() {
+  TriblockMicelle* micelle = NULL;
+  for ( auto it = this->micelleList.begin(); it != this->micelleList.end(); it++ ) {
+    micelle = *it;
+    micelle->pbcCorrectMicelle( &(this->box_length), this->pbc_correction_factor );
+    for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
+      ( *core )->calcCenterOfMass( &(this->box_length), this->pbc_correction_factor );
+    }
+  }
+}
+
+void TriblockFrame::colorChains() {
+  PECTriblock* chain = NULL;
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
+    chain = ( PECTriblock* ) this->chainList[ i ];
+    if ( chain->config == neither || chain->config == stem )
+      chain->colorChain( STEM );
+    else
+      chain->colorChain( PETAL );
+  }
+}
 
 void TriblockFrame::process() {
-  // this->correctFrame();
+  this->correctFrame();
   this->calcChainConfigFractions();
   this->calcAvgAggNum();
   this->calcAvgDistBtwnCores();

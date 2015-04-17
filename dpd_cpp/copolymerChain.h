@@ -39,6 +39,7 @@ class PECTriblock : public CopolymerChain {
     void unlink();
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
+		void colorChain( idx type );
 		uintptr_t determineConfiguration();
 };
 

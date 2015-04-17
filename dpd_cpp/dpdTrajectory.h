@@ -51,3 +51,13 @@ class TriblockTrajectory : public DPDTrajectory {
     TriblockTrajectory();
     ~TriblockTrajectory();
 };
+
+class ColorTriblockTraj : public TriblockTrajectory {
+  public:
+    ColorTriblockTraj() : TriblockTrajectory() {}
+    ~ColorTriblockTraj() {}
+    void analyzeHelp( std::ifstream& inFile, FILE* fp );
+    void setupHelp( FILE* fp );
+    void calcHelp();
+};
+
