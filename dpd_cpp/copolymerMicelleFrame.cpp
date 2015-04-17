@@ -144,29 +144,28 @@ void TriblockFrame::compareBin( Bin* b, HydrophobicCore* core ) {
 void TriblockFrame::deriveStems() {
   PECTriblock* chain = NULL;
   uintptr_t stemIdx = (uintptr_t) NULL;
-  Stem* newStem = NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = (PECTriblock*) this->chainList[ i ];
     stemIdx = chain->determineConfiguration();
     if ( stemIdx != (uintptr_t) NULL ) {
-      // chain->printChain( stdout );  
-      auto it = this->stems.find( stemIdx );
-      if ( it == this->stems.end() ) {
-        newStem = new Stem( chain->tail1->getCore(), chain->tail2->getCore() );
-        if ( stemIdx != newStem->getKey() ) {
-          fprintf( stdout, "Core mismatch.\n" );
-          exit( 1 );
-        }
-        this->stems.insert( this->stems.begin(), std::pair< uintptr_t, Stem* >( stemIdx, newStem ) );
-      } else {
-      	if ( ( it->second->core1 != chain->tail1->getCore() && it->second->core1 != chain->tail2->getCore() ) || 
-           ( it->second->core2 != chain->tail1->getCore() && it->second->core2 != chain->tail2->getCore() ) ) {
-          fprintf( stdout, "Stem collision.\n" );
-          exit( 1 );
-        }
-        it->second->inc();
-      }
+      this->checkStem( stemIdx, chain );
     }
+  }
+}
+
+void TriblockFrame::checkStem( uintptr_t stemIdx, PECTriblock* chain ) {
+  // make this a recursive insert function that uses linear probing  
+  auto it = this->stems.find( stemIdx );
+  if ( it == this->stems.end() ) {
+    Stem* newStem = new Stem( chain->tail1->getCore(), chain->tail2->getCore() );
+    this->stems.insert( this->stems.begin(), std::pair< uintptr_t, Stem* >( stemIdx, newStem ) );
+  } else {
+    if ( ( it->second->core1 != chain->tail1->getCore() && it->second->core1 != chain->tail2->getCore() ) || 
+       ( it->second->core2 != chain->tail1->getCore() && it->second->core2 != chain->tail2->getCore() ) ) {
+      // insert recursive call
+      this->checkStem( stemIdx++, chain );
+    }
+    it->second->inc();
   }
 }
 

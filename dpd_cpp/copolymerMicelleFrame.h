@@ -59,6 +59,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void calcChainConfigFractions();
 		void calcAvgAggNum();
 		void calcRMSDistBtwnCores();
+    void checkStem( uintptr_t stemIdx, PECTriblock* chain );
 };
 
 class TriblockFrameData : public ObjDPD {
