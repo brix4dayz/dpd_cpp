@@ -159,8 +159,8 @@ void TriblockFrame::deriveStems() {
         }
         this->stems.insert( this->stems.begin(), std::pair< uintptr_t, Stem* >( stemIdx, newStem ) );
       } else {
-      	if ( ( it->second->core1 == chain->tail1->getCore() && it->second->core2 == chain->tail2->getCore() ) || 
-           ( it->second->core2 == chain->tail1->getCore() && it->second->core1 == chain->tail2->getCore() ) ) {
+      	if ( ( it->second->core1 != chain->tail1->getCore() && it->second->core1 != chain->tail2->getCore() ) || 
+           ( it->second->core2 != chain->tail1->getCore() && it->second->core2 != chain->tail2->getCore() ) ) {
           fprintf( stdout, "Stem collision.\n" );
           exit( 1 );
         }
