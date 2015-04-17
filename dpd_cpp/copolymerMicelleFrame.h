@@ -32,7 +32,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		std::vector< TriblockMicelle* > micelleList;
     idx tail_length;
     idx pec_length;
-    std::map< uintptr_t, Stem* > stems;
+    std::map< uintptr_t, std::vector< Stem* > > stems;
     float avg_agg_number;
     float percent_neither_chains;
 		float percent_stem_chains;
@@ -59,7 +59,6 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void calcChainConfigFractions();
 		void calcAvgAggNum();
 		void calcRMSDistBtwnCores();
-    void checkStem( uintptr_t stemIdx, PECTriblock* chain );
 };
 
 class TriblockFrameData : public ObjDPD {

@@ -143,45 +143,57 @@ void TriblockFrame::compareBin( Bin* b, HydrophobicCore* core ) {
 
 void TriblockFrame::deriveStems() {
   PECTriblock* chain = NULL;
+  Stem* newStem = NULL;
+  Stem* oldStem = NULL;
   uintptr_t stemIdx = (uintptr_t) NULL;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = (PECTriblock*) this->chainList[ i ];
     stemIdx = chain->determineConfiguration();
-    if ( stemIdx != (uintptr_t) NULL ) {
-      this->checkStem( stemIdx, chain );
-    }
-  }
-}
+    if ( stemIdx != (uintptr_t) NULL ) {  
+      auto it = this->stems.find( stemIdx );
+      if ( it == this->stems.end() ) {
+        newStem = new Stem( chain->tail1->getCore(), chain->tail2->getCore() );
+        std::vector< Stem* > stemList;
+        auto inserted = this->stems.insert( this->stems.begin(), std::pair< uintptr_t, std::vector< Stem* > >( stemIdx, stemList ) );
+        inserted->second.push_back( newStem );
+      } else {
+        bool found = false;
+        for ( auto stems = it->second.begin(); stems != it->second.end(); it++ ) {
+          oldStem = *stems;
+          if ( ( oldStem->core1 == chain->tail1->getCore() && oldStem->core2 == chain->tail2->getCore() ) || 
+             ( oldStem->core2 == chain->tail1->getCore() && oldStem->core1 == chain->tail2->getCore() ) ) {
+            oldStem->inc();
+            found = true;
+            break;
+          }
 
-void TriblockFrame::checkStem( uintptr_t stemIdx, PECTriblock* chain ) {
-  // make this a recursive insert function that uses linear probing  
-  auto it = this->stems.find( stemIdx );
-  if ( it == this->stems.end() ) {
-    Stem* newStem = new Stem( chain->tail1->getCore(), chain->tail2->getCore() );
-    this->stems.insert( this->stems.begin(), std::pair< uintptr_t, Stem* >( stemIdx, newStem ) );
-  } else {
-    if ( ( it->second->core1 != chain->tail1->getCore() && it->second->core1 != chain->tail2->getCore() ) || 
-       ( it->second->core2 != chain->tail1->getCore() && it->second->core2 != chain->tail2->getCore() ) ) {
-      // insert recursive call
-      this->checkStem( stemIdx++, chain );
+        }
+        if ( !found ) {
+          newStem = new Stem( chain->tail1->getCore(), chain->tail2->getCore() );
+          it->second.push_back( newStem );
+        }
+      }
     }
-    it->second->inc();
   }
 }
 
 void TriblockFrame::compareCore( HydrophobicCore* core, TriblockMicelle* micelle ) {
+  Stem* currentStem = NULL;
   for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
-    if ( !it->second->grouped ) {
-      if ( it->second->core1 == core ) {
-        it->second->grouped = true;
-        micelle->addCore( it->second->core2 );
-        this->compareCore( it->second->core2, micelle );
-      } else if ( it->second->core2 == core ) {
-        it->second->grouped = true;
-        micelle->addCore( it->second->core1 );
-        this->compareCore( it->second->core1, micelle );
+    for ( auto stem = it->second.begin(); stem != it->second.end(); it++ ) {
+      currentStem = *stem;
+      if ( !currentStem->grouped ) {
+        if ( currentStem->core1 == core ) {
+          currentStem->grouped = true;
+          micelle->addCore( currentStem->core2 );
+          this->compareCore( currentStem->core2, micelle );
+        } else if ( currentStem->core2 == core ) {
+          currentStem->grouped = true;
+          micelle->addCore( currentStem->core1 );
+          this->compareCore( currentStem->core1, micelle );
+        }
       }
-    }
+    }  
   }
 }
 
@@ -246,6 +258,7 @@ void TriblockFrame::deriveMicelleList() {
   #endif
 
   TriblockMicelle* micelle = NULL;
+  Stem* currentStem = NULL;
 
   if ( this->stems.size() == 0 ) {
     for ( auto it = corePool.begin(); it != corePool.end(); it++ ) {
@@ -260,23 +273,27 @@ void TriblockFrame::deriveMicelleList() {
     }
   } else {
     for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
-      if ( !it->second->grouped ) {
-        it->second->grouped = true;
-        micelle = new TriblockMicelle();
-        micelle->addCore( it->second->core1 );
-        micelle->addCore( it->second->core2 );
+      for ( auto stem = it->second.begin(); stem != it->second.end(); stem++ ) {
+        currentStem = *stem;
+        if ( !currentStem->grouped ) {
+          currentStem->grouped = true;
+          micelle = new TriblockMicelle();
+          micelle->addCore( currentStem->core1 );
+          micelle->addCore( currentStem->core2 );
 
-        this->compareCore( it->second->core1, micelle );
-        this->compareCore( it->second->core2, micelle );
+          this->compareCore( currentStem->core1, micelle );
+          this->compareCore( currentStem->core2, micelle );
 
-        micelle->deriveChainList();
-        micelle->pbcCorrectMicelle( &(this->box_length) );
-        for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
-          ( *core )->calcCenterOfMass( &(this->box_length) );
+          micelle->deriveChainList();
+          micelle->pbcCorrectMicelle( &(this->box_length) );
+          for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
+            ( *core )->calcCenterOfMass( &(this->box_length) );
+          }
+
+          this->micelleList.push_back( micelle );
         }
-
-        this->micelleList.push_back( micelle );
       }
+
   }
 
   }
@@ -393,11 +410,15 @@ void TriblockFrame::calcAvgAggNum() {
 void TriblockFrame::calcRMSDistBtwnCores() {
   HydrophobicCore* c1 = NULL;
   HydrophobicCore* c2 = NULL;
+  Stem* currentStem = NULL;
   this->rms_distance_btwn_cores = 0.0;
   for ( auto it = this->stems.begin(); it != this->stems.end(); it++ ) {
-    c1 = it->second->core1;
-    c2 = it->second->core2;
-    this->rms_distance_btwn_cores += c1->com->getDistSquared( c2->com );
+    for ( auto stem = it->second.begin(); stem != it->second.end(); it++ ) {
+      currentStem = *stem;
+      c1 = currentStem->core1;
+      c2 = currentStem->core2;
+      this->rms_distance_btwn_cores += c1->com->getDistSquared( c2->com ); 
+    }
   }
   if ( this->rms_distance_btwn_cores != 0.0 ) {
     this->rms_distance_btwn_cores /= this->stems.size();
@@ -406,9 +427,11 @@ void TriblockFrame::calcRMSDistBtwnCores() {
 }
 
 TriblockFrame::~TriblockFrame() {
-  for ( auto stemObj = this->stems.begin(); stemObj != this->stems.end(); stemObj++ ) {
-    delete stemObj->second;
-    stemObj->second = NULL;
+  for ( auto stemList = this->stems.begin(); stemList != this->stems.end(); stemList++ ) {
+    for ( auto stem = stemList->second.begin(); stem != stemList->second.end(); stem++ ) {
+      delete *stem;
+      *stem = NULL;
+    }
   }
   for ( auto micelle = std::begin( this->micelleList ); micelle != std::end( this->micelleList ); micelle++ ) {
     delete *micelle;
