@@ -123,6 +123,7 @@ void DPDTrajectory::determineNumFrames() {
 
 void DPDTrajectory::setupOutputFile( FILE* fp ) {
   std::cout << "Setting up outfile..." << std::endl;
+  this->setupHelp( fp );
   std::cout << "Output file initialized." << std::endl;
 }
 
@@ -170,8 +171,8 @@ void DPDTrajectory::process() {
 }
 
 void DPDTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
+  this->analyzeHelp( inFile, fp );
   std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
-  this->skip( inFile );
 }
 
 void DPDTrajectory::skip( std::ifstream& inFile ) {
@@ -182,7 +183,8 @@ void DPDTrajectory::skip( std::ifstream& inFile ) {
 }
 
 void DPDTrajectory::calcData() {
-  std::cout << "Calculating final trajectory data..." << std::endl; 
+  std::cout << "Calculating final trajectory data..." << std::endl;
+  this->calcHelp();
 }
 
 // source: http://www.cplusplus.com/reference/cstdio/ftell/
@@ -237,13 +239,11 @@ TriblockTrajectory::~TriblockTrajectory() {
   }
 }
 
-void TriblockTrajectory::setupOutputFile( FILE* fp ) {
-  std::cout << "Setting up outfile..." << std::endl;
+void TriblockTrajectory::setupHelp( FILE* fp ) {
   fprintf( fp, "   Cores     AvgAgg     RMSDistCores     Stem     Petal   Neither  \n" );
-  std::cout << "Output file initialized." << std::endl;
 }
 
-void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
+void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
   TriblockFrame* tframe = new TriblockFrame( this->num_atoms, this->box_length, this->chain_length, 
                                              this->bin_length, &( this->micelle_cutoff ), this->tail_length, this->pec_length, &inFile );
   tframe->deriveMicelleList();
@@ -254,9 +254,7 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   TriblockFrameData* data = new TriblockFrameData( tframe );
   this->frameData.push_back( data );
 
-  std::cout << "Analyzed " << ++this->framesAnalyzed << " frames..." << std::endl;
-
-  if ( this->framesAnalyzed >= 100 ) {
+  if ( this->framesAnalyzed + 1 >= 100 ) {
     FILE* fp = fopen( "lastFrameWrapped.xyz", "w" );
 
     if ( fp == NULL ) {
@@ -280,8 +278,7 @@ void TriblockTrajectory::analyze( std::ifstream& inFile, FILE* fp ) {
   this->AVG_rms_distance_btwn_cores += data->rms_distance_btwn_cores;
 }
 
-void TriblockTrajectory::calcData() {
-  std::cout << "Calculating final trajectory data..." << std::endl;
+void TriblockTrajectory::calcHelp() {
 
   if ( this->framesAnalyzed != this->frameData.size() ) {
     fprintf( stdout, "Error in frame data and number analyzed." );

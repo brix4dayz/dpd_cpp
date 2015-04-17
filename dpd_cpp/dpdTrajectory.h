@@ -18,10 +18,13 @@ class DPDTrajectory : public ObjDPD {
     ~DPDTrajectory();
     void unlink();
     void process();
-    virtual void analyze( std::ifstream& inFile, FILE* fp );
-    virtual void setupOutputFile( FILE* fp );
-    virtual void calcData();
     void skip( std::ifstream& inFile );
+    void analyze( std::ifstream& inFile, FILE* fp );
+    virtual void analyzeHelp( std::ifstream& inFile, FILE* fp ) { skip( inFile ); }
+    void setupOutputFile( FILE* fp );
+    virtual void setupHelp( FILE* fp ) {}
+    void calcData();
+    virtual void calcHelp() {}
 };
 
 class TriblockTrajectory : public DPDTrajectory {
@@ -43,9 +46,9 @@ class TriblockTrajectory : public DPDTrajectory {
     idx tail_length;
     idx chain_length;
     float micelle_cutoff;
-    void analyze( std::ifstream& inFile, FILE* fp );
-    void setupOutputFile( FILE* fp );
-    void calcData();
+    void analyzeHelp( std::ifstream& inFile, FILE* fp );
+    void setupHelp( FILE* fp );
+    void calcHelp();
     TriblockTrajectory();
     ~TriblockTrajectory();
 };
