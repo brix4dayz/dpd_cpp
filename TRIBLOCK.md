@@ -1,15 +1,14 @@
 #### Triblock Processor
 
-##### ToDo's
- - Correct avg aggregation number.
- - Remove neither counter and change it to stem.
- - Look into Stem collisions with xor hashing.
+##### Latest
+- Colorer implemented. Stem chains are converted to type 1 and petal type 2.
 
 ##### Analysis Parameters
 
 - **Micelle cutoff** = 1.25
 - **Bin length** (neighbor list size) = 2
-- **PBC Correction Factor** (percentage of box length) = .5
+- **PBC Correction Factor** (percentage of box length) = 0.5
+    + Can be varied though
 
 ##### Tests Report  
 
