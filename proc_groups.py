@@ -61,7 +61,7 @@ for l in block_lengths:
         f.write("#BSUB -q yingling\n")
         f.write("#BSUB -n 1\n")
         f.write("#BSUB -W 300:00\n")
-        f.write("#BSUB -J tri_" + str(l) + "_" str(a) + "\n")
+        f.write("#BSUB -J tri_" + str(l) + "_" + str(a) + "\n")
         f.write("#BSUB -R \"em64t span[ptile=2]\"\n")
         f.write("#BSUB -o triblock.out\n");
         f.write("#BSUB -e triblock.err\n\n\n\n");
