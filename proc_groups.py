@@ -9,7 +9,7 @@ current_dir = os.getcwd()
 
 # go to dpd_cpp and run the compile script
 os.chdir(exec_path)
-subprocess.call("compileTriblock.sh", shell=True)
+subprocess.call("bash compileTriblock.sh", shell=True)
 
 # go back to where we were
 os.chdir(current_dir)
@@ -79,7 +79,7 @@ for l in block_lengths:
         f.write("#BSUB -R \"em64t span[ptile=2]\"\n")
         f.write("#BSUB -o triblock.out\n");
         f.write("#BSUB -e triblock.err\n\n\n\n");
-        # run the programs in this folder with their inputs
+        # run the programs in this folder with it's inputs
         f.write(exec_path + "triblockProcessor < params.in > results.out\n\n")
         f.write(exec_path + "colorTriblock < colors.in\n\n")
         f.close()
@@ -89,3 +89,4 @@ for l in block_lengths:
 
         # go back to original dir and onto the next group
         os.chdir(current_dir)
+# done

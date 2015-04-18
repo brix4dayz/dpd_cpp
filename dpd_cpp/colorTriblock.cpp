@@ -1,11 +1,14 @@
 #include "dpdTrajectory.h"
+#include <memory>
 
 int main() {
-  ColorTriblockTraj* traj = new ColorTriblockTraj();
+  
+  std::unique_ptr<ColorTriblockTraj> traj( new ColorTriblockTraj() );
 
-  traj->process();
+  if (traj)
+    traj->process();
 
-  delete traj;
+  traj.reset();
 
   return 0;
 }
