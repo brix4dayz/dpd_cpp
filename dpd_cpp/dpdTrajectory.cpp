@@ -335,6 +335,7 @@ void ColorTriblockTraj::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
                                              this->bin_length, &( this->micelle_cutoff ),
                                              ( const float ) this->pbc_correction_factor,  this->tail_length, this->pec_length, &inFile );
   tframe->deriveMicelleList();
+  tframe->correctFrame();
   tframe->colorChains();
 
   std::cout << "Printing frame " << ( this->framesAnalyzed + 1 ) << " ..." << std::endl;
