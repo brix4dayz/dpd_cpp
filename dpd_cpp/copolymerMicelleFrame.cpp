@@ -51,14 +51,6 @@ CopolymerMicelleFrame::~CopolymerMicelleFrame() {
 	this->unlink();
 }
 
-/*Bin CopolymerMicelleFrame::binBlock( PolymerBlock* block ) {
-	idx i = coordToBin( block->com->x );
-	idx j = coordToBin( block->com->y );
-	idx k = coordToBin( block->com->z );
-	this->box[ i ][ j ][ k ].addBlock( block );
-	return this->box[ i ][ j ][ k ];
-}*/
-
 Bin* CopolymerMicelleFrame::binBlock( HydrophobicTail* tail ) {
 	idx i = coordToBin( tail->com->x );
 	idx j = coordToBin( tail->com->y );
@@ -382,6 +374,19 @@ void TriblockFrame::colorChains() {
   }
 }
 
+/*
+void TriblockFrame::colorCores() {
+  short coreCounter = 1;
+  TriblockMicelle* micelle;
+  for ( auto it = micelleList.begin(); it != micelleList.end(); it++ ) {
+    micelle = ( *it );
+    for ( auto core = micelle->coreList.begin(); core != micelle->coreList.end(); core++ ) {
+      ( *core )->color( coreCounter++ );
+    }
+  }
+}
+*/
+ 
 void TriblockFrame::process() {
   this->correctFrame();
   this->calcChainConfigFractions();
