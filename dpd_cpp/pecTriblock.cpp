@@ -105,14 +105,9 @@ PECTriblock::~PECTriblock() {
 }
 
 void PECTriblock::colorChain( idx type ) {
-  for ( idx i = 0; i < this->pec_length; i++ ) {
-    this->pec_block->getBead( i )->type = type;
-  }
-
-  for ( idx i = 0; i < this->tail_length; i++ ) {
-    this->tail1->getBead( i )->type = type;
-    this->tail2->getBead( i )->type = type;
-  }
+  this->pec_block->color( type );
+  this->tail1->color( type );
+  this->tail2->color( type );
 }
 
 // maybe builds "edge"

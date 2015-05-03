@@ -23,8 +23,9 @@ class PolymerBlock : public ObjDPD {
 		void printData( FILE* stream );
 		void calcCenterOfMass( idx* box_length, const float& pbc_correction_factor );
 		bool addBead( Bead* bead );
-		Bead* getBead( idx idx );
+		Bead* getBead( idx index );
     void unlink();
+    void color( idx type );
 };
 
 class HydrophobicTail : public PolymerBlock {

@@ -63,6 +63,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
 		void calcAvgAggNum();
 		void calcAvgDistBtwnCores();
     void colorChains();
+    void colorCores();
     void correctFrame();
 };
 

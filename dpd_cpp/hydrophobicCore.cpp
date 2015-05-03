@@ -61,6 +61,14 @@ bool HydrophobicCore::groupCores( HydrophobicCore* core ) {
 	return false;
 }
 
+void HydrophobicCore::color( idx type ) {
+	for ( auto bin = std::begin( this->binList ) ; bin != std::end( this->binList ) ; bin++ ) {
+		for ( auto tail = std::begin( ( *bin )->tailList ) ; tail != std::end( ( *bin )->tailList ) ; tail++ ) {
+		 	( *tail )->color( type );
+		}
+	}
+}
+
 #if defined( TESTING )
 #include <iostream>
 

@@ -20,4 +20,5 @@ class HydrophobicCore : public ObjDPD {
 		void calcCenterOfMass( idx* box_length, const float& pbc_cor_factor );
 		void printCore( FILE* stream );
 		void unlink();
+		void color( idx type );
 };

@@ -174,6 +174,12 @@ ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length ) :
  
 ChargedBlock::ChargedBlock() : PolymerBlock() {}
 
+void PolymerBlock::color( idx type ) {
+	for ( idx i = 0; i < this->length; i++ ) {
+		this->getBead( i )->type = type;
+	}
+}
+
 #if defined( TESTING )
 #include <iostream>
 

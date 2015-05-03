@@ -1,8 +1,5 @@
 #### Triblock Processor
 
-##### Latest
-- Colorer implemented. Stem chains are converted to type 1 and petal type 2.
-
 ##### Analysis Parameters
 
 - **Micelle cutoff** = 1.25

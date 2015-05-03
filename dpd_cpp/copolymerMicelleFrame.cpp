@@ -374,9 +374,8 @@ void TriblockFrame::colorChains() {
   }
 }
 
-/*
 void TriblockFrame::colorCores() {
-  short coreCounter = 1;
+  idx coreCounter = 1;
   TriblockMicelle* micelle;
   for ( auto it = micelleList.begin(); it != micelleList.end(); it++ ) {
     micelle = ( *it );
@@ -385,8 +384,7 @@ void TriblockFrame::colorCores() {
     }
   }
 }
-*/
- 
+
 void TriblockFrame::process() {
   this->correctFrame();
   this->calcChainConfigFractions();

@@ -20,6 +20,12 @@ There are generic classes such as **PosVect** (position vector), **DirVect** (di
 
 Also has specific implementations descending from these classes: **BeadGyration**, **HydrophobicTail**, **PECTriblock**, **HydrophobicCore**, **Micelle**, **DPDPolymerData** (aqueous polymer builder), **TriblockData** (builder), **ChargeTriblockData** (builder), **DiblockMicelle**, **TriblockMicelle**, **CopolymerMicelleFrame** (processor), **TriblockFrame** (processor).
 
+<div style="text-align:center" markdown="1">
+
+<img src="hd_micelles.jp2" height=650>
+
+</div>
+
 #### _Current Objectives_
 * Finish _unlink_ and _deconstructors_ for objects to prevent memory leaks.
 * Look for redundant calculations within certain objects that can be given to their handlers (i.e. _num_atoms_ in **TriblockFrame** could be handled by **TriblockProcessor** which has a list of **TriblockFrames**).  
