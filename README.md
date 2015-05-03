@@ -22,7 +22,7 @@ Also has specific implementations descending from these classes: **BeadGyration*
 
 <div style="text-align:center" markdown="1">
 
-<img src="hd_micelles.jp2" align="middle" height=650>
+<img src="hd_micelles.jp2" height=650>
 
 </div>
 
