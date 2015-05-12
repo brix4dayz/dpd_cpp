@@ -4,6 +4,10 @@
 #include <ctime>
 #include <cmath>
 
+#define LARGE_TRAJ 1000
+
+const short lastFrames = 2000;
+
 DPDTrajectory::DPDTrajectory() {
     unsigned int temp = 0;
     this->numFiles = 0;
@@ -82,8 +86,8 @@ void DPDTrajectory::determineNumFrames() {
 
   this->numFrames = bytesInTraj / bytesPerFrame;
 
-  // Round to the nearest 100
-  if ( this->numFrames >= 1000 ) {
+  // Floor to the nearest 100
+  if ( this->numFrames >= LARGE_TRAJ ) {
     this->numFrames /= 100;
     this->numFrames *= 100;
   }
@@ -93,8 +97,8 @@ void DPDTrajectory::determineNumFrames() {
   std::cout << "Estimated number of frames: " << this->numFrames << std::endl;
 
   // calc start file and offset
-  if ( this->numFrames > 1000 ) {
-    this->startFrameOffset = this->numFrames - 1000;
+  if ( this->numFrames > lastFrames ) {
+    this->startFrameOffset = this->numFrames - lastFrames;
     unsigned int frames = 0;
     for ( unsigned int i = 0; i < this->numFiles; i++ ) {
       frames += bytesInEachFile[ i ]/bytesPerFrame;
@@ -142,7 +146,7 @@ void DPDTrajectory::process() {
     std::ifstream inFile( this->fileNames[ filePtr ].c_str() );
     filePtr++;
 
-    if ( this->numFrames > 100 ) {
+    if ( this->numFrames > ( lastFrames / 10 ) ) {
       while ( std::getline( inFile, line ) ) {
         std::getline( inFile, line );
         if ( frameCount >= this->startFrameOffset && ( frameCount - this->startFrameOffset ) % 10 == 0 )
@@ -256,9 +260,9 @@ void TriblockTrajectory::analyzeHelp( std::ifstream& inFile, FILE* output ) {
   TriblockFrameData* data = new TriblockFrameData( tframe );
   this->frameData.push_back( data );
 
-  if ( this->framesAnalyzed + 1 >= 100 ) {
+  if ( this->framesAnalyzed + 1 >= ( lastFrames / 10 ) ) {
     FILE* fp;
-    if ( this->framesAnalyzed + 1 == 100 )
+    if ( this->framesAnalyzed + 1 == ( lastFrames / 10 ) )
       fp = fopen( "lastFrameWrapped.xyz", "w" );
     else
       fp = fopen( "lastFrameWrapped.xyz", "a" );
