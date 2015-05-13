@@ -439,8 +439,8 @@ void TriblockFrame::calcAvgDistBtwnCores() {
       currentStem = *stem;
       c1 = currentStem->core1;
       c2 = currentStem->core2;
-      // Here changing this line could fix the distance_cores bug
-      this->avg_distance_btwn_cores += sqrt( c1->com->getDistSquared( c2->com ) ); 
+      this->avg_distance_btwn_cores += sqrt( c1->com->getCorrectedDist( c2->com, &(this->box_length), 
+                                             this->micelle_cutoff ) ); 
     }
   }
   if ( this->avg_distance_btwn_cores != 0.0 ) {
