@@ -6,7 +6,7 @@
 
 #define LARGE_TRAJ 1000
 
-const short lastFrames = 2000;
+const unsigned short lastFrames = 2000;
 
 DPDTrajectory::DPDTrajectory() {
     unsigned int temp = 0;
