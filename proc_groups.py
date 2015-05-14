@@ -69,6 +69,22 @@ for l in block_lengths:
         f.write(str(pbc) + "\n")
         f.close()
 
+        # write time.in for triblockTime
+        f = open('time.in', 'w')
+        f.write(str(box_length) + "\n") # prints box_length
+        f.write(str(bin_size) + "\n") # prints bin size
+        f.write(str(len(trajs)) + "\n") # prints number of xyz files for this group
+        # prints each xyz file on a separate line
+        for t in trajs:
+          f.write(t + "\n")
+        # prints the output file name: ${l}_${a}_frames_results.dat
+        f.write(str(l) + "_" + str(a) + "_time_evol.dat\n")
+        f.write(str(tail_length) + "\n") # prints constant tail_length
+        f.write(str(l) + "\n") # prints variable block length
+        f.write(str(mic_cut) + "\n") # prints micelle cutoff
+        f.write(str(pbc) + "\n") # prints pbc correction factor
+        f.close() # done writing time.in
+
         # write LSF job as a bash script
         f = open('analyzeTrajectory.sh', 'w')
         f.write("#! /bin/bash\n")
@@ -82,6 +98,7 @@ for l in block_lengths:
         # run the programs in this folder with it's inputs
         f.write(exec_path + "triblockProcessor < params.in > results.out\n\n")
         f.write(exec_path + "colorTriblock < colors.in\n\n")
+        f.write(exec_path + "triblockTime < time.in\n\n")
         f.close()
 
         # submit the job to the HPC

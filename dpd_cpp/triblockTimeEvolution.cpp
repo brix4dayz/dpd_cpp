@@ -61,8 +61,8 @@ void TriblockTimeEvolution::setupHelp( FILE* fp ) {
 TriblockTimeEvolution::~TriblockTimeEvolution() {}
 
 #if defined(USING)
-
 #include <memory>
+
 int main() {
   
   std::unique_ptr<TriblockTimeEvolution> traj( new TriblockTimeEvolution() );
