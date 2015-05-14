@@ -19,9 +19,10 @@ void TriblockTimeEvolution::process() {
 
     while ( std::getline( inFile, line ) ) {
       std::getline( inFile, line );
-      if ( frameCount % 10 == 0 )
+      if ( frameCount % 10 == 0 ) {
+        fprintf( output, "%4d ", ( frameCount / 10 ) );
         this->analyze( inFile, output );
-      else
+      } else
         this->skip( inFile );
       frameCount++;
     }
@@ -43,15 +44,35 @@ void TriblockTimeEvolution::analyzeHelp( std::ifstream& inFile, FILE* fp ) {
                                              this->bin_length, &( this->micelle_cutoff ),
                                              ( const float ) this->pbc_correction_factor,  this->tail_length, this->pec_length, &inFile );
   tframe->deriveMicelleList();
+  tframe->process();
+
+  tframe->printData( fp );
+
+  delete tframe;
 
 }
 
-void TriblockTimeEvolution::calcHelp() {
-
-}
+void TriblockTimeEvolution::calcHelp() {}
 
 void TriblockTimeEvolution::setupHelp( FILE* fp ) {
-
+  fprintf( fp, "Frame #   Cores     AvgAgg     AvgDistCores     Stem     Petal\n" );
 }
 
 TriblockTimeEvolution::~TriblockTimeEvolution() {}
+
+#if defined(USING)
+
+#include <memory>
+int main() {
+  
+  std::unique_ptr<TriblockTimeEvolution> traj( new TriblockTimeEvolution() );
+
+  if (traj)
+    traj->process();
+
+  traj.reset();
+
+  return 0;
+}
+
+#endif

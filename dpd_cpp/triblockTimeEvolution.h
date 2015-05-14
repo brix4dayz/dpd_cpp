@@ -1,4 +1,5 @@
 #include "dpdTrajectory.h"
+#include <iostream>
 
 class TriblockTimeEvolution : public TriblockTrajectory {
   public:

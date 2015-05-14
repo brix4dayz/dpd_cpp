@@ -6,6 +6,8 @@ echo 'Removing old executables...'
 rm -rf triblockProcessor
 rm -rf triblockBuilder
 rm -rf colorTriblock
+rm -rf triblockTime
+rm -rf triCoresTime
 echo '...executables removed.'
 
 echo 'Compiling triblockProcessor...'
@@ -20,6 +22,13 @@ echo 'Compiling colorTriblock...'
 make colorTriblock LINUX=1 HPC=1
 echo '...colorTriblock compiled.'
 
+echo 'Compiling triblockTime...'
+make triblockTime LINUX=1 HPC=1
+echo '...triblockTime compiled.'
+
+echo 'Compiling triCoresTime...'
+make triCoresTime LINUX=1 HPC=1
+echo '...triCoresTime compiled.'
 
 echo '...compilation completed.'
 echo 'Exiting...'

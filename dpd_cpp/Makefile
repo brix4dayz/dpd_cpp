@@ -230,3 +230,30 @@ colorTriblock:
 	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
 	$(CC) $(WARN) $(STDFLAG) -c dpdTrajectory.cpp
 	$(CC) $(WARN) $(STDFLAG) -o colorTriblock colorTriblock.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+
+triblockTime:
+	rm -rf *.o
+		$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(STDFLAG) -c hydrophobicCore.cpp
+	$(CC) $(WARN) $(STDFLAG) -c micelle.cpp
+	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
+	$(CC) $(WARN) $(STDFLAG) -c dpdTrajectory.cpp
+	$(CC) $(WARN) $(STDFLAG) -DUSING -o triblockTime triblockTimeEvolution.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+
+triCoresTime:
+	rm -rf *.o
+		$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(STDFLAG) -c hydrophobicCore.cpp
+	$(CC) $(WARN) $(STDFLAG) -c micelle.cpp
+	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
+	$(CC) $(WARN) $(STDFLAG) -c dpdTrajectory.cpp
+	$(CC) $(WARN) $(STDFLAG) -c triblockTimeEvolution.cpp
+	$(CC) $(WARN) $(STDFLAG) -DUSING -o triCoresTime triblockCoresTime.cpp triblockTimeEvolution.o dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
