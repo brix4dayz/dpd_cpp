@@ -17,10 +17,11 @@ class DPDVect : public ObjDPD {
     void print( FILE* fp );
     void add( const DPDVect& v );
     void divideByScalar( const int& value );
-    void multipltByScalar( const int& value );
+    void multiplyByScalar( const int& value );
     void normalize();
     float magnitude();
     float modulus();
+    float dot();
 };
 
 class Vect3D : public DPDVect {
@@ -47,6 +48,7 @@ class PosVect { // Position Vector class
   private:
     void pbcCorrectDistanceCompForCluster( double* d, idx* box_length,
                                            float* micelle_cutoff );
+    void pbcCorrectDistCompForLink( double* d, idx* box_length, const float& pbc_correction_factor );
   public:
     double x;
     double y;
@@ -62,6 +64,7 @@ class PosVect { // Position Vector class
     void divideCoords( int* value );
     double getCorrectedDist( PosVect* r, idx* box_length, float* micelle_cutoff );
     double getDistSquared( PosVect* p );
+    double getLinkedDist( PosVect* r, idx* box_length, const float& pbc_correction_factor );
 };
 
 class DirVect { // Direction Vector class

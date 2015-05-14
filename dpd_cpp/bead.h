@@ -33,8 +33,6 @@ class Bead : public ObjDPD {
 	private:
 		void pbcCorrectDistanceCompInChain( double* d, double* coord, 
 			                                  idx* box_length, const float& pbc_correction_factor );
-		void pbcCorrectDistanceCompForCluster( double* d, idx* box_length,
-		 	                                     float* micelle_cutoff );
 	public:
 		//Fields (data)
 		PosVect* r;

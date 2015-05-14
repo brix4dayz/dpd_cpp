@@ -69,12 +69,33 @@ void PosVect::pbcCorrectDistanceCompForCluster( double* d,
     *d = *box_length - absD;
 }
 
+void PosVect::pbcCorrectDistCompForLink( double* d, 
+ idx* box_length, const float& pbc_correction_factor ) {
+  if ( std::abs( *d ) >= ( *box_length )*pbc_correction_factor ) {
+    if ( *d > 0 )
+      *d -= *box_length;
+    else
+      *d += *box_length;
+  }
+}
+
 double PosVect::getCorrectedDist( PosVect* r, idx* box_length, 
  float* micelle_cutoff ) {
   DirVect* d = new DirVect( this, r );
   pbcCorrectDistanceCompForCluster( &( d->dx ), box_length, micelle_cutoff );
   pbcCorrectDistanceCompForCluster( &( d->dy ), box_length, micelle_cutoff );
   pbcCorrectDistanceCompForCluster( &( d->dz ), box_length, micelle_cutoff );
+  d->calcMod();
+  double dist = d->modulus;
+  delete d;
+  return dist;
+}
+
+double PosVect::getLinkedDist( PosVect* r, idx* box_length, const float& pbc_correction_factor ) {
+  DirVect* d = new DirVect( this, r );
+  pbcCorrectDistCompForLink( &( d->dx ), box_length, pbc_correction_factor );
+  pbcCorrectDistCompForLink( &( d->dy ), box_length, pbc_correction_factor );
+  pbcCorrectDistCompForLink( &( d->dz ), box_length, pbc_correction_factor);
   d->calcMod();
   double dist = d->modulus;
   delete d;
