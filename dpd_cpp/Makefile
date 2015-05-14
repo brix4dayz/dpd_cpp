@@ -220,7 +220,7 @@ triblockProcessor:
 
 colorTriblock:
 	rm -rf *.o
-		$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
 	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
 	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
@@ -233,7 +233,7 @@ colorTriblock:
 
 triblockTime:
 	rm -rf *.o
-		$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
 	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
 	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
@@ -246,7 +246,7 @@ triblockTime:
 
 triCoresTime:
 	rm -rf *.o
-		$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
 	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
 	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
