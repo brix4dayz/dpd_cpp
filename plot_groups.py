@@ -2,7 +2,7 @@ import subprocess
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.axes as ax
+import operator
 
 # location of where we are
 current_dir = os.getcwd()
@@ -45,6 +45,7 @@ for l in block_lengths:
     os.chdir(current_dir)
 
 # cores
+
 for l in colors.keys():
   plt.errorbar(salt_concs, measurements['cores'][l]['mean'], yerr=measurements['cores'][l]['std'], marker='o', color=colors[l], label=str(l))
 
@@ -52,9 +53,13 @@ plt.ylabel('# of Cores')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
-handles, labels = ax.Axes.get_legend_handles_labels()
-labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
-ax.legend(handles, labels)
+ax = plt.gca()
+
+handles, labels = ax.get_legend_handles_labels()
+hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+handles2, labels2 = zip(*hl)
+
+ax.legend(handles2, labels2)
 
 x1, x2, y1, y2 = plt.axis()
 
@@ -72,10 +77,6 @@ plt.ylabel('Avg. Aggregation Number / Core')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
-handles, labels = ax.Axes.get_legend_handles_labels()
-labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
-ax.legend(handles, labels)
-
 x1, x2, y1, y2 = plt.axis()
 
 plt.axis([0, 100, y1, y2])
@@ -92,10 +93,6 @@ plt.ylabel('Avg. Distance Between Linked Cores')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
-handles, labels = ax.Axes.get_legend_handles_labels()
-labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
-ax.legend(handles, labels)
-
 x1, x2, y1, y2 = plt.axis()
 
 plt.axis([0, 100, y1, y2])
@@ -111,10 +108,6 @@ for l in colors.keys():
 plt.ylabel('Percentage of Stems')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
-
-handles, labels = ax.Axes.get_legend_handles_labels()
-labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
-ax.legend(handles, labels)
 
 x1, x2, y1, y2 = plt.axis()
 
