@@ -29,23 +29,23 @@ for l in block_lengths:
     print tail_results
     tail_results = tail_results.split()
 
-    measurements['cores'][l]['mean'] = np.append(measurements['cores'][l]['mean'], [tail_results[1]])
-    measurements['cores'][l]['std'] = np.append(measurements['cores'][l]['std'], [tail_results[7]])
+    measurements['cores'][l]['mean'] = np.append(measurements['cores'][l]['mean'], [float(tail_results[1])])
+    measurements['cores'][l]['std'] = np.append(measurements['cores'][l]['std'], [float(tail_results[7])])
 
-    measurements['agg'][l]['mean'] = np.append(measurements['agg'][l]['mean'], [tail_results[2]])
-    measurements['agg'][l]['std'] = np.append(measurements['agg'][l]['std'], [tail_results[8]])
+    measurements['agg'][l]['mean'] = np.append(measurements['agg'][l]['mean'], [float(tail_results[2])])
+    measurements['agg'][l]['std'] = np.append(measurements['agg'][l]['std'], [float(tail_results[8])])
 
-    measurements['dist'][l]['mean'] = np.append(measurements['dist'][l]['mean'], [tail_results[3]])
-    measurements['dist'][l]['std'] = np.append(measurements['dist'][l]['std'], [tail_results[9]])
+    measurements['dist'][l]['mean'] = np.append(measurements['dist'][l]['mean'], [float(tail_results[3])])
+    measurements['dist'][l]['std'] = np.append(measurements['dist'][l]['std'], [float(tail_results[9])])
 
-    measurements['stems'][l]['mean'] = np.append(measurements['stems'][l]['mean'], [tail_results[4]])
-    measurements['stems'][l]['std'] = np.append(measurements['stems'][l]['std'], [tail_results[10]])
+    measurements['stems'][l]['mean'] = np.append(measurements['stems'][l]['mean'], [float(tail_results[4])])
+    measurements['stems'][l]['std'] = np.append(measurements['stems'][l]['std'], [float(tail_results[10])])
 
     os.chdir(current_dir)
 
 # cores
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['cores'][l]['mean'], yerr=measurements['cores'][l]['std'], marker='o')
+  plt.errorbar(salt_concs, measurements['cores'][l]['mean'], yerr=measurements['cores'][l]['std'], marker='o', color=colors[l])
 
 plt.ylabel('# of Cores')
 plt.xlabel('$ a_{2,2} $')
@@ -56,7 +56,7 @@ plt.clf()
 
 # agg
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['agg'][l]['mean'], yerr=measurements['agg'][l]['std'], marker='o')
+  plt.errorbar(salt_concs, measurements['agg'][l]['mean'], yerr=measurements['agg'][l]['std'], marker='o', color=colors[l])
 
 plt.ylabel('Avg. Aggregation Number / Core')
 plt.xlabel('$ a_{2,2} $')
@@ -67,7 +67,7 @@ plt.clf()
 
 # dist
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['dist'][l]['mean'], yerr=measurements['dist'][l]['std'], marker='o')
+  plt.errorbar(salt_concs, measurements['dist'][l]['mean'], yerr=measurements['dist'][l]['std'], marker='o', color=colors[l])
 
 plt.ylabel('Avg. Distance Between Linked Cores')
 plt.xlabel('$ a_{2,2} $')
@@ -78,7 +78,7 @@ plt.clf()
 
 # stems
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['stems'][l]['mean'], yerr=measurements['stems'][l]['std'], marker='o')
+  plt.errorbar(salt_concs, measurements['stems'][l]['mean'], yerr=measurements['stems'][l]['std'], marker='o', color=colors[l])
 
 plt.ylabel('Percentage of Stems')
 plt.xlabel('$ a_{2,2} $')
