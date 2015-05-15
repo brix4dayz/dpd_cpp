@@ -51,15 +51,13 @@ for l in colors.keys():
 
 plt.ylabel('# of Cores')
 plt.xlabel('$ a_{2,2} $')
-plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 ax = plt.gca()
-
 handles, labels = ax.get_legend_handles_labels()
 hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
 handles2, labels2 = zip(*hl)
-
 ax.legend(handles2, labels2)
+plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
 
@@ -75,8 +73,13 @@ for l in colors.keys():
 
 plt.ylabel('Avg. Aggregation Number / Core')
 plt.xlabel('$ a_{2,2} $')
-plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
+ax = plt.gca()
+handles, labels = ax.get_legend_handles_labels()
+hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+handles2, labels2 = zip(*hl)
+ax.legend(handles2, labels2)
+plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 x1, x2, y1, y2 = plt.axis()
 
 plt.axis([0, 100, y1, y2])
@@ -91,6 +94,12 @@ for l in colors.keys():
 
 plt.ylabel('Avg. Distance Between Linked Cores')
 plt.xlabel('$ a_{2,2} $')
+
+ax = plt.gca()
+handles, labels = ax.get_legend_handles_labels()
+hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+handles2, labels2 = zip(*hl)
+ax.legend(handles2, labels2)
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
@@ -107,6 +116,12 @@ for l in colors.keys():
 
 plt.ylabel('Percentage of Stems')
 plt.xlabel('$ a_{2,2} $')
+
+ax = plt.gca()
+handles, labels = ax.get_legend_handles_labels()
+hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+handles2, labels2 = zip(*hl)
+ax.legend(handles2, labels2)
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
