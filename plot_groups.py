@@ -49,7 +49,7 @@ for l in colors.keys():
 
 plt.ylabel('# of Cores')
 plt.xlabel('$ a_{2,2} $')
-plt.legend()
+plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
 
@@ -65,7 +65,7 @@ for l in colors.keys():
 
 plt.ylabel('Avg. Aggregation Number / Core')
 plt.xlabel('$ a_{2,2} $')
-plt.legend()
+plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
 
@@ -81,7 +81,7 @@ for l in colors.keys():
 
 plt.ylabel('Avg. Distance Between Linked Cores')
 plt.xlabel('$ a_{2,2} $')
-plt.legend()
+plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
 
@@ -97,7 +97,7 @@ for l in colors.keys():
 
 plt.ylabel('Percentage of Stems')
 plt.xlabel('$ a_{2,2} $')
-plt.legend()
+plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
 x1, x2, y1, y2 = plt.axis()
 
