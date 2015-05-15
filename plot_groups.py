@@ -51,6 +51,10 @@ plt.ylabel('# of Cores')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
+handles, labels = plt.get_legend_handles_labels()
+labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+plt.legend(handles, labels)
+
 x1, x2, y1, y2 = plt.axis()
 
 plt.axis([0, 100, y1, y2])
@@ -66,6 +70,10 @@ for l in colors.keys():
 plt.ylabel('Avg. Aggregation Number / Core')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
+
+handles, labels = plt.get_legend_handles_labels()
+labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+plt.legend(handles, labels)
 
 x1, x2, y1, y2 = plt.axis()
 
@@ -83,6 +91,10 @@ plt.ylabel('Avg. Distance Between Linked Cores')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
+handles, labels = plt.get_legend_handles_labels()
+labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+plt.legend(handles, labels)
+
 x1, x2, y1, y2 = plt.axis()
 
 plt.axis([0, 100, y1, y2])
@@ -98,6 +110,10 @@ for l in colors.keys():
 plt.ylabel('Percentage of Stems')
 plt.xlabel('$ a_{2,2} $')
 plt.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
+
+handles, labels = plt.get_legend_handles_labels()
+labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+plt.legend(handles, labels)
 
 x1, x2, y1, y2 = plt.axis()
 
