@@ -45,7 +45,7 @@ for l in block_lengths:
 
 # cores
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['cores'][l]['mean'], yerr=measurements['cores'][l]['std'], marker='o', color=colors[l])
+  plt.errorbar(salt_concs, measurements['cores'][l]['mean'], yerr=measurements['cores'][l]['std'], marker='o')
 
 plt.ylabel('# of Cores')
 plt.xlabel('$ a_{2,2} $')
@@ -56,7 +56,7 @@ plt.clf()
 
 # agg
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['agg'][l]['mean'], yerr=measurements['agg'][l]['std'], marker='o', color=colors[l])
+  plt.errorbar(salt_concs, measurements['agg'][l]['mean'], yerr=measurements['agg'][l]['std'], marker='o')
 
 plt.ylabel('Avg. Aggregation Number / Core')
 plt.xlabel('$ a_{2,2} $')
@@ -67,7 +67,7 @@ plt.clf()
 
 # dist
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['dist'][l]['mean'], yerr=measurements['dist'][l]['std'], marker='o', color=colors[l])
+  plt.errorbar(salt_concs, measurements['dist'][l]['mean'], yerr=measurements['dist'][l]['std'], marker='o')
 
 plt.ylabel('Avg. Distance Between Linked Cores')
 plt.xlabel('$ a_{2,2} $')
@@ -78,7 +78,7 @@ plt.clf()
 
 # stems
 for l in colors.keys():
-  plt.errorbar(salt_concs, measurements['stems'][l]['mean'], yerr=measurements['stems'][l]['std'], marker='o', color=colors[l])
+  plt.errorbar(salt_concs, measurements['stems'][l]['mean'], yerr=measurements['stems'][l]['std'], marker='o')
 
 plt.ylabel('Percentage of Stems')
 plt.xlabel('$ a_{2,2} $')
