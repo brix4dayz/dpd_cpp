@@ -260,7 +260,7 @@ void ChargeTriblockData::deriveChainList() {
   auto chargeDice = std::bind( dist, gen );
   PECTriblock* chain = NULL;
   float uncharged_density = 1.0f - this->charge_density;
-  idx num_uncharged = uncharged_density*this->pec_length;
+  idx num_uncharged = uncharged_density*this->pec_length + 0.5f;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
                             this->pec_length, this->tail_length, this->chain_length,
