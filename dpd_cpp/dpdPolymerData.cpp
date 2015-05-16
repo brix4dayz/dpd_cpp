@@ -258,7 +258,7 @@ void ChargeTriblockData::deriveChainList() {
   auto chargeDice = std::bind( dist, gen );
   PECTriblock* chain = NULL;
   float uncharged_density = 1.0f - this->charge_density;
-  idx num_uncharged = uncharged_density*this->pec_length + 1.0f;
+  idx num_uncharged = uncharged_density*this->pec_length;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
                             this->pec_length, this->tail_length, this->chain_length,
@@ -267,9 +267,11 @@ void ChargeTriblockData::deriveChainList() {
     while ( uncharged_counter < num_uncharged ) {
       for ( idx pec_counter = 0; pec_counter < this->pec_length; pec_counter++ ) {
         #if defined( TESTING )
-        if ( randomRealC() <= uncharged_density ) {
+        if ( chain->pec_block->beadList[ pec_counter ]->type != FLUID_ID_TRIBLOCK && 
+             randomRealC() <= uncharged_density ) {
         #else
-        if ( chargeDice() <= uncharged_density ) { 
+        if ( chain->pec_block->beadList[ pec_counter ]->type != FLUID_ID_TRIBLOCK && 
+             chargeDice() <= uncharged_density ) { 
         #endif
           uncharged_counter++;
           chain->pec_block->beadList[ pec_counter ]->type = FLUID_ID_TRIBLOCK;
