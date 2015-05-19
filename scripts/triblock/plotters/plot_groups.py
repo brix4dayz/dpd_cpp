@@ -56,7 +56,7 @@ for i in measurements.keys():
   plt.ylabel(titles[i])
   plt.xlabel('$ a_{2,2} $')
 
-  # sort legend and put in top left corner
+  # sort legend and put in top right corner
   ax = plt.gca()
   handles, labels = ax.get_legend_handles_labels()
   hl = sorted(zip(handles, labels), key=operator.itemgetter(1))

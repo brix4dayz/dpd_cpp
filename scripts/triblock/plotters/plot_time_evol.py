@@ -49,7 +49,8 @@ for i in measurements.keys():
     plt.ylabel(titles[i])
     plt.xlabel('$ \\tau $')
 
-    # sort legend and put in top left corner
+    # sort legend and put in top right corner
+    if i == 'agg':
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()
     hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
@@ -58,7 +59,10 @@ for i in measurements.keys():
 
     x1, x2, y1, y2 = plt.axis()
 
-    plt.axis([0, 600, y1, y2])
+    if i != 'cores':
+      plt.axis([0, 600, y1, y2])
+    else:
+      plt.axis([0, 600, y1, 40])
 
     plt.savefig(i + "_time.png", dpi=96)
 
