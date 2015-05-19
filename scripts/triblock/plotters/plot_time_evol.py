@@ -2,6 +2,7 @@ import subprocess
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import operator
 
 
 Na = 30
@@ -12,7 +13,7 @@ current_dir = os.getcwd()
 
 measurements = {'t': { 'idx':0 }, 'cores': { 'idx':1 }, 'agg': { 'idx':2 }, 'dist': { 'idx':3 }, 'stems': { 'idx':4 }}
 
-delta = {'33%': 'g', '67%':'b', '100%':'m'}
+delta = {'33%':'g', '67%':'b', '100%':'m'}
 
 titles = {'cores': '# of Cores', 'agg': 'Avg. Aggregation Number / Core', 'dist': 'Avg. Distance Between Linked Cores', 'stems': 'Percentage of Stem Chains'}
 
@@ -25,14 +26,13 @@ for d in delta:
   os.chdir(d) # go to group folder
   print(os.getcwd()) # print which group we're in
 
-  f = open( str(Na) + "_" str(a22) + "_time_evol.dat", "r")
+  f = open( str(Na) + "_" + str(a22) + "_time_evol.dat", "r")
 
   for line in f:
     tokens = line.split()
     if tokens[0] != "Frame":
       for m in measurements.keys():
-        for d in delta:
-          measurements[m][d] = np.append(measurements[m][d], [float(tokens[measurements[m]['idx']])])
+        measurements[m][d] = np.append(measurements[m][d], [float(tokens[measurements[m]['idx']])])
 
   f.close()
 
