@@ -65,6 +65,7 @@ class TriblockFrame : public CopolymerMicelleFrame {
     void colorChains();
     void colorCores();
     void correctFrame();
+    void printCores( FILE* fp );
 };
 
 class TriblockFrameData : public ObjDPD {

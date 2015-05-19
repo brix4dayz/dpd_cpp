@@ -470,6 +470,12 @@ void TriblockFrame::printChains( FILE* fp ) {
   }
 }
 
+void TriblockFrame::printCores( FILE* fp ) {
+  for ( auto it = this->micelleList.begin(); it != this->micelleList.end(); it++ ) {
+    ( *it )->printMicelleCore( fp );
+  }
+}
+
 void TriblockFrame::printBins( FILE* fp ) {
   for ( idx i = 0; i < this->num_bins; i++ ) {
     for ( idx j = 0; j < this->num_bins; j++ ) {
