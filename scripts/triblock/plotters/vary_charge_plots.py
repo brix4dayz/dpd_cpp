@@ -65,7 +65,7 @@ for i in measurements.keys():
 
   x1, x2, y1, y2 = plt.axis()
 
-  plt.axis([0, 1.0, y1, y2])
+  plt.axis([0, 1.2, y1, y2])
 
   plt.savefig(i + ".png", dpi=96)
 
