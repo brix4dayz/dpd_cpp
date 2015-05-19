@@ -51,7 +51,8 @@ for a in a22:
 for i in measurements.keys():
   # plot each length for the current measurement
   for l in colors.keys():
-    plt.errorbar(delta, measurements[i][l]['mean'], yerr=measurements[i][l]['std'], marker='o', color=colors[l], label=str(l))
+    plt.errorbar(delta, measurements[i][l]['mean'], yerr=measurements[i][l]['std'], 
+                 marker='o', color=colors[l], label=str(l), linewidth=2.0)
 
   plt.ylabel(titles[i])
   plt.xlabel('$ \delta $')
