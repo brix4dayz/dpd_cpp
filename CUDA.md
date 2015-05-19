@@ -7,3 +7,4 @@
   + Accelerating DPD on GPU's using USERMESO:   
     - <http://devblogs.nvidia.com/parallelforall/accelerating-dissipative-particle-dynamics-simulation-tesla-gpus/>  
     - <http://www.dam.brown.edu/dpd/doku.php/user-meso:main>
+    - However we can't use it because it's designed specifically for Tesla Nvidia's, we have GeForce's.
