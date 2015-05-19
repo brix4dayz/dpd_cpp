@@ -50,11 +50,11 @@ for i in measurements.keys():
     plt.xlabel('$ \\tau $')
 
     # sort legend and put in top left corner
-    #ax = plt.gca()
-    #handles, labels = ax.get_legend_handles_labels()
-    #hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
-    #handles2, labels2 = zip(*hl)
-    #ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
+    ax = plt.gca()
+    handles, labels = ax.get_legend_handles_labels()
+    hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+    handles2, labels2 = zip(*hl)
+    ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
     x1, x2, y1, y2 = plt.axis()
 
