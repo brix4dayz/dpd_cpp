@@ -47,7 +47,7 @@ for l in block_lengths:
     os.chdir(current_dir)
 
 # make plots
-for t in measurements.keys():
+for i in measurements.keys():
   # plot each length for the current measurement
   for l in colors.keys():
     plt.errorbar(salt_concs, measurements[i][l]['mean'], yerr=measurements[i][l]['std'], marker='o', color=colors[l], label=str(l))
