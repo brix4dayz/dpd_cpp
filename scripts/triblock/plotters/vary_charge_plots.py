@@ -33,17 +33,17 @@ for a in a22:
     print tail_results
     tail_results = tail_results.split()
 
-    measurements['cores'][l]['mean'] = np.append(measurements['cores'][l]['mean'], [float(tail_results[1])])
-    measurements['cores'][l]['std'] = np.append(measurements['cores'][l]['std'], [float(tail_results[7])])
+    measurements['cores'][a]['mean'] = np.append(measurements['cores'][a]['mean'], [float(tail_results[1])])
+    measurements['cores'][a]['std'] = np.append(measurements['cores'][a]['std'], [float(tail_results[7])])
 
-    measurements['agg'][l]['mean'] = np.append(measurements['agg'][l]['mean'], [float(tail_results[2])])
-    measurements['agg'][l]['std'] = np.append(measurements['agg'][l]['std'], [float(tail_results[8])])
+    measurements['agg'][a]['mean'] = np.append(measurements['agg'][a]['mean'], [float(tail_results[2])])
+    measurements['agg'][a]['std'] = np.append(measurements['agg'][a]['std'], [float(tail_results[8])])
 
-    measurements['dist'][l]['mean'] = np.append(measurements['dist'][l]['mean'], [float(tail_results[3])])
-    measurements['dist'][l]['std'] = np.append(measurements['dist'][l]['std'], [float(tail_results[9])])
+    measurements['dist'][a]['mean'] = np.append(measurements['dist'][a]['mean'], [float(tail_results[3])])
+    measurements['dist'][a]['std'] = np.append(measurements['dist'][a]['std'], [float(tail_results[9])])
 
-    measurements['stems'][l]['mean'] = np.append(measurements['stems'][l]['mean'], [float(tail_results[4])])
-    measurements['stems'][l]['std'] = np.append(measurements['stems'][l]['std'], [float(tail_results[10])])
+    measurements['stems'][a]['mean'] = np.append(measurements['stems'][a]['mean'], [float(tail_results[4])])
+    measurements['stems'][a]['std'] = np.append(measurements['stems'][a]['std'], [float(tail_results[10])])
 
     os.chdir(current_dir)
 
