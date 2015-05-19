@@ -47,7 +47,7 @@ for i in measurements.keys():
                color=delta[d], label=d, linewidth=2.0)
 
     plt.ylabel(titles[i])
-    plt.xlabel('$ \\tau $', fontsize=40)
+    plt.xlabel('$ \\tau $', fontsize=25)
 
     # sort legend and put in top right corner
     if i == 'agg':
@@ -60,9 +60,9 @@ for i in measurements.keys():
     x1, x2, y1, y2 = plt.axis()
 
     if i != 'cores':
-      plt.axis([0, 600, y1, y2])
+      plt.axis([0, 6000, y1, y2])
     else:
-      plt.axis([0, 600, y1, 40])
+      plt.axis([0, 6000, y1, 40])
 
     plt.savefig(i + "_time.png", dpi=96)
 
