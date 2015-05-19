@@ -43,11 +43,11 @@ for i in measurements.keys():
   if i != 't':
     # plot each length for the current measurement
     for d in delta.keys():
-      plt.plot(measurements['t'][d], measurements[i][d], 
+      plt.plot(measurements['t'][d]*10, measurements[i][d], 
                color=delta[d], label=d, linewidth=2.0)
 
     plt.ylabel(titles[i])
-    plt.xlabel('$ \\tau $')
+    plt.xlabel('$ \\tau $', fontsize=40)
 
     # sort legend and put in top right corner
     if i == 'agg':
