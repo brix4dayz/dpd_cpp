@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import operator
 
-
 Na = 30
 a22 = 50
 
@@ -14,6 +13,8 @@ current_dir = os.getcwd()
 measurements = {'t': { 'idx':0 }, 'cores': { 'idx':1 }, 'agg': { 'idx':2 }, 'dist': { 'idx':3 }, 'stems': { 'idx':4 }}
 
 delta = {'33%':'g', '67%':'b', '100%':'m'}
+
+labels = { '33%': '33%', '67%': '67%', '100%': '99%'}
 
 titles = {'cores': '# of Cores', 'agg': 'Avg. Aggregation Number / Core', 'dist': 'Avg. Distance Between Linked Cores', 'stems': 'Percentage of Stem Chains'}
 
@@ -44,7 +45,7 @@ for i in measurements.keys():
     # plot each length for the current measurement
     for d in delta.keys():
       plt.plot(measurements['t'][d]*10, measurements[i][d], 
-               color=delta[d], label=d, linewidth=2.0)
+               color=delta[d], label=labels[d], linewidth=2.0)
 
     plt.ylabel(titles[i])
     plt.xlabel('$ \\tau $', fontsize=25)
@@ -55,6 +56,7 @@ for i in measurements.keys():
       handles, labels = ax.get_legend_handles_labels()
       hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
       handles2, labels2 = zip(*hl)
+      labels2[2] = '100%'
       ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
     x1, x2, y1, y2 = plt.axis()
@@ -64,7 +66,7 @@ for i in measurements.keys():
     else:
       plt.axis([0, 6000, y1, 40])
 
-    plt.savefig(i + "_time.png", dpi=96)
+    plt.savefig( i + "_" + str(Na) + "_" + str(a22) + "_time.png", dpi=96)
 
     plt.clf()
 

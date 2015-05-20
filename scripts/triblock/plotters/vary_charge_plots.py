@@ -8,13 +8,13 @@ import operator
 current_dir = os.getcwd()
 
 # simulation variables
-a22 = np.array([ 50 ])
+a22 = np.array([ 30, 50 ])
 delta = np.array([ (1.0/3.0), (2.0/3.0), 1.0 ])
 deltaStrings = { (1.0/3.0): '33%', (2.0/3.0): '67%', 1.0: '100%'}
 
 measurements = {'cores': {}, 'agg': {}, 'dist': {}, 'stems': {}}
 
-colors = {50:'g'}
+colors = {30: 'b', 50:'g'}
 
 titles = {'cores': '# of Cores', 'agg': 'Avg. Aggregation Number / Core', 'dist': 'Avg. Distance Between Linked Cores', 'stems': 'Percentage of Stem Chains'}
 
@@ -58,11 +58,12 @@ for i in measurements.keys():
   plt.xlabel('$ \delta $', fontsize=25)
 
   # sort legend and put in top right corner
-  #ax = plt.gca()
-  #handles, labels = ax.get_legend_handles_labels()
-  #hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
-  #handles2, labels2 = zip(*hl)
-  #ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
+  if i == 'agg':
+    ax = plt.gca()
+    handles, labels = ax.get_legend_handles_labels()
+    hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+    handles2, labels2 = zip(*hl)
+    ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
   x1, x2, y1, y2 = plt.axis()
 
