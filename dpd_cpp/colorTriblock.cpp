@@ -1,5 +1,4 @@
 #include "dpdTrajectory.h"
-#include <memory>
 
 int main() {
   

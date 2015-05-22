@@ -61,7 +61,6 @@ void TriblockTimeEvolution::setupHelp( FILE* fp ) {
 TriblockTimeEvolution::~TriblockTimeEvolution() {}
 
 #if defined(USING)
-#include <memory>
 
 int main() {
   

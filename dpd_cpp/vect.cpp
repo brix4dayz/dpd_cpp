@@ -1,7 +1,6 @@
 #include "vect.h"
 #include <cmath>
 #include <cstdlib>
-#include <random>
 
 // Constants
 #define PI 3.14159265

@@ -1,7 +1,7 @@
 #include <string>
 #include <cstdio>
 #include "dpd.h"
-#include <functional>
+#include "dice.h"
 
 // Primitive data pointers shold be references
 

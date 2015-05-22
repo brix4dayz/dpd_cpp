@@ -17,7 +17,6 @@ void TriblockCoresTime::setupHelp( FILE* fp ) {
 }
 
 #if defined(USING)
-#include <memory>
 
 int main () {
 
