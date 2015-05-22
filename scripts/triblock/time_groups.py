@@ -2,14 +2,14 @@ import subprocess
 import os
 
 # location of processing/building programs
-exec_path = "/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/"
+exec_path = "/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/bin/"
 
 # location of where we are
 current_dir = os.getcwd()
 
 # go to dpd_cpp and run the compile script
 os.chdir(exec_path)
-subprocess.call("bash compileTriblock.sh", shell=True)
+subprocess.call("./compileTriblock.sh", shell=True)
 
 # go back to where we were
 os.chdir(current_dir)

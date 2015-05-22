@@ -21,26 +21,34 @@ class CopolymerChain : public ObjDPD {
 
 enum TriblockConfiguration { stem, petal, neither };
 
-class PECTriblock : public CopolymerChain {
+class SymmetricAmphiphilicTriblock : public CopolymerChain {
+  public:
+    HydrophobicTail* tail1;
+    HydrophobicTail* tail2;
+    TriblockConfiguration config;
+    idx tail_length;
+    idx pec_length;
+    void unlink();
+    uintptr_t determineConfiguration();
+    SymmetricAmphiphilicTriblock();
+    SymmetricAmphiphilicTriblock( idx pec_length, idx tail_length, idx length );
+    ~SymmetricAmphiphilicTriblock();
+    void linkTails();
+};
+
+class PECTriblock : public SymmetricAmphiphilicTriblock {
 	public:
-		TriblockFrame* frame;
     ChargedBlock* pec_block;
-		HydrophobicTail* tail1;
-		HydrophobicTail* tail2;
-		TriblockConfiguration config;
-		idx tail_length;
-		idx pec_length;
 		PECTriblock();
 		PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length,
                        unsigned int* idTracker, unsigned short id);
-		PECTriblock( idx tail_length, idx pec_length, idx length );
-		PECTriblock( idx tail_length, idx pec_length, idx length, std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor );
+		PECTriblock( idx pec_length, idx tail_length, idx length );
+		PECTriblock( idx pec_length, idx tail_length, idx length, std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor );
 		~PECTriblock();
     void unlink();
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
 		void colorChain( idx type );
-		uintptr_t determineConfiguration();
 };
 
 // XOR ptrs source: http://stackoverflow.com/questions/3531972/c-code-for-xor-linked-list

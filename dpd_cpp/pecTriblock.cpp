@@ -2,56 +2,57 @@
 #include "bin.h"
 #include <cstdlib>
 
+SymmetricAmphiphilicTriblock::SymmetricAmphiphilicTriblock() {}
+
+SymmetricAmphiphilicTriblock::SymmetricAmphiphilicTriblock( idx pec_length, idx tail_length, idx length ) {
+  this->com = new PosVect();
+  this->pec_length = pec_length;
+  this->tail_length = tail_length;
+  this->chain_length = length;
+  this->micelle = NULL;
+}
+
+void SymmetricAmphiphilicTriblock::linkTails() {
+  this->tail1->other = this->tail2;
+  this->tail2->other = this->tail1;
+}
+
 PECTriblock::PECTriblock() {}
 
 // Generic constuctor
-PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) {
-  this->com = new PosVect();
-  
-  this->pec_length = pec_length;
-	this->tail_length = tail_length;
+PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length ) : 
+                          SymmetricAmphiphilicTriblock( pec_length, tail_length, 
+                                                        length ) {
 	this->pec_block = new ChargedBlock( this, HYDROPHILIC, pec_length );
 	this->tail1 = new HydrophobicTail( this, tail_length );
 	this->tail2 = new HydrophobicTail( this, tail_length );
-  this->chain_length = length;
-	this->tail1->other = this->tail2;
-	this->tail2->other = this->tail1;
-	this->micelle = NULL;
+  this->linkTails();
 }
 
 // Constructs from reading input file
 // Should I add a void ptr to the frame as a parameter?
 PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
                           std::ifstream* inFile,
-                          idx* box_length, const float& pbc_correction_factor ) {
-	this->com = new PosVect();
-  
-  this->pec_length = pec_length;
-	this->tail_length = tail_length;
+                          idx* box_length, const float& pbc_correction_factor ) : 
+                          SymmetricAmphiphilicTriblock( pec_length, tail_length, 
+                                                        length ) {
+
 	this->tail1 = new HydrophobicTail( this, tail_length, 
 	 inFile, box_length, pbc_correction_factor );
 	this->pec_block = new ChargedBlock( this, 
 	 HYDROPHILIC, pec_length, inFile, box_length, pbc_correction_factor );
 	this->tail2 = new HydrophobicTail( this, tail_length, 
 	 inFile, box_length, pbc_correction_factor );
-  this->chain_length = length;
-	this->tail1->other = this->tail2;
-	this->tail2->other = this->tail1;
-	this->micelle = NULL;
+  this->linkTails();
 }
 
-// Chain length should be calculated once and passed as a parameter...
-
 // Constructs a chain with a random position within a box
-// DEBUG
 PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
-                          unsigned int* idTracker, unsigned short id ) {
-  this->com = new PosVect();
+                          unsigned int* idTracker, unsigned short id ) :
+                          SymmetricAmphiphilicTriblock( pec_length, tail_length, 
+                                                        length ) {
   
   this->id = id + 1;
-  this->pec_length = pec_length;
-  this->tail_length = tail_length;
-  this->chain_length = length;
   
   DirVect* d = new DirVect( bond_length ); // assigns random direction for chain
   PosVect* first = new PosVect( box_length ); // assigns random position for first bead
@@ -72,9 +73,7 @@ PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, i
                                      first, idTracker, this->id );
   delete d;
 
-  this->tail1->other = this->tail2;
-  this->tail2->other = this->tail1;
-  this->micelle = NULL;
+  this->linkTails();
 }
 
 void PECTriblock::printChain( FILE* stream ) {
@@ -89,18 +88,24 @@ void PECTriblock::printData( FILE* stream ) {
   this->tail2->printData( stream ); 
 }
 
-void PECTriblock::unlink() {
-  this->pec_block = NULL;
+void SymmetricAmphiphilicTriblock::unlink() {
   this->tail1 = NULL;
   this->tail2 = NULL;
-  this->frame = NULL;
+}
+
+SymmetricAmphiphilicTriblock::~SymmetricAmphiphilicTriblock() {
+  delete tail1;
+  delete tail2;
+  this->unlink();
+}
+
+void PECTriblock::unlink() {
+  this->pec_block = NULL;
 }
 
 //Deconstructor... clean up
 PECTriblock::~PECTriblock() {
   delete pec_block;
-  delete tail1;
-  delete tail2;
   this->unlink();
 }
 
@@ -111,7 +116,7 @@ void PECTriblock::colorChain( idx type ) {
 }
 
 // maybe builds "edge"
-uintptr_t PECTriblock::determineConfiguration() {
+uintptr_t SymmetricAmphiphilicTriblock::determineConfiguration() {
   HydrophobicCore* core1 = this->tail1->getCore();
   HydrophobicCore* core2 = this->tail2->getCore();
   if ( core1 == core2 && core1 ) {

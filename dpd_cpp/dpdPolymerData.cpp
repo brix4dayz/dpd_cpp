@@ -249,7 +249,8 @@ ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, fl
                                        float polymer_volume_fraction, idx pec_length, idx tail_length, float charge_density ):
                                         TriblockData( filename, box_length, bond_length,
                                         polymer_volume_fraction, pec_length, tail_length ) {
-  this->Fluid_type += 1;
+  if ( charge_density < 1.0 )
+    this->Fluid_type += 1;
   this->charge_density = charge_density;
 }
 

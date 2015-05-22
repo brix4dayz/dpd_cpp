@@ -3,11 +3,11 @@
 echo 'Starting compilation...'
 
 echo 'Removing old executables...'
-rm -rf triblockProcessor
-rm -rf triblockBuilder
-rm -rf colorTriblock
-rm -rf triblockTime
-rm -rf triCoresTime
+rm -rf ./bin/triblockProcessor
+rm -rf ./bin/triblockBuilder
+rm -rf ./bin/colorTriblock
+rm -rf ./bin/triblockTime
+rm -rf ./bin/triCoresTime
 echo '...executables removed.'
 
 echo 'Compiling triblockProcessor...'
@@ -31,4 +31,9 @@ make triCoresTime LINUX=1 HPC=1
 echo '...triCoresTime compiled.'
 
 echo '...compilation completed.'
+mv -iv triblockProcessor ./bin/ 
+mv -iv triblockBuilder ./bin/
+mv -iv colorTriblock ./bin/
+mv -iv triblockTime ./bin/
+mv -iv triCoresTime ./bin/
 echo 'Exiting...'
