@@ -9,6 +9,7 @@ class CopolymerChain : public ObjDPD {
     unsigned short id;
     virtual void printChain( FILE* stream ) {}
     virtual void printData( FILE* stream ) {}
+    virtual void colorChain( idx type ) {}
 		~CopolymerChain() {
       delete this->com;
       this->com = NULL;
@@ -34,6 +35,7 @@ class SymmetricAmphiphilicTriblock : public CopolymerChain {
     SymmetricAmphiphilicTriblock( idx pec_length, idx tail_length, idx length );
     ~SymmetricAmphiphilicTriblock();
     void linkTails();
+    void colorTails( idx type );
 };
 
 class PECTriblock : public SymmetricAmphiphilicTriblock {

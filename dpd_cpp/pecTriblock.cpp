@@ -109,10 +109,14 @@ PECTriblock::~PECTriblock() {
   this->unlink();
 }
 
-void PECTriblock::colorChain( idx type ) {
-  this->pec_block->color( type );
+void SymmetricAmphiphilicTriblock::colorTails( idx type ) {
   this->tail1->color( type );
   this->tail2->color( type );
+}
+
+void PECTriblock::colorChain( idx type ) {
+  this->pec_block->color( type );
+  this->colorTails( type );
 }
 
 // maybe builds "edge"
