@@ -1,5 +1,12 @@
 #include "bin.h"
 
+
+// Bond type enumerations
+#define PHOBE_PHOBE 1
+#define PHIL_PHIL 2
+
+#define FLUID_ID_TRIBLOCK 3
+
 class DPDPolymerData : public DPDData {
   public:
     std::string filename;
@@ -28,6 +35,7 @@ class DPDPolymerData : public DPDData {
     void calcNumFluid();
     void calcNumBonds();
     void calcNumAtoms();
+    void calcNumChains( float* polymer_volume_fraction );
     void addBond( Bond* bond );
     void addBlockBonds( PolymerBlock* block, idx bond_type );
     void makeNewBond( idx type, Bead* bead1, Bead* bead2 );
@@ -48,7 +56,6 @@ class TriblockData : public DPDPolymerData {
     PECTriblock* chainList;
     idx pec_length;
     idx tail_length;
-    void calcNumChains( float* polymer_volume_fraction );
     void calcChainLength();
     TriblockData();
     TriblockData( std::string filename, idx box_length, float bond_length,
@@ -57,18 +64,16 @@ class TriblockData : public DPDPolymerData {
     void deriveBondList();
     void deriveChainList();
     void generate();
-    void wereAllBeadsMade();
     void printLAMMPS( FILE* fp );
     void addChain( PECTriblock* chain );
-    void unlink() {}
 };
 
 class ChargeTriblockData : public TriblockData {
-    public:
-        float charge_density;
-        void deriveChainList();
-        ChargeTriblockData( std::string filename, idx box_length, float bond_length,
-                     float polymer_volume_fraction, idx pec_length, idx tail_length,
-                     float charge_density );
+  public:
+    float charge_density;
+    void deriveChainList();
+    ChargeTriblockData( std::string filename, idx box_length, float bond_length,
+                 float polymer_volume_fraction, idx pec_length, idx tail_length,
+                 float charge_density );
 };
 

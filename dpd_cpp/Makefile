@@ -214,11 +214,12 @@ testTriblockProcessor:
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DUSING -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
 
 libdpd.so:
-	rm -rf *.o *.so
+	rm -rf *.o ./lib/libdpd.so
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC vect.cpp -o vect.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC bead.cpp -o bead.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC polymerBlock.cpp -o polymerBlock.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC pecTriblock.cpp -o pecTriblock.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC linkerPECTriblock.cpp -o linkerPECTriblock.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC bin.cpp -o bin.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC hydrophobicCore.cpp -o hydrophobicCore.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC micelle.cpp -o micelle.o
@@ -226,7 +227,9 @@ libdpd.so:
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdTrajectory.cpp -o dpdTrajectory.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC triblockTimeEvolution.cpp -o triblockTimeEvolution.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
-	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
+	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o linkerTriblockData.o linkerPECTriblock.o
+	mv -iv libdpd.so ./lib/
 
 triblockProcessor:
 ifndef HPC	
@@ -294,4 +297,19 @@ ifndef HPC
 	$(CC) $(WARN) $(STDFLAG) -DUSING -o triCoresTime triblockCoresTime.cpp triblockTimeEvolution.o dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
 else
 	$(CC) $(WARN) $(STDFLAG) $(LIBDPD) -DUSING -o triCoresTime triblockCoresTime.cpp
+endif
+
+linkerBuilder:
+ifndef HPC
+	rm -rf *.o
+	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c linkerPECTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(STDFLAG) -c dpdPolymerData.cpp
+	$(CC) $(WARN) $(STDFLAG) -DUSING -o linkerBuilder vect.o bead.o polymerBlock.o pecTriblock.o linkerPECTriblock.o bin.o dpdPolymerData.o linkerTriblockData.cpp
+else
+	$(CC) $(WARN) $(STDFLAG) -DUSING $(LIBDPD) -o linkerBuilder linkerTriblockData.cpp
 endif

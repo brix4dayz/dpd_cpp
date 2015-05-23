@@ -16,8 +16,8 @@ class PolymerBlock : public ObjDPD {
 		PolymerBlock( CopolymerChain *chain, byte type, idx length );
 		PolymerBlock();
 		PolymerBlock( CopolymerChain*chain, byte type, idx length,
-                            		std::ifstream* inFile, idx* box_length, 
-                            		const float& pbc_correction_factor );
+                  std::ifstream* inFile, idx* box_length, 
+                  const float& pbc_correction_factor );
 		~PolymerBlock();
 		void printBlock( FILE *stream );
 		void printData( FILE* stream );

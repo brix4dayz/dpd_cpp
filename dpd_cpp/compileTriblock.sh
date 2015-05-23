@@ -8,12 +8,11 @@ rm -rf ./bin/triblockBuilder
 rm -rf ./bin/colorTriblock
 rm -rf ./bin/triblockTime
 rm -rf ./bin/triCoresTime
-rm -rf ./lib/libdpd.so
+rm -rf ./bin/linkerBuilder
 echo '...executables removed.'
 
 echo 'Compiling libdpd.so...'
 make libdpd.so LINUX=1 HPC=1
-mv -iv libdpd.so ./lib/
 echo '...libdpd.so compiled.'
 
 echo 'Compiling triblockProcessor...'
@@ -36,6 +35,10 @@ echo 'Compiling triCoresTime...'
 make triCoresTime LINUX=1 HPC=1
 echo '...triCoresTime compiled.'
 
+echo 'Compiling linkerBuilder...'
+make linkerBuilder LINUX=1 HPC=1
+echo '...linkerBuilder compiled.'
+
 echo '...compilation completed.'
 rm -rf *.o
 mv -iv triblockProcessor ./bin/ 
@@ -43,5 +46,6 @@ mv -iv triblockBuilder ./bin/
 mv -iv colorTriblock ./bin/
 mv -iv triblockTime ./bin/
 mv -iv triCoresTime ./bin/
+mv -iv linkerBuilder ./bin/
 ./setup_dpd_cpp_path.sh
 echo 'Exiting...'

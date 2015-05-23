@@ -30,6 +30,10 @@ echo 'Compiling triCoresTime...'
 make triCoresTime
 echo '...triCoresTime compiled.'
 
+echo 'Compiling linkerBuilder...'
+make linkerBuilder
+echo '...linkerBuilder compiled.'
+
 echo '...compilation completed.'
 rm -rf *.o
 mv -iv triblockProcessor ./bin/ 
@@ -37,5 +41,6 @@ mv -iv triblockBuilder ./bin/
 mv -iv colorTriblock ./bin/
 mv -iv triblockTime ./bin/
 mv -iv triCoresTime ./bin/
+mv -iv linkerBuilder ./bin/
 echo 'Exiting...'
 

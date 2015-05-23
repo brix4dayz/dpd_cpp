@@ -4,13 +4,6 @@
 
 // Consider putting a few of the functions and data in polymerData in dpdData.
 
-
-// Bond type enumerations
-#define PHOBE_PHOBE 1
-#define PHIL_PHIL 2
-
-#define FLUID_ID_TRIBLOCK 3
-
 DPDPolymerData::DPDPolymerData() {}
 
 DPDPolymerData::DPDPolymerData( std::string filename, idx density, 
@@ -83,7 +76,7 @@ void TriblockData::calcChainLength() {
   this->chain_length = this->pec_length + 2*this->tail_length;
 }
 
-void TriblockData::calcNumChains( float* polymer_volume_fraction ) {
+void DPDPolymerData::calcNumChains( float* polymer_volume_fraction ) {
   this->num_chains = ( *polymer_volume_fraction * this->num_atoms / this->chain_length ) + .5;
 }
 
@@ -131,7 +124,6 @@ void TriblockData::deriveBondList() {
   }
   this->wereAllBondsMade();
 }
-
 
 void DPDPolymerData::addBlockBonds( PolymerBlock* block, idx bond_type ) {
   for ( idx i = 0; i < block->length - 1; i++ ) {
