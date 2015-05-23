@@ -54,6 +54,11 @@ class ChargedBlock : public PolymerBlock {
                     idx length, DirVect* d,
                     idx* box_length, PosVect* r, unsigned int* id,
                     unsigned int mold_id );
+      ChargedBlock( CopolymerChain* chain, idx type,
+                            idx length, DirVect* d,
+                            idx* box_length, PosVect* r, unsigned int* id,
+                            unsigned int mol_id, byte& uncharged_type, idx& num_uncharged,
+                            IntegerDice<idx>& chargeDice );
       ChargedBlock( CopolymerChain *chain, idx type, idx length );
       ChargedBlock();
 };

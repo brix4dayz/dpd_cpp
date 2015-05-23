@@ -46,13 +46,40 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
   this->linkTails();
 }
 
+PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
+                          unsigned int* idTracker, unsigned short id ) : 
+                          SymmetricAmphiphilicTriblock( pec_length, tail_length, length ) {
+ this->id = id + 1;
+  
+  DirVect* d = new DirVect( bond_length ); // assigns random direction for chain
+  PosVect* first = new PosVect( box_length ); // assigns random position for first bead
+  this->tail1 = new HydrophobicTail( this, tail_length, d, box_length, first, idTracker, this->id ); // makes tail1 from
+  // first position and random direction
+  
+  // determines first position of pec block using random direction and 
+  // last position of tail block
+  first = new PosVect( this->tail1->beadList[ tail_length - 1 ]->r, d );
+  this->pec_block = new ChargedBlock( this, HYDROPHILIC, pec_length, d, box_length,
+                                      first, idTracker, this->id );
+  
+
+  // determines first position of tail2 using random direction and
+  // last position of pec block
+  first = new PosVect( this->pec_block->beadList[ pec_length - 1 ]->r, d );
+  this->tail2 = new HydrophobicTail( this, tail_length, d, box_length,
+                                     first, idTracker, this->id );
+  delete d;
+
+  this->linkTails();
+}
+
 // Constructs a linear chain with a random position and direction 
 // within a box, the edges are not avoided b/c using PBC, each
 // bead is bond_length distance apart
 PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
-                          unsigned int* idTracker, unsigned short id ) :
-                          SymmetricAmphiphilicTriblock( pec_length, tail_length, 
-                                                        length ) {
+                          unsigned int* idTracker, unsigned short id, byte& uncharged_type, idx& num_uncharged,
+                          IntegerDice<idx>& chargeDice ) : SymmetricAmphiphilicTriblock( pec_length, tail_length, 
+                                                                                         length ) {
   
   this->id = id + 1;
   
@@ -65,7 +92,8 @@ PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, i
   // last position of tail block
   first = new PosVect( this->tail1->beadList[ tail_length - 1 ]->r, d );
   this->pec_block = new ChargedBlock( this, HYDROPHILIC, pec_length, d, box_length,
-                                      first, idTracker, this->id );
+                                      first, idTracker, this->id, uncharged_type, 
+                                      num_uncharged, chargeDice );
   
 
   // determines first position of tail2 using random direction and

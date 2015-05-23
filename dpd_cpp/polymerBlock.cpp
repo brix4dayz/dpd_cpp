@@ -1,4 +1,5 @@
 #include "bin.h"
+#include <map>
 
 const float default_correction_factor = DEFAULT_PBC;
 
@@ -173,6 +174,29 @@ ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length ) :
 														PolymerBlock( chain, type, length ) {}
  
 ChargedBlock::ChargedBlock() : PolymerBlock() {}
+
+ChargedBlock::ChargedBlock( CopolymerChain* chain, idx type,
+              							idx length, DirVect* d,
+               							idx* box_length, PosVect* r, unsigned int* id,
+              	 						unsigned int mol_id, byte& uncharged_type, idx& num_uncharged,
+              	 						IntegerDice<idx>& chargeDice ) : ChargedBlock( chain, type,
+              																															length, d, 
+              																															box_length,r, id,
+              	 																														mol_id )  {
+  std::map< idx, idx > unchargedBeads;
+  idx unchargedIdx;
+  while ( ( (idx) unchargedBeads.size() ) != num_uncharged ) {
+    #if defined(TESTING)
+    unchargedIdx = rand() % this->length;
+    #else
+    unchargedIdx = chargeDice.roll();
+    #endif
+    if ( unchargedBeads.find( unchargedIdx ) == unchargedBeads.end() ) {
+      unchargedBeads.insert( std::pair< idx, idx >( unchargedIdx, unchargedIdx ) );
+      this->getBead( unchargedIdx )->type = uncharged_type;
+    }
+  }
+}
 
 void PolymerBlock::color( idx type ) {
 	for ( idx i = 0; i < this->length; i++ ) {

@@ -2,8 +2,6 @@
 #include <cstdlib>
 #include <cmath>
 
-#include <map>
-
 // Consider putting a few of the functions and data in polymerData in dpdData.
 
 
@@ -225,17 +223,17 @@ void TriblockData::printLAMMPS( FILE* fp ) {
 
   this->printLAMMPSHeader( fp );
   
-  for ( int i = 0; i < this->num_chains; i++ ) {
+  for ( unsigned int i = 0; i < this->num_chains; i++ ) {
     this->chainList[ i ].printData( fp );
   }
 
-  for ( int i = 0; i < this->num_Fluid; i++ ) {
+  for ( unsigned int i = 0; i < this->num_Fluid; i++ ) {
     this->FluidList[ i ].printData( fp );
   }
 
   fprintf( fp, "\nBonds\n\n" );
 
-  for ( int i = 0; i < this->num_bonds; i++ ) {
+  for ( unsigned int i = 0; i < this->num_bonds; i++ ) {
     this->bondList[ i ].printBond( fp );
   }
 
@@ -254,29 +252,16 @@ ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, fl
 }
 
 void ChargeTriblockData::deriveChainList() {
-  #ifndef TESTING
   IntegerDice<idx> chargeDice( 0, this->pec_length - 1 );
-  #endif
   PECTriblock* chain = NULL;
+  byte uncharged_type = FLUID_ID_TRIBLOCK;
   float uncharged_density = 1.0f - this->charge_density;
   idx num_uncharged = uncharged_density*this->pec_length + 0.5f;
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = new PECTriblock( &( this->box_length ), &( this->bond_length ),
                             this->pec_length, this->tail_length, this->chain_length,
-                            &( this->idTracker ), this->chainCursor );
-    std::map< idx, idx > unchargedBeads;
-    idx unchargedIdx;
-    while ( ( (idx) unchargedBeads.size() ) != num_uncharged ) {
-      #if defined(TESTING)
-      unchargedIdx = rand() % this->pec_length;
-      #else
-      unchargedIdx = chargeDice.roll();
-      #endif
-      if ( unchargedBeads.find( unchargedIdx ) == unchargedBeads.end() ) {
-        unchargedBeads.insert( std::pair< idx, idx >( unchargedIdx, unchargedIdx ) );
-        chain->pec_block->getBead( unchargedIdx )->type = FLUID_ID_TRIBLOCK;
-      }
-    }
+                            &( this->idTracker ), this->chainCursor, uncharged_type,
+                            num_uncharged, chargeDice );
     this->addChain( chain );
   }
   this->molIDTracker = this->num_chains;

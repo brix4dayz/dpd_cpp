@@ -51,6 +51,9 @@ class PECTriblock : public SymmetricAmphiphilicTriblock {
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
 		void colorChain( idx type );
+    PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length,
+                 unsigned int* idTracker, unsigned short id, byte& uncharged_type, idx& num_uncharged,
+                 IntegerDice<idx>& chargeDice );
 };
 
 // XOR ptrs source: http://stackoverflow.com/questions/3531972/c-code-for-xor-linked-list
