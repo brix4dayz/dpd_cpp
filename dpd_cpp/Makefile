@@ -16,7 +16,7 @@ DEBUG=-g
 TEST=-DTESTING
 
 results:
-	rm -rf *.o
+	rm -rf *.o *.dSYM
 	mv mac_results old_mac_results
 	make testBeadFile
 	make testBlockFile
@@ -25,11 +25,12 @@ results:
 	make testCoreFile
 	make testMicelleFile
 	make testFrameFile
-	rm -rf *.o
+	rm -rf *.o *.dSYM
 	diff mac_results old_mac_results
 ifndef LINUX
 	make testGenerateData
 	make testDLLInPython
+	rm -rf *.o *.dSYM
 endif
 
 testBead:
@@ -193,7 +194,7 @@ endif
 
 
 testDLLInPython:
-	rm -rf *.o *.dylib
+	rm -rf *.o *.dylib *.dSYM
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DPYTHON_LIB $(TEST) -c -fPIC vect.cpp -o vect.o && $(CC) $(WARN) $(DEBUG) $(STDFLAG) $(TEST) -shared -Wl -o libvect.dylib vect.o
 	mv current_libvect_test former_libvect_test
 	python2.7 dpdVect.py > current_libvect_test
@@ -291,5 +292,5 @@ ifndef HPC
 	$(CC) $(WARN) $(STDFLAG) -c triblockTimeEvolution.cpp
 	$(CC) $(WARN) $(STDFLAG) -DUSING -o triCoresTime triblockCoresTime.cpp triblockTimeEvolution.o dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
 else
-$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triCoresTime triblockCoresTime.cpp
+	$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triCoresTime triblockCoresTime.cpp
 endif

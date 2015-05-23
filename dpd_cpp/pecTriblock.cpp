@@ -49,7 +49,7 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
 PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
                           unsigned int* idTracker, unsigned short id ) : 
                           SymmetricAmphiphilicTriblock( pec_length, tail_length, length ) {
- this->id = id + 1;
+  this->id = id + 1;
   
   DirVect* d = new DirVect( bond_length ); // assigns random direction for chain
   PosVect* first = new PosVect( box_length ); // assigns random position for first bead
