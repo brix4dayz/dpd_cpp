@@ -206,7 +206,23 @@ testTriblockProcessor:
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c copolymerMicelleFrame.cpp
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DUSING -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
 
-triblockProcessor:	
+libdpd.so:
+	rm -rf *.o *.so
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC vect.cpp -o vect.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC bead.cpp -o bead.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC polymerBlock.cpp -o polymerBlock.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC pecTriblock.cpp -o pecTriblock.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC bin.cpp -o bin.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC hydrophobicCore.cpp -o hydrophobicCore.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC micelle.cpp -o micelle.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC copolymerMicelleFrame.cpp -o copolymerMicelleFrame.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdTrajectory.cpp -o dpdTrajectory.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC triblockTimeEvolution.cpp -o triblockTimeEvolution.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
+	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o
+
+triblockProcessor:
+	ifndef LINUX	
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -217,6 +233,10 @@ triblockProcessor:
 	$(CC) $(WARN) $(STDFLAG) -c micelle.cpp
 	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
 	$(CC) $(WARN) $(STDFLAG) -DUSING -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+	else
+	make libdpd.so
+	$(CC) $(WARN) $(STDFLAG) -llibdpd -DUSING -o triblockProcessor dpdTrajectory.cpp
+	endif
 
 colorTriblock:
 	rm -rf *.o
