@@ -31,6 +31,7 @@ make triCoresTime
 echo '...triCoresTime compiled.'
 
 echo '...compilation completed.'
+rm -rf *.o
 mv -iv triblockProcessor ./bin/ 
 mv -iv triblockBuilder ./bin/
 mv -iv colorTriblock ./bin/

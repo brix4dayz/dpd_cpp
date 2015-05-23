@@ -178,6 +178,7 @@ testGenerateData:
 	diff newdataTest.dat formerdataTest.dat
 
 triblockBuilder:
+ifndef HPC
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -186,6 +187,10 @@ triblockBuilder:
 	$(CC) $(WARN) $(STDFLAG) -c bin.cpp
 	$(CC) $(WARN) $(STDFLAG) -c dpdPolymerData.cpp
 	$(CC) $(WARN) $(STDFLAG) -o triblockBuilder vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.o chargeTriblockBuilder.cpp
+else
+	$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o triblockBuilder chargeTriblockBuilder.cpp
+endif
+
 
 testDLLInPython:
 	rm -rf *.o *.dylib
@@ -222,7 +227,7 @@ libdpd.so:
 	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o
 
 triblockProcessor:
-ifndef LINUX	
+ifndef HPC	
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -238,6 +243,7 @@ else
 endif
 
 colorTriblock:
+ifndef HPC
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -249,8 +255,12 @@ colorTriblock:
 	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
 	$(CC) $(WARN) $(STDFLAG) -c dpdTrajectory.cpp
 	$(CC) $(WARN) $(STDFLAG) -o colorTriblock colorTriblock.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+else
+	$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o colorTriblock colorTriblock.cpp
+endif
 
 triblockTime:
+ifndef HPC
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -262,8 +272,12 @@ triblockTime:
 	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
 	$(CC) $(WARN) $(STDFLAG) -c dpdTrajectory.cpp
 	$(CC) $(WARN) $(STDFLAG) -DUSING -o triblockTime triblockTimeEvolution.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+else
+	$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triblockTime triblockTimeEvolution.cpp
+endif
 
 triCoresTime:
+ifndef HPC
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -276,3 +290,6 @@ triCoresTime:
 	$(CC) $(WARN) $(STDFLAG) -c dpdTrajectory.cpp
 	$(CC) $(WARN) $(STDFLAG) -c triblockTimeEvolution.cpp
 	$(CC) $(WARN) $(STDFLAG) -DUSING -o triCoresTime triblockCoresTime.cpp triblockTimeEvolution.o dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+else
+$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triCoresTime triblockCoresTime.cpp
+endif
