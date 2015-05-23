@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LD_LIBRARY_PATH="/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp:${LD_LIBRARY_PATH}"
+
 echo 'Starting compilation...'
 
 echo 'Removing old executables...'

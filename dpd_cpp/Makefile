@@ -222,7 +222,7 @@ libdpd.so:
 	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o
 
 triblockProcessor:
-	ifndef LINUX	
+ifndef LINUX	
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) -c bead.cpp
@@ -233,10 +233,10 @@ triblockProcessor:
 	$(CC) $(WARN) $(STDFLAG) -c micelle.cpp
 	$(CC) $(WARN) $(STDFLAG) -c copolymerMicelleFrame.cpp
 	$(CC) $(WARN) $(STDFLAG) -DUSING -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
-	else
+else
 	make libdpd.so
-	$(CC) $(WARN) $(STDFLAG) -llibdpd -DUSING -o triblockProcessor dpdTrajectory.cpp
-	endif
+	$(CC) $(WARN) $(STDFLAG) -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp -DUSING -o triblockProcessor dpdTrajectory.cpp
+endif
 
 colorTriblock:
 	rm -rf *.o
