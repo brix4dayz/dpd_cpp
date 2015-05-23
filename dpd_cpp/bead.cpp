@@ -57,21 +57,21 @@ Bead::Bead( std::string line ) {
   this->r = new PosVect( x, y, z );
 }
 
-Bead::Bead( PosVect* r, idx type ) {
+Bead::Bead( PosVect* r, byte type ) {
   this->r = r;
   this->type = type;
 }
 
-Bead::Bead( PosVect* r, idx type, unsigned int* id,
+Bead::Bead( PosVect* r, byte type, unsigned int* id,
             unsigned int mol_id ) : Bead( r, type ) {
   this->id = *id;
   *id += 1;
   this->mol_id = mol_id;
 }
 
-Bead::Bead( double x, double y, double z, idx type ): Bead( new PosVect( x, y, z ), type ) {}
+Bead::Bead( double x, double y, double z, byte type ): Bead( new PosVect( x, y, z ), type ) {}
 		
-Bead::Bead( double x, double y, double z, idx type, std::string name ): Bead( x, y, z, type ) {
+Bead::Bead( double x, double y, double z, byte type, std::string name ): Bead( x, y, z, type ) {
   this->type_name = name;
 }
 
@@ -139,7 +139,7 @@ BeadGyration::~BeadGyration() {}
 
 Bond::Bond() {}
 
-Bond::Bond( idx type, unsigned int id, Bead* bead1, Bead* bead2) {
+Bond::Bond( byte type, unsigned int id, Bead* bead1, Bead* bead2) {
 	this->type = type;
 	this->id = id;
 	this->bead1 = bead1;

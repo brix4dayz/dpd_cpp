@@ -13,7 +13,7 @@ class CopolymerChain : public ObjDPD {
     unsigned short id;
     virtual void printChain( FILE* stream ) {}
     virtual void printData( FILE* stream ) {}
-    virtual void colorChain( idx type ) {}
+    virtual void colorChain( byte type ) {}
 		~CopolymerChain() {
       delete this->com;
       this->com = NULL;
@@ -39,7 +39,7 @@ class SymmetricAmphiphilicTriblock : public CopolymerChain {
     SymmetricAmphiphilicTriblock( idx pec_length, idx tail_length, idx length );
     ~SymmetricAmphiphilicTriblock();
     void linkTails();
-    void colorTails( idx type );
+    void colorTails( byte type );
 };
 
 class PECTriblock : public SymmetricAmphiphilicTriblock {
@@ -54,7 +54,7 @@ class PECTriblock : public SymmetricAmphiphilicTriblock {
     void unlink();
 		void printChain( FILE* stream );
 		void printData( FILE* stream );
-		void colorChain( idx type );
+		void colorChain( byte type );
     PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length,
                  unsigned int* idTracker, unsigned short id, byte& uncharged_type, idx& num_uncharged,
                  IntegerDice<idx>& chargeDice );

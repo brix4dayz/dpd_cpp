@@ -41,10 +41,10 @@ class Bead : public ObjDPD {
 		unsigned int mol_id;
 		std::string type_name;
 		//Constructor/Destructor
-		Bead( PosVect* r, idx type );
-    Bead( PosVect* r, idx type, unsigned int* id, unsigned int mol_id);
-    Bead( double x, double y, double z, idx type );
-		Bead( double x, double y, double z, idx type, 
+		Bead( PosVect* r, byte type );
+    Bead( PosVect* r, byte type, unsigned int* id, unsigned int mol_id);
+    Bead( double x, double y, double z, byte type );
+		Bead( double x, double y, double z, byte type, 
 			    std::string name );
 		Bead();
 		Bead( std::string line );
@@ -64,12 +64,12 @@ class Bead : public ObjDPD {
 
 class Bond : public ObjDPD {
 	public:
-		idx type;
+		byte type;
 		unsigned int id;
 		Bead* bead1;
 		Bead* bead2;
 		Bond();
-		Bond( idx type, unsigned int id, Bead* bead1, Bead* bead2);
+		Bond( byte type, unsigned int id, Bead* bead1, Bead* bead2);
 		~Bond();
 		void printBond( FILE* fp );
 		void unlink();

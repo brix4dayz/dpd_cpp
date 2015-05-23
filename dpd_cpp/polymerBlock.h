@@ -3,19 +3,19 @@
 
 class PolymerBlock : public ObjDPD {
 	public:
-		idx bead_type;
+		byte bead_type;
 		idx length;
 		idx cursor;
 		Bead** beadList;
 		PosVect* com;
 		CopolymerChain* chain;
-		PolymerBlock( CopolymerChain* chain, idx type, 
+		PolymerBlock( CopolymerChain* chain, byte type, 
 	                          idx length, DirVect* d, 
 	                          idx* box_length, PosVect* r, unsigned int* idTracker,
 	                          unsigned int mol_id );
-		PolymerBlock( CopolymerChain *chain, idx type, idx length );
+		PolymerBlock( CopolymerChain *chain, byte type, idx length );
 		PolymerBlock();
-		PolymerBlock( CopolymerChain*chain, idx type, idx length,
+		PolymerBlock( CopolymerChain*chain, byte type, idx length,
                             		std::ifstream* inFile, idx* box_length, 
                             		const float& pbc_correction_factor );
 		~PolymerBlock();
@@ -25,7 +25,7 @@ class PolymerBlock : public ObjDPD {
 		bool addBead( Bead* bead );
 		Bead* getBead( idx index );
     void unlink();
-    void color( idx type );
+    void color( byte type );
 };
 
 class HydrophobicTail : public PolymerBlock {
@@ -48,17 +48,17 @@ class HydrophobicTail : public PolymerBlock {
 
 class ChargedBlock : public PolymerBlock {
 	public:
-			ChargedBlock( CopolymerChain *chain, idx type, idx length, 
+			ChargedBlock( CopolymerChain *chain, byte type, idx length, 
 										std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor );
-      ChargedBlock( CopolymerChain* chain, idx type,
+      ChargedBlock( CopolymerChain* chain, byte type,
                     idx length, DirVect* d,
                     idx* box_length, PosVect* r, unsigned int* id,
                     unsigned int mold_id );
-      ChargedBlock( CopolymerChain* chain, idx type,
+      ChargedBlock( CopolymerChain* chain, byte type,
                             idx length, DirVect* d,
                             idx* box_length, PosVect* r, unsigned int* id,
                             unsigned int mol_id, byte& uncharged_type, idx& num_uncharged,
                             IntegerDice<idx>& chargeDice );
-      ChargedBlock( CopolymerChain *chain, idx type, idx length );
+      ChargedBlock( CopolymerChain *chain, byte type, idx length );
       ChargedBlock();
 };

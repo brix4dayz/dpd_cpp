@@ -139,12 +139,12 @@ PECTriblock::~PECTriblock() {
   this->unlink();
 }
 
-void SymmetricAmphiphilicTriblock::colorTails( idx type ) {
+void SymmetricAmphiphilicTriblock::colorTails( byte type ) {
   this->tail1->color( type );
   this->tail2->color( type );
 }
 
-void PECTriblock::colorChain( idx type ) {
+void PECTriblock::colorChain( byte type ) {
   this->pec_block->color( type );
   this->colorTails( type );
 }

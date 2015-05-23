@@ -8,7 +8,7 @@ PolymerBlock::PolymerBlock() {
   this->cursor = 0;
 }
 
-PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, idx length )	:
+PolymerBlock::PolymerBlock( CopolymerChain* chain, byte type, idx length )	:
                             PolymerBlock() {
 	this->bead_type = type;
 	this->chain = chain;
@@ -16,7 +16,7 @@ PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, idx length )	:
 	this->beadList = new Bead*[ length ];
 }
 
-PolymerBlock::PolymerBlock( CopolymerChain*chain, idx type, idx length, 
+PolymerBlock::PolymerBlock( CopolymerChain*chain, byte type, idx length, 
                             std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor ) :
                             PolymerBlock( chain, type, length ) {
 	std::string line;
@@ -29,7 +29,7 @@ PolymerBlock::PolymerBlock( CopolymerChain*chain, idx type, idx length,
 	this->calcCenterOfMass( box_length, pbc_correction_factor );
 }
 
-PolymerBlock::PolymerBlock( CopolymerChain* chain, idx type, 
+PolymerBlock::PolymerBlock( CopolymerChain* chain, byte type, 
 	                          idx length, DirVect* d, 
 	                          idx* box_length, PosVect* r, unsigned int* idTracker,
 	                          unsigned int mol_id ) :
@@ -152,7 +152,7 @@ HydrophobicTail::~HydrophobicTail() {
   // Don't delete the other tail or Bin, let them take care of themselves
 }
 
-ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length, 
+ChargedBlock::ChargedBlock( CopolymerChain *chain, byte type, idx length, 
 										std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor ) :
 										PolymerBlock( chain , type, length, inFile, box_length, pbc_correction_factor ) {}
 
@@ -164,18 +164,18 @@ bool HydrophobicTail::addBead( Bead* bead ) {
 	return true;
 }
 
-ChargedBlock::ChargedBlock( CopolymerChain* chain, idx type,
+ChargedBlock::ChargedBlock( CopolymerChain* chain, byte type,
               							idx length, DirVect* d,
                							idx* box_length, PosVect* r, unsigned int* id,
               	 						unsigned int mol_id ) : PolymerBlock( chain, 
               	 						type, length, d, box_length, r, id, mol_id ) {}
      
-ChargedBlock::ChargedBlock( CopolymerChain *chain, idx type, idx length ) : 
+ChargedBlock::ChargedBlock( CopolymerChain *chain, byte type, idx length ) : 
 														PolymerBlock( chain, type, length ) {}
  
 ChargedBlock::ChargedBlock() : PolymerBlock() {}
 
-ChargedBlock::ChargedBlock( CopolymerChain* chain, idx type,
+ChargedBlock::ChargedBlock( CopolymerChain* chain, byte type,
               							idx length, DirVect* d,
                							idx* box_length, PosVect* r, unsigned int* id,
               	 						unsigned int mol_id, byte& uncharged_type, idx& num_uncharged,
@@ -198,7 +198,7 @@ ChargedBlock::ChargedBlock( CopolymerChain* chain, idx type,
   }
 }
 
-void PolymerBlock::color( idx type ) {
+void PolymerBlock::color( byte type ) {
 	for ( idx i = 0; i < this->length; i++ ) {
 		this->getBead( i )->type = type;
 	}
