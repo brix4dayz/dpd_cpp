@@ -30,18 +30,15 @@ PosVect::PosVect( PosVect* pos, DirVect* d ) {
 // http://eternallyconfuzzled.com/arts/jsw_art_rand.aspx
 // http://stackoverflow.com/questions/6223355/static-variables-in-class-methods
 PosVect::PosVect( idx* box_length ) {
-  static std::random_device seed;
-  static std::mt19937 gen(seed());
-  static std::uniform_real_distribution<double> dist(0.0, 1.0);
-  static auto posDice = std::bind( dist, gen );
   #if defined( TESTING )
   this->x = randomRealC() * ( *box_length - 2 ) + 1;
   this->y = randomRealC() * ( *box_length - 2 ) + 1;
   this->z = randomRealC() * ( *box_length - 2 ) + 1;
   #else
-  this->x = posDice() * ( *box_length - 2 ) + 1;
-  this->y = posDice() * ( *box_length - 2 ) + 1;
-  this->z = posDice() * ( *box_length - 2 ) + 1;
+  static RealDice<double> positionDice( 1.0, ( (double) *box_length - 1 ) );
+  this->x = positionDice.roll();
+  this->y = positionDice.roll();
+  this->z = positionDice.roll();
   #endif
 }
 
@@ -123,16 +120,13 @@ double PosVect::getDistSquared( PosVect* p ) {
 // Builds random direction with given length
 // Adapted from random_polymerchain.m
 DirVect::DirVect( float* bond_length ) {
-  static std::random_device Dseed;
-  static std::mt19937 Dgen(Dseed());
-  static std::uniform_real_distribution<float> Ddist(0.0, 360.0);
-  static auto angleDice = std::bind( Ddist, Dgen );
   #if defined( TESTING )
   float angle1 = randomRealC() * 2 * PI;
   float angle2 = randomRealC() * 2 * PI;
   #else
-  float angle1 = angleDice();
-  float angle2 = angleDice();
+  static RealDice<float> angleDice( 0.0f, 360.0f );
+  float angle1 = angleDice.roll() * PI / 180.0f;
+  float angle2 = angleDice.roll() * PI / 180.0f;
   #endif
   float height = std::cos( angle2 ) * *bond_length;
   this->dx = std::sin( angle1 ) * height;

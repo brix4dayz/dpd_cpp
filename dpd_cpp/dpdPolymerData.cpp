@@ -254,10 +254,9 @@ ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, fl
 }
 
 void ChargeTriblockData::deriveChainList() {
-  std::random_device seed;
-  std::mt19937 gen(seed());
-  std::uniform_int_distribution<idx> dist(0, this->pec_length - 1);
-  auto chargeDice = std::bind( dist, gen );
+  #ifndef TESTING
+  IntegerDice<idx> chargeDice( 0, this->pec_length - 1 );
+  #endif
   PECTriblock* chain = NULL;
   float uncharged_density = 1.0f - this->charge_density;
   idx num_uncharged = uncharged_density*this->pec_length + 0.5f;
@@ -271,7 +270,7 @@ void ChargeTriblockData::deriveChainList() {
       #if defined(TESTING)
       unchargedIdx = rand() % this->pec_length;
       #else
-      unchargedIdx = chargeDice();
+      unchargedIdx = chargeDice.roll();
       #endif
       if ( unchargedBeads.find( unchargedIdx ) == unchargedBeads.end() ) {
         unchargedBeads.insert( std::pair< idx, idx >( unchargedIdx, unchargedIdx ) );

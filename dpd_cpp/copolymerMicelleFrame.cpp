@@ -2,7 +2,8 @@
 #include <cmath>
 
 CopolymerMicelleFrame::CopolymerMicelleFrame( unsigned int num_atoms, idx box_length,
-	                                            idx chain_length, idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor ): pbc_correction_factor( pbc_correction_factor ) {
+	                                            idx chain_length, idx bin_size, float* micelle_cutoff, const float& pbc_correction_factor ): 
+                                              pbc_correction_factor( pbc_correction_factor ) {
   //this->pbc_correction_factor = pbc_correction_factor;
 	this->micelle_cutoff = micelle_cutoff;
   this->chainCursor = 0;

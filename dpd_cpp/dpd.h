@@ -3,13 +3,14 @@
 // author: Hayden Fuss
 // Yinglab labs
 
-
-
 // a single byte to store integer values between 0 - 255
 // when printing must cast to short in order to see integer value
 // we'll have alot of beads so we want to try to minimize their
 // size in memory
-typedef unsigned char idx;
+typedef unsigned char byte;
+
+// index, 0 - 65,535 values, cant be negative
+typedef unsigned short idx;
 
 #define FLUID_DENSITY 3
 

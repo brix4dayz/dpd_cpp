@@ -46,7 +46,9 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
   this->linkTails();
 }
 
-// Constructs a chain with a random position within a box
+// Constructs a linear chain with a random position and direction 
+// within a box, the edges are not avoided b/c using PBC, each
+// bead is bond_length distance apart
 PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
                           unsigned int* idTracker, unsigned short id ) :
                           SymmetricAmphiphilicTriblock( pec_length, tail_length, 

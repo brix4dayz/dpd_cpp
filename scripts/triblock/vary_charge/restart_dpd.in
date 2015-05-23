@@ -1,0 +1,73 @@
+#topo readlammpsdata newdata.dat hybrid atomic bond
+#animate write psf newdata.psf
+#template
+package gpu force/neigh 0 0 1
+dimension 3
+boundary p p p
+atom_style  hybrid atomic bond
+neighbor  2.0 bin
+neigh_modify  delay 3
+
+read_restart     timestp.4000000.rstrt
+
+pair_style  dpd 1.0 1.0 34387
+
+mass          *  1.0
+
+
+# define groups
+
+group   hydrophobic type 1
+group   hydrophilic type 2
+group   hydrophilic_uncharged type 3
+
+
+group   waterbead type 4
+group    polymer  type 1 2 3 
+
+# DPD potentials
+#    1     2     3
+#    a     b     W              
+#1a 25    90    100
+#2b       50     26
+#3W              25
+
+
+pair_style  dpd/gpu 1.0 1.0 34387
+pair_coeff  1 1 25.0 4.5 1.0
+pair_coeff  2 2 50 4.5 1.0
+pair_coeff  4 4 25.0 4.5 1.0
+pair_coeff  1 2 90 4.5 1.0
+pair_coeff  1 4 100 4.5 1.0
+pair_coeff  2 4 26.0 4.5 1.0
+pair_coeff  3 3 25.0 4.5 1.0
+pair_coeff  1 3 90.0 4.5 1.0
+pair_coeff  2 3 25.0 4.5 1.0
+pair_coeff  3 4 26.0 4.5 1.0
+
+bond_style      harmonic
+bond_coeff      1 2.0 0.0
+bond_coeff      2 25.0 0.0
+# initial velocities
+
+compute      mobile1 hydrophobic temp
+compute      mobile2 hydrophilic temp
+compute      mobile3 hydrophilic_uncharged temp
+compute      mobile4 waterbead temp
+comm_modify  vel yes 
+
+# run
+
+thermo    100
+thermo_modify temp mobile4
+fix   1 all nve
+
+restart            50000 timestp.*.rstrt
+timestep  0.05
+dump            1 all dcd 10000 traj_2.dcd
+dump            2 polymer xyz 1000 traj_polymer_2.xyz
+
+
+run 2000000
+
+

@@ -36,7 +36,7 @@ class Bead : public ObjDPD {
 	public:
 		//Fields (data)
 		PosVect* r;
-		idx type;
+		byte type;
 		unsigned int id;
 		unsigned int mol_id;
 		std::string type_name;

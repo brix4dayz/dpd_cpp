@@ -207,7 +207,7 @@ unsigned long DPDTrajectory::numBytesInFile( std::string filename ) {
 }
 
 TriblockTrajectory::TriblockTrajectory() : DPDTrajectory() {
-  int temp;
+  unsigned int temp;
 
   std::cout << "Enter tail length: ";
   std::cin >> temp;
