@@ -44,7 +44,7 @@ for a22 in salt_concs:
 
     f.close()
 
-    os.chdir(folder)
+    os.chdir("../")
 
   # make plots
   for i in measurements.keys():

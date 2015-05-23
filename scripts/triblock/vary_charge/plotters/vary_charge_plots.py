@@ -50,7 +50,7 @@ for a in a22:
     measurements['stems'][a]['mean'] = np.append(measurements['stems'][a]['mean'], [float(tail_results[4])])
     measurements['stems'][a]['std'] = np.append(measurements['stems'][a]['std'], [float(tail_results[10])])
 
-    os.chdir(group)
+    os.chdir("../")
   os.chdir(current_dir)
 
 # make plots

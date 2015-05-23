@@ -109,6 +109,6 @@ for a in salt_concs:
         subprocess.call("bsub < analyzeTrajectory.sh", shell=True)
 
         # go back to original dir and onto the next group
-        os.chdir(group)
+        os.chdir("../")
     os.chdir(current_dir)
 # done
