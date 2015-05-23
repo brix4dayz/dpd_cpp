@@ -13,3 +13,10 @@ then
 else
   echo "setenv LD_LIBRARY_PATH \${LD_LIBRARY_PATH}:/usr/local/apps/gcc/473/lib64/" >> ~/.cshrc;
 fi
+
+if [[ "$LD_LIBRARY_PATH" == *":/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/"* ]]
+then
+  echo "LD_LIBRARY_PATH already up-to-date.";
+else
+  echo "setenv LD_LIBRARY_PATH \${LD_LIBRARY_PATH}:/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/" >> ~/.cshrc;
+fi
