@@ -9,8 +9,6 @@ current_dir = os.getcwd()
 
 # go to dpd_cpp and run the compile script
 os.chdir(exec_path)
-subprocess.call("./setup_dpd_cpp_path.sh", shell=True)
-subprocess.call("source ~/.cshrc")
 subprocess.call("./compileTriblock.sh", shell=True)
 
 # go back to where we were
@@ -53,9 +51,9 @@ for a in salt_concs:
         for t in trajs:
           f.write(t + "\n")
         # prints the output file name: ${l}_${a}_frames_results.dat
-        f.write(str(l) + "_" + str(a) + "_frames_results.dat\n")
+        f.write(group + "_frames_results.dat\n")
         f.write(str(tail_length) + "\n") # prints constant tail_length
-        f.write(str(l) + "\n") # prints variable block length
+        f.write(str(pec_length) + "\n") # prints variable block length
         f.write(str(mic_cut) + "\n") # prints micelle cutoff
         f.write(str(pbc) + "\n") # prints pbc correction factor
         f.close() # done writing params.in
@@ -70,7 +68,7 @@ for a in salt_concs:
         # all output written to new xyz file containing the colored frames
         f.write("coloredFrames.xyz\n")
         f.write(str(tail_length) + "\n")
-        f.write(str(l) + "\n")
+        f.write(str(pec_length) + "\n")
         f.write(str(mic_cut) + "\n")
         f.write(str(pbc) + "\n")
         f.close()
@@ -84,9 +82,9 @@ for a in salt_concs:
         for t in trajs:
           f.write(t + "\n")
         # prints the output file name: ${l}_${a}_frames_results.dat
-        f.write(str(l) + "_" + str(a) + "_time_evol.dat\n")
+        f.write(group + "_time_evol.dat\n")
         f.write(str(tail_length) + "\n") # prints constant tail_length
-        f.write(str(l) + "\n") # prints variable block length
+        f.write(str(pec_length) + "\n") # prints variable block length
         f.write(str(mic_cut) + "\n") # prints micelle cutoff
         f.write(str(pbc) + "\n") # prints pbc correction factor
         f.close() # done writing time.in
@@ -97,7 +95,7 @@ for a in salt_concs:
         f.write("#BSUB -q yingling\n")
         f.write("#BSUB -n 1\n")
         f.write("#BSUB -W 300:00\n")
-        f.write("#BSUB -J tri_" + str(l) + "_" + str(a) + "\n")
+        f.write("#BSUB -J tri_" + str(pec_length) + "_" + str(a) + "\n")
         f.write("#BSUB -R \"em64t span[ptile=2]\"\n")
         f.write("#BSUB -o triblock.out\n");
         f.write("#BSUB -e triblock.err\n\n\n\n");

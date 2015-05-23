@@ -9,8 +9,6 @@ current_dir = os.getcwd()
 
 # go to dpd_cpp and run the compile script
 os.chdir(exec_path)
-subprocess.call("./setup_dpd_cpp_path.sh", shell=True)
-subprocess.call("source ~/.cshrc")
 subprocess.call("./compileTriblock.sh", shell=True)
 
 # go back to where we were
