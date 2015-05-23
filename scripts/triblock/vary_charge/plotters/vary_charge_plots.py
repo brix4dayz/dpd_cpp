@@ -7,6 +7,8 @@ import operator
 # location of where we are
 current_dir = os.getcwd()
 
+Na = 30
+
 # simulation variables
 a22 = np.array([ 30, 50 ])
 delta = np.array([ (1.0/3.0), (2.0/3.0), 1.0 ])
@@ -24,6 +26,9 @@ for i in measurements.keys():
 
 # for all groups
 for a in a22:
+  group = str(Na) + "_" + str(a)
+  os.chdir(group)
+  print(os.getcwd())
   for d in delta:
     folder = deltaStrings[d] # relative path to folder
     os.chdir(folder) # go to group folder
@@ -45,7 +50,8 @@ for a in a22:
     measurements['stems'][a]['mean'] = np.append(measurements['stems'][a]['mean'], [float(tail_results[4])])
     measurements['stems'][a]['std'] = np.append(measurements['stems'][a]['std'], [float(tail_results[10])])
 
-    os.chdir(current_dir)
+    os.chdir(group)
+  os.chdir(current_dir)
 
 # make plots
 for i in measurements.keys():
@@ -58,12 +64,11 @@ for i in measurements.keys():
   plt.xlabel('$ \delta $', fontsize=25)
 
   # sort legend and put in top right corner
-  if i == 'agg':
-    ax = plt.gca()
-    handles, labels = ax.get_legend_handles_labels()
-    hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
-    handles2, labels2 = zip(*hl)
-    ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
+  ax = plt.gca()
+  handles, labels = ax.get_legend_handles_labels()
+  hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+  handles2, labels2 = zip(*hl)
+  ax.legend(handles2, labels2, bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
 
   x1, x2, y1, y2 = plt.axis()
 
