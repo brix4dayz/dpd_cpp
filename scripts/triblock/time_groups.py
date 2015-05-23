@@ -9,7 +9,8 @@ current_dir = os.getcwd()
 
 # go to dpd_cpp and run the compile script
 os.chdir(exec_path)
-subprocess.call("../compileTriblock.sh", shell=True)
+os.chdir("../")
+subprocess.call("./compileTriblock.sh", shell=True)
 
 # go back to where we were
 os.chdir(current_dir)
