@@ -1,3 +1,7 @@
+#ifndef COPOLYMER
+
+#define COPOLYMER 1
+
 #include "polymerBlock.h"
 #include <cstdint>
 
@@ -70,3 +74,5 @@ class Stem : public ObjDPD {
 		uintptr_t getKey();
 		static uintptr_t hashCores( HydrophobicCore* c1, HydrophobicCore* c2 );
 };
+
+#endif

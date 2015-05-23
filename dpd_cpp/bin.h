@@ -1,4 +1,4 @@
-#ifndef Bin
+#ifndef BIN
 
 #define BIN 1
 
