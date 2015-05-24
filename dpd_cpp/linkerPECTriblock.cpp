@@ -8,7 +8,6 @@ LinkerPECTriblock::LinkerPECTriblock( idx pec_length, idx tail_length, idx link_
                                       std::ifstream* inFile, idx* box_length, const float& pbc_correction_factor ) : 
                                       SymmetricAmphiphilicTriblock( pec_length, tail_length, length ) {
   this->link_length = link_length;
-  this->chain_length = length;
   this->tail1 = new HydrophobicTail( this, tail_length, 
    inFile, box_length, pbc_correction_factor );
   this->pec1 = new ChargedBlock( this, 
@@ -29,7 +28,8 @@ LinkerPECTriblock::LinkerPECTriblock( idx* box_length, float* bond_length, idx p
                     byte uncharged_type, idx num_uncharged, IntegerDice<idx>& chargeDice ) : 
                     SymmetricAmphiphilicTriblock( pec_length, tail_length, length ) {
   this->id = id + 1;
-  
+  this->link_length = link_length;
+
   DirVect* d = new DirVect( bond_length ); // assigns random direction for chain
   PosVect* first = new PosVect( box_length ); // assigns random position for first bead
   this->tail1 = new HydrophobicTail( this, tail_length, d, box_length, first, idTracker, this->id ); // makes tail1 from

@@ -18,11 +18,11 @@ LinkerTriblockData::LinkerTriblockData( std::string filename, idx box_length, fl
   this->calcNumChains( &polymer_volume_fraction );
   this->calcNumFluid();
   this->calcNumBonds();
-  this->chainList = new LinkerPECTriblock[ this->num_chains ];
+  this->chainList = new LinkerPECTriblock*[ this->num_chains ];
   this->chainCursor = 0;
-  this->FluidList = new Bead[ this->num_Fluid ];
+  this->FluidList = new Bead*[ this->num_Fluid ];
   this->FluidCursor = 0;
-  this->bondList = new Bond[ this->num_bonds ];
+  this->bondList = new Bond*[ this->num_bonds ];
   this->bondCursor = 0;
   this->idTracker = 1;
 }
