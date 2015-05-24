@@ -313,3 +313,18 @@ ifndef HPC
 else
 	$(CC) $(WARN) $(STDFLAG) -DUSING $(LIBDPD) -o linkerBuilder linkerTriblockData.cpp
 endif
+
+testLinkerBuilder:
+ifndef HPC
+	rm -rf *.o
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -DTESTING -c vect.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c bead.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -DTESTING -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c linkerPECTriblock.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c bin.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c dpdPolymerData.cpp
+	$(CC) $(WARN) $(STDFLAG) -DUSING -DTESTING -o linkerBuilder vect.o bead.o polymerBlock.o pecTriblock.o linkerPECTriblock.o bin.o dpdPolymerData.o linkerTriblockData.cpp
+else
+	$(CC) $(WARN) $(STDFLAG) -DUSING -DTESTING $(LIBDPD) -o linkerBuilder linkerTriblockData.cpp
+endif
