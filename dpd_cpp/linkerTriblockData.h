@@ -1,5 +1,5 @@
 #include "dpdPolymerData.h"
-#include "LinkerPECTriblock.h"
+#include "linkerPECTriblock.h"
 
 class LinkerTriblockData : public DPDPolymerData {
   public:

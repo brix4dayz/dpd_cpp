@@ -88,11 +88,11 @@ bool PolymerBlock::addBead( Bead *bead ) {
 	return true;
 }
 
-Bead* PolymerBlock::getBead( idx idx ) {
-	if ( idx < 0 || idx >= this->length )
+Bead* PolymerBlock::getBead( idx  ) {
+	if ( i < 0 || i >= this->length )
 		return NULL;
 	else
-		return this->beadList[ idx ];
+		return this->beadList[ i ];
 }
 
 void PolymerBlock::printBlock( FILE *stream ) {

@@ -30,7 +30,7 @@ LinkerTriblockData::LinkerTriblockData( std::string filename, idx box_length, fl
 void LinkerTriblockData::deriveBondList() {
   LinkerPECTriblock* chain = NULL;
 
-  for ( unsigned short i = 0; i  < this->num_chains; i++ ) {
+  for ( unsigned short i = 0; i < this->num_chains; i++ ) {
     chain = this->chainList + i;
   
     this->addBlockBonds( chain->tail1, PHOBE_PHOBE );
@@ -47,7 +47,7 @@ void LinkerTriblockData::deriveBondList() {
                 chain->pec2->getBead( 0 ) );
     this->addBlockBonds( chain->pec2, PHIL_PHIL );
 
-    this->makeNewBond( PHIL_PHIL, chain->pec2->getBead( chain->tail_length - 1 ),
+    this->makeNewBond( PHIL_PHIL, chain->pec2->getBead( chain->pec_length - 1 ),
                 chain->tail2->getBead( 0 ) );
     this->addBlockBonds( chain->tail2, PHOBE_PHOBE );
   }
