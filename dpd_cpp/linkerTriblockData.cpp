@@ -31,7 +31,7 @@ void LinkerTriblockData::deriveBondList() {
   LinkerPECTriblock* chain = NULL;
 
   for ( unsigned short i = 0; i < this->num_chains; i++ ) {
-    chain = this->chainList + i;
+    chain = this->chainList[ i ];
   
     this->addBlockBonds( chain->tail1, PHOBE_PHOBE );
   
@@ -86,7 +86,7 @@ void LinkerTriblockData::addChain( LinkerPECTriblock* chain ) {
     fprintf( stdout, "Error, adding too many chains." );
     exit( 1 );
   }
-  this->chainList[ this->chainCursor ] = *chain;
+  this->chainList[ this->chainCursor ] = chain;
   this->chainCursor++;
 }
 
@@ -103,17 +103,17 @@ void LinkerTriblockData::printLAMMPS( FILE* fp ) {
   this->printLAMMPSHeader( fp );
   
   for ( unsigned int i = 0; i < this->num_chains; i++ ) {
-    this->chainList[ i ].printData( fp );
+    this->chainList[ i ]->printData( fp );
   }
 
   for ( unsigned int i = 0; i < this->num_Fluid; i++ ) {
-    this->FluidList[ i ].printData( fp );
+    this->FluidList[ i ]->printData( fp );
   }
 
   fprintf( fp, "\nBonds\n\n" );
 
   for ( unsigned int i = 0; i < this->num_bonds; i++ ) {
-    this->bondList[ i ].printBond( fp );
+    this->bondList[ i ]->printBond( fp );
   }
 }
 

@@ -139,7 +139,7 @@ BeadGyration::~BeadGyration() {}
 
 Bond::Bond() {}
 
-Bond::Bond( byte type, unsigned int id, Bead* bead1, Bead* bead2) {
+Bond::Bond( byte type, unsigned int id, Bead* bead1, Bead* bead2 ) {
 	this->type = type;
 	this->id = id;
 	this->bead1 = bead1;
@@ -161,14 +161,12 @@ void Bond::printBond( FILE* fp ) {
 	fprintf(fp, "%d %d %d %d\n", this->id, this->type, this->bead1->id, this->bead2->id );
 }
 
-
 //if you compile bead.cpp with the following commands then the
 //it can be tested:  g++ -Wall -c beadGyration.cpp
 // g++ -Wall -DTESTING beadGyration.o bead.cpp -o bead
 // -DTESTING "turns on" main function
 //the following main function contains examples of how to use these functions
 #if defined(TESTING)
-
 #include <fstream>
 
 

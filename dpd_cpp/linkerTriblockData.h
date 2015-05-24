@@ -3,7 +3,7 @@
 
 class LinkerTriblockData : public DPDPolymerData {
   public:
-    LinkerPECTriblock* chainList;
+    LinkerPECTriblock** chainList;
     idx pec_length;
     idx tail_length;
     idx link_length;

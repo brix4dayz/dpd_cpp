@@ -319,7 +319,7 @@ ifndef HPC
 	rm -rf *.o
 	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -DTESTING -c vect.cpp
 	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c bead.cpp
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -DTESTING -c polymerBlock.cpp
+	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -DTEST -c polymerBlock.cpp
 	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c pecTriblock.cpp
 	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c linkerPECTriblock.cpp
 	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c bin.cpp

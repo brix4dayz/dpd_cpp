@@ -88,7 +88,7 @@ bool PolymerBlock::addBead( Bead *bead ) {
 	return true;
 }
 
-Bead* PolymerBlock::getBead( idx  ) {
+Bead* PolymerBlock::getBead( idx i ) {
 	if ( i < 0 || i >= this->length )
 		return NULL;
 	else
@@ -186,7 +186,7 @@ ChargedBlock::ChargedBlock( CopolymerChain* chain, byte type,
   std::map< idx, idx > unchargedBeads;
   idx unchargedIdx;
   while ( ( (idx) unchargedBeads.size() ) != num_uncharged ) {
-    #if defined(TESTING)
+    #if defined(TEST)
     unchargedIdx = rand() % this->length;
     #else
     unchargedIdx = chargeDice.roll();

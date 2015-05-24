@@ -1,3 +1,7 @@
+#ifndef POLYMERBLOCK
+
+#define POLYMERBLOCK 1
+
 #include "bead.h"
 #include <fstream>
 
@@ -62,3 +66,5 @@ class ChargedBlock : public PolymerBlock {
       ChargedBlock( CopolymerChain *chain, byte type, idx length );
       ChargedBlock();
 };
+
+#endif

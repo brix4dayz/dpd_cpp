@@ -63,11 +63,11 @@ TriblockData::TriblockData( std::string filename, idx box_length, float bond_len
   this->calcNumChains( &polymer_volume_fraction );
   this->calcNumFluid();
   this->calcNumBonds();
-  this->chainList = new PECTriblock[ this->num_chains ];
+  this->chainList = new PECTriblock*[ this->num_chains ];
   this->chainCursor = 0;
-  this->FluidList = new Bead[ this->num_Fluid ];
+  this->FluidList = new Bead*[ this->num_Fluid ];
   this->FluidCursor = 0;
-  this->bondList = new Bond[ this->num_bonds ];
+  this->bondList = new Bond*[ this->num_bonds ];
   this->bondCursor = 0;
   this->idTracker = 1;
 }
@@ -110,7 +110,7 @@ void TriblockData::deriveBondList() {
   PECTriblock* chain = NULL;
 
   for ( unsigned short i = 0; i  < this->num_chains; i++ ) {
-    chain = this->chainList + i;
+    chain = this->chainList[ i ];
   
     this->addBlockBonds( chain->tail1, PHOBE_PHOBE );
   
@@ -158,7 +158,7 @@ void TriblockData::addChain( PECTriblock* chain ) {
     fprintf( stdout, "Error, adding too many chains." );
     exit( 1 );
   }
-  this->chainList[ this->chainCursor ] = *chain;
+  this->chainList[ this->chainCursor ] = chain;
   this->chainCursor++;
 }
 
@@ -167,13 +167,13 @@ void DPDPolymerData::addBond( Bond* bond ) {
     fprintf( stdout, "Error, adding too many chains." );
     exit( 1 );
   }
-  this->bondList[ this->bondCursor ] = *bond;
+  this->bondList[ this->bondCursor ] = bond;
   this->bondCursor++;
 }
 
 bool DPDPolymerData::addFluid( Bead* bead ) { 
   if ( this->FluidCursor >= this->num_Fluid ) return false;
-  this->FluidList[ this->FluidCursor ] = *bead;
+  this->FluidList[ this->FluidCursor ] = bead;
   this->FluidCursor++;
   return true;
 }
@@ -216,17 +216,17 @@ void TriblockData::printLAMMPS( FILE* fp ) {
   this->printLAMMPSHeader( fp );
   
   for ( unsigned int i = 0; i < this->num_chains; i++ ) {
-    this->chainList[ i ].printData( fp );
+    this->chainList[ i ]->printData( fp );
   }
 
   for ( unsigned int i = 0; i < this->num_Fluid; i++ ) {
-    this->FluidList[ i ].printData( fp );
+    this->FluidList[ i ]->printData( fp );
   }
 
   fprintf( fp, "\nBonds\n\n" );
 
   for ( unsigned int i = 0; i < this->num_bonds; i++ ) {
-    this->bondList[ i ].printBond( fp );
+    this->bondList[ i ]->printBond( fp );
   }
 
 }

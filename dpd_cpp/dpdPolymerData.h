@@ -18,10 +18,10 @@ class DPDPolymerData : public DPDData {
     float bond_length;
     unsigned int num_Fluid;
     unsigned int num_bonds;
-    Bead* FluidList;
+    Bead** FluidList;
     unsigned int FluidCursor;
     unsigned short chainCursor;
-    Bond* bondList;
+    Bond** bondList;
     unsigned int bondCursor;
     unsigned int idTracker;
     unsigned int molIDTracker;
@@ -53,7 +53,7 @@ class DPDPolymerData : public DPDData {
 
 class TriblockData : public DPDPolymerData {
   public:
-    PECTriblock* chainList;
+    PECTriblock** chainList;
     idx pec_length;
     idx tail_length;
     void calcChainLength();
