@@ -28,13 +28,13 @@ int main() {
   std::cout << "Enter polymer volume fraction: ";
   std::cin >> polymer_volume_fraction;
   
-  std::cout << "Enter polyelectrolyte (pec) block length: ";
-  std::cin >> temp;
-  pec_length = (idx) temp;
-  
   std::cout << "Enter hydrophobic tail length: ";
   std::cin >> temp;
   tail_length = (idx) temp;
+
+  std::cout << "Enter polyelectrolyte (pec) block length: ";
+  std::cin >> temp;
+  pec_length = (idx) temp;
   
   std::cout << "Enter pec block charge density: ";
   std::cin >> pec_charge_density;

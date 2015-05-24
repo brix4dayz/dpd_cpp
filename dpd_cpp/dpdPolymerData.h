@@ -1,6 +1,5 @@
 #include "bin.h"
 
-
 // Bond type enumerations
 #define PHOBE_PHOBE 1
 #define PHIL_PHIL 2
@@ -31,7 +30,6 @@ class DPDPolymerData : public DPDData {
                     idx box_length, float bond_length, idx Fluid_type );
     DPDPolymerData( std::string filename, idx density, idx box_length, float bond_length,
                     idx chain_length, unsigned short num_chains, idx Fluid_type );
-    virtual ~DPDPolymerData() {}
     void calcNumFluid();
     void calcNumBonds();
     void calcNumAtoms();
@@ -45,10 +43,13 @@ class DPDPolymerData : public DPDData {
     void wereAllBondsMade();
     virtual void deriveBondList() {}
     virtual void deriveChainList() {}
-    virtual void generate() {}
-    virtual void printLAMMPS( FILE* fp ) {}
+    void generate();
+    void printLAMMPS( FILE* fp );
+    virtual void printChainList( FILE* fp ) {}
     void printLAMMPSHeader( FILE* fp );
-    void unlink() {}
+    void unlink();
+    void initFluidsAndBonds();
+    ~DPDPolymerData();
 };
 
 class TriblockData : public DPDPolymerData {
@@ -63,9 +64,9 @@ class TriblockData : public DPDPolymerData {
     ~TriblockData();
     void deriveBondList();
     void deriveChainList();
-    void generate();
-    void printLAMMPS( FILE* fp );
     void addChain( PECTriblock* chain );
+    void unlink();
+    void printChainList( FILE* fp );
 };
 
 class ChargeTriblockData : public TriblockData {
@@ -73,7 +74,7 @@ class ChargeTriblockData : public TriblockData {
     float charge_density;
     void deriveChainList();
     ChargeTriblockData( std::string filename, idx box_length, float bond_length,
-                 float polymer_volume_fraction, idx pec_length, idx tail_length,
-                 float charge_density );
+                        float polymer_volume_fraction, idx pec_length, idx tail_length,
+                        float charge_density );
 };
 

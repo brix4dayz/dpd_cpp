@@ -10,21 +10,14 @@ LinkerTriblockData::LinkerTriblockData( std::string filename, idx box_length, fl
   if ( charge_density < 1.0 )
     this->Fluid_type += 1;
   this->charge_density = charge_density;
-
   this->pec_length = pec_length;
   this->tail_length = tail_length;
   this->link_length = link_length;
   this->calcChainLength();
   this->calcNumChains( &polymer_volume_fraction );
-  this->calcNumFluid();
-  this->calcNumBonds();
   this->chainList = new LinkerPECTriblock*[ this->num_chains ];
   this->chainCursor = 0;
-  this->FluidList = new Bead*[ this->num_Fluid ];
-  this->FluidCursor = 0;
-  this->bondList = new Bond*[ this->num_bonds ];
-  this->bondCursor = 0;
-  this->idTracker = 1;
+  this->initFluidsAndBonds();
 }
 
 void LinkerTriblockData::deriveBondList() {
@@ -90,34 +83,22 @@ void LinkerTriblockData::addChain( LinkerPECTriblock* chain ) {
   this->chainCursor++;
 }
 
-void LinkerTriblockData::generate() {
-  this->deriveChainList();
-  this->deriveBondList();
-  this->deriveFluidList();
-  FILE* fp = fopen( this->filename.c_str(), "w" );
-  this->printLAMMPS( fp );
-  fclose( fp );
+void LinkerTriblockData::printChainList( FILE* fp ) {
+  for ( unsigned int i = 0; i < this->num_chains; i++ )
+    this->chainList[ i ]->printData( fp ); 
 }
 
-void LinkerTriblockData::printLAMMPS( FILE* fp ) {
-  this->printLAMMPSHeader( fp );
-  
-  for ( unsigned int i = 0; i < this->num_chains; i++ ) {
-    this->chainList[ i ]->printData( fp );
-  }
-
-  for ( unsigned int i = 0; i < this->num_Fluid; i++ ) {
-    this->FluidList[ i ]->printData( fp );
-  }
-
-  fprintf( fp, "\nBonds\n\n" );
-
-  for ( unsigned int i = 0; i < this->num_bonds; i++ ) {
-    this->bondList[ i ]->printBond( fp );
-  }
+LinkerTriblockData::~LinkerTriblockData() {
+  for ( unsigned int i = 0; i < this->num_chains; i++ )
+    delete this->chainList[ i ];
+  delete[] this->chainList;
 }
 
-LinkerTriblockData::~LinkerTriblockData() {}
+void LinkerTriblockData::unlink() {
+  for ( unsigned int i = 0; i < this->num_chains; i++ )
+    this->chainList[ i ] = NULL;
+  this->chainList = NULL;
+}
 
 #if defined(USING)
 #include <ctime>
@@ -150,13 +131,13 @@ int main() {
   std::cout << "Enter polymer volume fraction: ";
   std::cin >> polymer_volume_fraction;
   
-  std::cout << "Enter polyelectrolyte (pec) block length: ";
-  std::cin >> temp;
-  pec_length = (idx) temp;
-  
   std::cout << "Enter hydrophobic tail length: ";
   std::cin >> temp;
   tail_length = (idx) temp;
+
+  std::cout << "Enter polyelectrolyte (pec) block length: ";
+  std::cin >> temp;
+  pec_length = (idx) temp;
   
   std::cout << "Enter linker block length: ";
   std::cin >> temp;

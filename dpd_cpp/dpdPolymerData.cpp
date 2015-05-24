@@ -38,6 +38,17 @@ void DPDPolymerData::calcNumBonds() {
   this->num_bonds = this->num_chains*( this->chain_length - 1 );
 }
 
+void DPDPolymerData::initFluidsAndBonds() {
+  this->calcNumFluid();
+  this->calcNumBonds();
+
+  this->FluidList = new Bead*[ this->num_Fluid ];
+  this->FluidCursor = 0;
+  this->bondList = new Bond*[ this->num_bonds ];
+  this->bondCursor = 0;
+  this->idTracker = 1;
+}
+
 void DPDPolymerData::printLAMMPSHeader( FILE *fp ) {
   fprintf( fp, "LAMMPS Description\n\n");
   fprintf( fp, "%d atoms\n%d bonds\n\n", this->num_atoms, this->num_bonds );
@@ -49,8 +60,6 @@ void DPDPolymerData::printLAMMPSHeader( FILE *fp ) {
   fprintf( fp, "\nAtoms\n\n");
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
 TriblockData::TriblockData(): DPDPolymerData() {}
 
 TriblockData::TriblockData( std::string filename, idx box_length, float bond_length,
@@ -61,15 +70,9 @@ TriblockData::TriblockData( std::string filename, idx box_length, float bond_len
   this->tail_length = tail_length;
   this->calcChainLength();
   this->calcNumChains( &polymer_volume_fraction );
-  this->calcNumFluid();
-  this->calcNumBonds();
   this->chainList = new PECTriblock*[ this->num_chains ];
   this->chainCursor = 0;
-  this->FluidList = new Bead*[ this->num_Fluid ];
-  this->FluidCursor = 0;
-  this->bondList = new Bond*[ this->num_bonds ];
-  this->bondCursor = 0;
-  this->idTracker = 1;
+  this->initFluidsAndBonds();
 }
 
 void TriblockData::calcChainLength() {
@@ -80,7 +83,7 @@ void DPDPolymerData::calcNumChains( float* polymer_volume_fraction ) {
   this->num_chains = ( *polymer_volume_fraction * this->num_atoms / this->chain_length ) + .5;
 }
 
-void TriblockData::generate() {
+void DPDPolymerData::generate() {
   this->deriveChainList();
   this->deriveBondList();
   this->deriveFluidList();
@@ -104,6 +107,20 @@ void DPDPolymerData::wereAllBondsMade() {
              this->num_bonds, this->bondCursor );
     exit( 1 );
   }
+}
+
+void DPDPolymerData::printLAMMPS( FILE* fp ) {
+  this->printLAMMPSHeader( fp );
+  
+  this->printChainList( fp );
+
+  for ( unsigned int i = 0; i < this->num_Fluid; i++ )
+    this->FluidList[ i ]->printData( fp );
+
+  fprintf( fp, "\nBonds\n\n" );
+
+  for ( unsigned int i = 0; i < this->num_bonds; i++ )
+    this->bondList[ i ]->printBond( fp );
 }
 
 void TriblockData::deriveBondList() {
@@ -185,7 +202,8 @@ void DPDPolymerData::deriveFluidList() {
 
   double fluid_offset = 0.0;
 
-  while ( this->FluidCursor < this->num_Fluid ) { // leq to guarantees addFluid is done one extra time
+  while ( this->FluidCursor < this->num_Fluid ) { 
+    // leq to guarantees addFluid is done one extra time
     // puts a fluid bead at every integer position plus a changing offset within the box
     for ( idx i = 0; i <= box_length; i++ ) {
       for ( idx j = 0; j <= box_length; j++ ) {
@@ -211,28 +229,46 @@ void DPDPolymerData::deriveFluidList() {
   this->wereAllBeadsMade();
 }
 
-void TriblockData::printLAMMPS( FILE* fp ) {
-
-  this->printLAMMPSHeader( fp );
-  
-  for ( unsigned int i = 0; i < this->num_chains; i++ ) {
+void TriblockData::printChainList( FILE* fp ) {
+  for ( unsigned int i = 0; i < this->num_chains; i++ )
     this->chainList[ i ]->printData( fp );
-  }
-
-  for ( unsigned int i = 0; i < this->num_Fluid; i++ ) {
-    this->FluidList[ i ]->printData( fp );
-  }
-
-  fprintf( fp, "\nBonds\n\n" );
-
-  for ( unsigned int i = 0; i < this->num_bonds; i++ ) {
-    this->bondList[ i ]->printBond( fp );
-  }
 
 }
 
+void DPDPolymerData::unlink() {
+  for ( unsigned int i = 0; i < this->num_bonds; i++ )
+    this->bondList[ i ] = NULL;
+  this->bondList = NULL;
+
+  for ( unsigned int i = 0; i < this->num_Fluid; i++ )
+    this->FluidList[ i ] = NULL;
+  this->FluidList = NULL;
+}
+
+DPDPolymerData::~DPDPolymerData() {
+  for ( unsigned int i = 0; i < this->num_bonds; i++ )
+    delete this->bondList[ i ];
+  delete[] this->bondList;
+
+  for ( unsigned int i = 0; i < this->num_Fluid; i++ )
+    delete this->FluidList[ i ];
+  delete[] this->FluidList;
+}
+
+void TriblockData::unlink() {
+  for ( unsigned int i = 0; i < this->num_chains; i++ )
+    this->chainList[ i ] = NULL;
+  this->chainList = NULL;
+}
+
 // Should properly delete everything
-TriblockData::~TriblockData() {}
+TriblockData::~TriblockData() {
+  for ( unsigned int i = 0; i < this->num_chains; i++ )
+    delete this->chainList[ i ];
+  delete[] this->chainList;
+
+  this->unlink();
+}
 
 ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, float bond_length,
                                        float polymer_volume_fraction, idx pec_length, idx tail_length, float charge_density ):
