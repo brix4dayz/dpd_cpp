@@ -232,42 +232,51 @@ void DPDPolymerData::deriveFluidList() {
 void TriblockData::printChainList( FILE* fp ) {
   for ( unsigned int i = 0; i < this->num_chains; i++ )
     this->chainList[ i ]->printData( fp );
-
 }
 
 void DPDPolymerData::unlink() {
-  for ( unsigned int i = 0; i < this->num_bonds; i++ )
-    this->bondList[ i ] = NULL;
-  this->bondList = NULL;
+  if ( this->bondList ) {
+    for ( unsigned int i = 0; i < this->num_bonds; i++ )
+      this->bondList[ i ] = NULL;
+  }
 
-  for ( unsigned int i = 0; i < this->num_Fluid; i++ )
-    this->FluidList[ i ] = NULL;
-  this->FluidList = NULL;
+  if ( this->FluidList ) {
+    for ( unsigned int i = 0; i < this->num_Fluid; i++ )
+      this->FluidList[ i ] = NULL;
+  }
 }
 
 DPDPolymerData::~DPDPolymerData() {
-  for ( unsigned int i = 0; i < this->num_bonds; i++ )
-    delete this->bondList[ i ];
-  delete[] this->bondList;
+  if ( this->bondList ) {
+    for ( unsigned int i = 0; i < this->num_bonds; i++ )
+      delete this->bondList[ i ];
+    delete[] this->bondList;
+    this->bondList = NULL;
+  }
 
-  for ( unsigned int i = 0; i < this->num_Fluid; i++ )
-    delete this->FluidList[ i ];
-  delete[] this->FluidList;
+  if ( this->FluidList ) {
+    for ( unsigned int i = 0; i < this->num_Fluid; i++ )
+      delete this->FluidList[ i ];
+    delete[] this->FluidList;
+    this->FluidList = NULL;
+  }
 }
 
 void TriblockData::unlink() {
-  for ( unsigned int i = 0; i < this->num_chains; i++ )
-    this->chainList[ i ] = NULL;
-  this->chainList = NULL;
+  if ( this->chainList ) {
+    for ( unsigned int i = 0; i < this->num_chains; i++ )
+      this->chainList[ i ] = NULL;
+  }
 }
 
 // Should properly delete everything
 TriblockData::~TriblockData() {
-  for ( unsigned int i = 0; i < this->num_chains; i++ )
-    delete this->chainList[ i ];
-  delete[] this->chainList;
-
-  this->unlink();
+  if ( this->chainList ) {
+    for ( unsigned int i = 0; i < this->num_chains; i++ )
+      delete this->chainList[ i ];
+    delete[] this->chainList;
+    this->chainList = NULL;
+  }
 }
 
 ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, float bond_length,
@@ -310,7 +319,6 @@ int main() {
   cout << data->num_atoms << endl;
   cout << data->num_chains << endl;
   cout << data->num_Fluid << endl;
-
   delete data;
 
   srand(2);

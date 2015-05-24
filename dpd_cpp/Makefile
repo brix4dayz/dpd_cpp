@@ -173,11 +173,13 @@ testGenerateData:
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c pecTriblock.cpp
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c bin.cpp
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG)  $(TEST) -o dataTest vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.cpp
+ifndef LINUX
 	mv newdata formerdata
 	mv newdataTest.dat formerdataTest.dat
 	./dataTest > newdata
 	diff formerdata newdata
 	diff newdataTest.dat formerdataTest.dat
+endif
 
 triblockBuilder:
 ifndef HPC

@@ -17,5 +17,6 @@ class LinkerTriblockData : public DPDPolymerData {
     void deriveBondList();
     void deriveChainList();
     void addChain( LinkerPECTriblock* chain );
+    void printChainList( FILE* fp );
     void unlink();
 };
