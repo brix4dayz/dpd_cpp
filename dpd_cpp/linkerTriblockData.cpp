@@ -89,12 +89,12 @@ void LinkerTriblockData::printChainList( FILE* fp ) {
 }
 
 LinkerTriblockData::~LinkerTriblockData() {
-  if ( this->chainList ) {
+  if ( this->chainCursor != 0 ) {
     for ( unsigned int i = 0; i < this->num_chains; i++ )
       delete this->chainList[ i ];
-    delete[] this->chainList;
-    this->chainList = NULL;
   }
+  delete[] this->chainList;
+  this->chainList = NULL;
 }
 
 void LinkerTriblockData::unlink() {

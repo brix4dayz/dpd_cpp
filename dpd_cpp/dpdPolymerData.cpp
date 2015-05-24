@@ -247,19 +247,21 @@ void DPDPolymerData::unlink() {
 }
 
 DPDPolymerData::~DPDPolymerData() {
-  if ( this->bondList ) {
-    for ( unsigned int i = 0; i < this->num_bonds; i++ )
+  if ( this->bondCursor != 0) {
+    for ( unsigned int i = 0; i < this->num_bonds; i++ ) {
+      this->bondList[ i ]->unlink();
       delete this->bondList[ i ];
-    delete[] this->bondList;
-    this->bondList = NULL;
+    }
   }
+  delete[] this->bondList;
+  this->bondList = NULL;
 
-  if ( this->FluidList ) {
+  if ( this->FluidCursor != 0 ) {
     for ( unsigned int i = 0; i < this->num_Fluid; i++ )
       delete this->FluidList[ i ];
-    delete[] this->FluidList;
-    this->FluidList = NULL;
   }
+  delete[] this->FluidList;
+  this->FluidList = NULL;
 }
 
 void TriblockData::unlink() {
@@ -271,12 +273,12 @@ void TriblockData::unlink() {
 
 // Should properly delete everything
 TriblockData::~TriblockData() {
-  if ( this->chainList ) {
+  if ( this->chainCursor != 0 ) {
     for ( unsigned int i = 0; i < this->num_chains; i++ )
       delete this->chainList[ i ];
-    delete[] this->chainList;
-    this->chainList = NULL;
   }
+  delete[] this->chainList;
+  this->chainList = NULL;
 }
 
 ChargeTriblockData::ChargeTriblockData( std::string filename, idx box_length, float bond_length,

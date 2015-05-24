@@ -192,7 +192,7 @@ ifndef HPC
 	$(CC) $(WARN) $(STDFLAG) -c dpdPolymerData.cpp
 	$(CC) $(WARN) $(STDFLAG) -o triblockBuilder vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.o chargeTriblockBuilder.cpp
 else
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) $(LIBDPD) -o triblockBuilder chargeTriblockBuilder.cpp
+	$(CC) $(WARN) $(STDFLAG) $(LIBDPD) -o triblockBuilder chargeTriblockBuilder.cpp
 endif
 
 
@@ -217,19 +217,19 @@ testTriblockProcessor:
 
 libdpd.so:
 	rm -rf *.o ./lib/libdpd.so
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC vect.cpp -o vect.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC bead.cpp -o bead.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC polymerBlock.cpp -o polymerBlock.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC pecTriblock.cpp -o pecTriblock.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC linkerPECTriblock.cpp -o linkerPECTriblock.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC bin.cpp -o bin.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC hydrophobicCore.cpp -o hydrophobicCore.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC micelle.cpp -o micelle.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC copolymerMicelleFrame.cpp -o copolymerMicelleFrame.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC dpdTrajectory.cpp -o dpdTrajectory.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC triblockTimeEvolution.cpp -o triblockTimeEvolution.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
-	$(CC) $(WARN) $(STDFLAG) $(DEBUG) -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC vect.cpp -o vect.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC bead.cpp -o bead.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC polymerBlock.cpp -o polymerBlock.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC pecTriblock.cpp -o pecTriblock.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC linkerPECTriblock.cpp -o linkerPECTriblock.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC bin.cpp -o bin.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC hydrophobicCore.cpp -o hydrophobicCore.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC micelle.cpp -o micelle.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC copolymerMicelleFrame.cpp -o copolymerMicelleFrame.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdTrajectory.cpp -o dpdTrajectory.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC triblockTimeEvolution.cpp -o triblockTimeEvolution.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
+	$(CC) $(WARN) $(STDFLAG) -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
 	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o linkerTriblockData.o linkerPECTriblock.o
 	mv -iv libdpd.so ./lib/
 
