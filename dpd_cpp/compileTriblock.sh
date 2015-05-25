@@ -47,5 +47,4 @@ mv -iv colorTriblock ./bin/
 mv -iv triblockTime ./bin/
 mv -iv triCoresTime ./bin/
 mv -iv linkerBuilder ./bin/
-./setup_dpd_cpp_path.sh
 echo 'Exiting...'
