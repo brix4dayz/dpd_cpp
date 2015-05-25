@@ -1,0 +1,72 @@
+Starting compilation...
+Removing old executables...
+...executables removed.
+Compiling triblockProcessor...
+rm -rf *.o
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c vect.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bead.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c polymerBlock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c pecTriblock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bin.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c hydrophobicCore.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c micelle.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c copolymerMicelleFrame.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -DUSING -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+...triblockProcessor compiled.
+Compiling triblockBuilder...
+rm -rf *.o
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c vect.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bead.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c polymerBlock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c pecTriblock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bin.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c dpdPolymerData.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -o triblockBuilder vect.o bead.o polymerBlock.o pecTriblock.o bin.o dpdPolymerData.o chargeTriblockBuilder.cpp
+...triblockBuilder compiled.
+Compiling colorTriblock...
+rm -rf *.o
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c vect.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bead.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c polymerBlock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c pecTriblock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bin.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c hydrophobicCore.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c micelle.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c copolymerMicelleFrame.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c dpdTrajectory.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -o colorTriblock colorTriblock.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+...colorTriblock compiled.
+Compiling triblockTime...
+rm -rf *.o
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c vect.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bead.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c polymerBlock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c pecTriblock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bin.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c hydrophobicCore.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c micelle.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c copolymerMicelleFrame.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c dpdTrajectory.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -DUSING -o triblockTime triblockTimeEvolution.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+...triblockTime compiled.
+Compiling triCoresTime...
+rm -rf *.o
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c vect.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bead.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c polymerBlock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c pecTriblock.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c bin.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c hydrophobicCore.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c micelle.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c copolymerMicelleFrame.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c dpdTrajectory.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c triblockTimeEvolution.cpp
+/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -DUSING -o triCoresTime triblockCoresTime.cpp triblockTimeEvolution.o dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+...triCoresTime compiled.
+...compilation completed.
+`triblockProcessor' -> `./bin/triblockProcessor'
+`triblockBuilder' -> `./bin/triblockBuilder'
+`colorTriblock' -> `./bin/colorTriblock'
+`triblockTime' -> `./bin/triblockTime'
+`triCoresTime' -> `./bin/triCoresTime'
+Exiting...
