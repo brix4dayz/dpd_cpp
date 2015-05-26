@@ -1,47 +1,47 @@
 ## Programming with _dpd_cpp_ objects
-<br>
 
-===================================================================================
 ### A simple example on the HPC
 
 ##### Including a header
 ```C++
 	
-	#include "polymerBlock.h" // for PosVect, DirVect, HydrophobicTail, PECTriblock
+	#include "polymerBlock.h" // for PosVect, DirVect, HydrophobicTail
 	#include <iostream> // for cout/endl
 	using namespace std;
 
 	int main() {
 
-        idx box_length = 42;
+        	idx box_length = 42;
 
-        float init_bond_length = 0.1;
+        	float init_bond_length = 0.1;
 
-        unsigned int idTracker = 0;
+        	unsigned int idTracker = 0;
 
-        PosVect* r = new PosVect( &box_length );
+        	PosVect* r = new PosVect( &box_length );
 
-        DirVect* d = new DirVect( &init_bond_length );
+        	DirVect* d = new DirVect( &init_bond_length );
 
-        HydrophobicTail* tail = new HydrophobicTail(NULL, 4, d, &box_length, r, &idTracker, 0);
+        	HydrophobicTail* tail = new HydrophobicTail(NULL, 4, d, &box_length, r, &idTracker, 0);
 
-        cout << "Printing tail for newdata.dat format: " << endl;
+        	cout << "Printing tail for newdata.dat format: " << endl;
 
-        tail->printData( stdout );
+        	tail->printData( stdout );
 
-        cout << "Printing tail for .xyz format: " << endl;
+        	cout << "Printing tail for .xyz format: " << endl;
 
-        tail->printBlock( stdout );
+        	tail->printBlock( stdout );
+	
+		delete d;
+		
+        	delete tail;
 
-        delete tail;
-
-        return 0;
+        	return 0;
 	}
 
 ```
 ##### Compiling an executable on the HPC
 
-	[whfuss@login04 triblock]$ /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -		ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -I/		gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/ -o test testDPD.cpp
+	[whfuss@login04 triblock]$ /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -I/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/ -o test testDPD.cpp
 	[whfuss@login04 triblock]$ ./test
 		Printing tail for newdata.dat format: 
 		0 1 3.729090e+01 1.438004e+01 2.445791e+00 0
