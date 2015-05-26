@@ -2,7 +2,7 @@ Starting compilation...
 Removing old executables...
 ...executables removed.
 Compiling libdpd.so...
-rm -rf *.o ./lib/libdpd.so
+rm -rf ./lib/*.o ./lib/libdpd.so
 /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC vect.cpp -o vect.o
 /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC bead.cpp -o bead.o
 /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC polymerBlock.cpp -o polymerBlock.o
@@ -17,7 +17,20 @@ rm -rf *.o ./lib/libdpd.so
 /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
 /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
 /usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o linkerTriblockData.o linkerPECTriblock.o
-mv -iv libdpd.so ./lib/
+mv -iv *.o libdpd.so ./lib/
+`bead.o' -> `./lib/bead.o'
+`bin.o' -> `./lib/bin.o'
+`copolymerMicelleFrame.o' -> `./lib/copolymerMicelleFrame.o'
+`dpdPolymerData.o' -> `./lib/dpdPolymerData.o'
+`dpdTrajectory.o' -> `./lib/dpdTrajectory.o'
+`hydrophobicCore.o' -> `./lib/hydrophobicCore.o'
+`linkerPECTriblock.o' -> `./lib/linkerPECTriblock.o'
+`linkerTriblockData.o' -> `./lib/linkerTriblockData.o'
+`micelle.o' -> `./lib/micelle.o'
+`pecTriblock.o' -> `./lib/pecTriblock.o'
+`polymerBlock.o' -> `./lib/polymerBlock.o'
+`triblockTimeEvolution.o' -> `./lib/triblockTimeEvolution.o'
+`vect.o' -> `./lib/vect.o'
 `libdpd.so' -> `./lib/libdpd.so'
 ...libdpd.so compiled.
 Compiling triblockProcessor...
