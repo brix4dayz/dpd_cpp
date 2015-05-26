@@ -11,31 +11,31 @@
 
 	int main() {
 
-        	idx box_length = 42;
+    idx box_length = 42;
 
-        	float init_bond_length = 0.1;
+    float init_bond_length = 0.1;
 
-        	unsigned int idTracker = 0;
+    unsigned int idTracker = 0;
 
-        	PosVect* r = new PosVect( &box_length );
+    PosVect* r = new PosVect( &box_length );
 
-        	DirVect* d = new DirVect( &init_bond_length );
+    DirVect* d = new DirVect( &init_bond_length );
 
-        	HydrophobicTail* tail = new HydrophobicTail(NULL, 4, d, &box_length, r, &idTracker, 0);
+    HydrophobicTail* tail = new HydrophobicTail(NULL, 4, d, &box_length, r, &idTracker, 0);
 
-        	cout << "Printing tail for newdata.dat format: " << endl;
+    cout << "Printing tail for newdata.dat format: " << endl;
 
-        	tail->printData( stdout );
+    tail->printData( stdout );
 
-        	cout << "Printing tail for .xyz format: " << endl;
+    cout << "Printing tail for .xyz format: " << endl;
 
-        	tail->printBlock( stdout );
+    tail->printBlock( stdout );
 	
-		delete d;
-		
-        	delete tail;
+    delete d;
+  
+    delete tail;
 
-        	return 0;
+    return 0;
 	}
 
 ```
