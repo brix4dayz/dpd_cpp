@@ -9,7 +9,7 @@
 	#include <iostream> // for cout/endl
 	using namespace std;
 
-	int main() {
+  int main() {
 
     idx box_length = 42;
 
