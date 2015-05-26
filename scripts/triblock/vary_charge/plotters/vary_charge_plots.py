@@ -16,7 +16,7 @@ deltaStrings = { (1.0/3.0): '33%', (2.0/3.0): '67%', 1.0: '100%'}
 
 measurements = {'cores': {}, 'agg': {}, 'dist': {}, 'stems': {}}
 
-colors = {30: 'b', 50:'g'}
+colors = {30: 'b', 50:'g', 90:'m'}
 
 titles = {'cores': '# of Cores', 'agg': 'Avg. Aggregation Number / Core', 'dist': 'Avg. Distance Between Linked Cores', 'stems': 'Percentage of Stem Chains'}
 

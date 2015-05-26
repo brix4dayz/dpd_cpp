@@ -5,7 +5,8 @@
 ### A simple example on the HPC
 
 ##### Including a header
-
+```C++
+	
 		#include "copolymerChain.h"
 		
 		
@@ -13,7 +14,7 @@
 		
 			return 0;
 		}
-
+```
 ##### Compiling an executable on the HPC
 <br>
 
