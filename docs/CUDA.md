@@ -3,6 +3,10 @@
 **Link for using C++ objects in the CUDA kernel and then compiling the code using** `nvcc`:
   + <http://devblogs.nvidia.com/parallelforall/separate-compilation-linking-cuda-device-code/>
   
+**Getting started with CUDA programming**:
+  + <http://www.cyberciti.biz/faq/linux-tell-which-graphics-vga-card-installed/>
+  + <docs.nvidia.com/cuda/cuda-getting-started-guide-for-linux/#axzz3a8g4qaiF>
+
 **Notes**:
   + Accelerating DPD on GPU's using USERMESO:   
     - <http://devblogs.nvidia.com/parallelforall/accelerating-dissipative-particle-dynamics-simulation-tesla-gpus/>  
