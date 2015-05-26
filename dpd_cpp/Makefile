@@ -216,7 +216,7 @@ testTriblockProcessor:
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DUSING -o triblockProcessor dpdTrajectory.cpp copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
 
 libdpd.so:
-	rm -rf *.o ./lib/libdpd.so
+	rm -rf ./lib/*.o ./lib/libdpd.so
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC vect.cpp -o vect.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC bead.cpp -o bead.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC polymerBlock.cpp -o polymerBlock.o
@@ -231,7 +231,7 @@ libdpd.so:
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
 	$(CC) $(WARN) $(STDFLAG) -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
 	$(CC) $(WARN) $(STDFLAG) -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o linkerTriblockData.o linkerPECTriblock.o
-	mv -iv libdpd.so ./lib/
+	mv -iv *.o libdpd.so ./lib/
 
 triblockProcessor:
 ifndef HPC	
