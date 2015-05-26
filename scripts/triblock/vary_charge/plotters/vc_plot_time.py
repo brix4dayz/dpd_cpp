@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import operator
 
 Na = 30
-salt_concs = [ 30, 50 ]
+salt_concs = [ 30, 50, 90 ]
 
 
 # location of where we are

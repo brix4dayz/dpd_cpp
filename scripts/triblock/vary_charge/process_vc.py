@@ -10,7 +10,7 @@ current_dir = os.getcwd()
 # go to dpd_cpp and run the compile script
 os.chdir(exec_path)
 os.chdir("../")
-subprocess.call("./compileTriblock.sh", shell=True)
+subprocess.call("./compileHPC.sh", shell=True)
 
 # go back to where we were
 os.chdir(current_dir)
@@ -24,7 +24,7 @@ tail_length = 4
 pec_length = 30
 
 # simulation variables
-salt_concs = [ 30, 50 ]
+salt_concs = [ 30, 50, 90 ]
 delta = [ "33%", "67%" ]
 
 # for all groups

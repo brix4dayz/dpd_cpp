@@ -10,7 +10,7 @@ current_dir = os.getcwd()
 Na = 30
 
 # simulation variables
-a22 = np.array([ 30, 50 ])
+a22 = np.array([ 30, 50, 90 ])
 delta = np.array([ (1.0/3.0), (2.0/3.0), 1.0 ])
 deltaStrings = { (1.0/3.0): '33%', (2.0/3.0): '67%', 1.0: '100%'}
 
