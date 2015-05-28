@@ -197,7 +197,7 @@ unsigned long DPDTrajectory::numBytesInFile( std::string filename ) {
   unsigned long size = 0;
 
   pFile = fopen( filename.c_str(),"rb" );
-  if ( pFile == NULL) perror ( "Error opening file" );
+  if ( pFile == NULL) perror ( filename.c_str() );
   else {
     fseek( pFile, 0, SEEK_END );   // non-portable
     size = ftell( pFile );
