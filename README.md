@@ -10,7 +10,7 @@
 + silica_micelles.pl  
 
 #### _Description_
-A library of C++ classes designed for building and processing **DPD** simulations, with several classes implemented specifically for block copolymer solutions.
+A C++ framework designed for building and processing **DPD** simulations, with several classes implemented specifically for block copolymer solutions.
 
 There are generic classes such as **PosVect** (position vector), **DirVect** (direction vector), **Bond**, **Bead** (atom), **Gyration**, **PolymerBlock**, **CopolymerChain**, **Bin**, **DPDFrame** (trajectory processor), **DPDData** (generator), **DPDBuilder**.
 
