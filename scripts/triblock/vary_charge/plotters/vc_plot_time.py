@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import operator
 
 Na = 30
-salt_concs = [ 30, 50, 90 ]
+salt_concs = [ 30, 50, 70, 90 ]
 
 
 # location of where we are
@@ -19,9 +19,9 @@ for a22 in salt_concs:
 
   measurements = {'t': { 'idx':0 }, 'cores': { 'idx':1 }, 'agg': { 'idx':2 }, 'dist': { 'idx':3 }, 'stems': { 'idx':4 }}
 
-  delta = {'33%':'g', '67%':'b', '100%':'m'}
+  delta = {'33%':'g', '50%':'r', '67%':'b', '85%':'c' , '100%':'m'}
 
-  labs = { '33%': '33%', '67%': '67%', '100%': '99%'}
+  labs = { '33%': '33%', '50%':'50%', '67%': '67%', '85%':'85%', '100%': '99%'}
 
   titles = {'cores': '# of Cores', 'agg': 'Avg. Aggregation Number / Core', 'dist': 'Avg. Distance Between Linked Cores', 'stems': 'Percentage of Stem Chains'}
 
@@ -30,28 +30,30 @@ for a22 in salt_concs:
       measurements[i][d] = np.array([])
 
   for d in delta:
-     # relative path to folder
-    os.chdir(d) # go to group folder
-    print(os.getcwd()) # print which group we're in
+    if ((d != "50%" || d != "85%") and (a22 != 30 || a22 != 90):
+       # relative path to folder
+      os.chdir(d) # go to group folder
+      print(os.getcwd()) # print which group we're in
 
-    f = open( folder + "_time_evol.dat", "r")
+      f = open( folder + "_time_evol.dat", "r")
 
-    for line in f:
-      tokens = line.split()
-      if tokens[0] != "Frame":
-        for m in measurements.keys():
-          measurements[m][d] = np.append(measurements[m][d], [float(tokens[measurements[m]['idx']])])
+      for line in f:
+        tokens = line.split()
+        if tokens[0] != "Frame":
+          for m in measurements.keys():
+            measurements[m][d] = np.append(measurements[m][d], [float(tokens[measurements[m]['idx']])])
 
-    f.close()
+      f.close()
 
-    os.chdir("../")
+      os.chdir("../")
 
   # make plots
   for i in measurements.keys():
     if i != 't':
       # plot each length for the current measurement
       for d in delta.keys():
-        plt.plot(measurements['t'][d]*10, measurements[i][d], 
+        if ((d != "50%" || d != "85%") and (a22 != 30 || a22 != 90):
+          plt.plot(measurements['t'][d]*10, measurements[i][d], 
                  color=delta[d], label=labs[d], linewidth=2.0)
 
       plt.ylabel(titles[i])

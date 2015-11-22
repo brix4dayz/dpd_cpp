@@ -10,13 +10,16 @@ current_dir = os.getcwd()
 Na = 30
 
 # simulation variables
-a22 = np.array([ 30, 50, 90 ])
+a22 = np.array([ 30, 50, 70, 90 ])
 delta = np.array([ (1.0/3.0), (2.0/3.0), 1.0 ])
 deltaStrings = { (1.0/3.0): '33%', (2.0/3.0): '67%', 1.0: '100%'}
 
+# delta = np.array([ (1.0/3.0), 0.5, (2.0/3.0), 0.85, 1.0 ])
+# deltaStrings = { (1.0/3.0): '33%', 0.5: '50%', (2.0/3.0): '67%', 0.85: '85%', 1.0: '100%'}
+
 measurements = {'cores': {}, 'agg': {}, 'dist': {}, 'stems': {}}
 
-colors = {30: 'b', 50:'g', 90:'m'}
+colors = {30: 'b', 50:'g', '70':'c' , 90:'m'}
 
 titles = {'cores': '# of Cores', 'agg': 'Avg. Aggregation Number / Core', 'dist': 'Avg. Distance Between Linked Cores', 'stems': 'Percentage of Stem Chains'}
 
@@ -30,6 +33,7 @@ for a in a22:
   os.chdir(group)
   print(os.getcwd())
   for d in delta:
+    #if ((d != "50%" || d != "85%") and (a != 30 || a != 90):
     folder = deltaStrings[d] # relative path to folder
     os.chdir(folder) # go to group folder
     print(os.getcwd()) # print which group we're in
