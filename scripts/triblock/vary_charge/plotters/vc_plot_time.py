@@ -30,7 +30,7 @@ for a22 in salt_concs:
       measurements[i][d] = np.array([])
 
   for d in delta:
-    if ((d != "50%" || d != "85%") and (a22 != 30 || a22 != 90):
+    if ((d != "50%" or d != "85%") and (a22 != 30 or a22 != 90):
        # relative path to folder
       os.chdir(d) # go to group folder
       print(os.getcwd()) # print which group we're in
@@ -52,7 +52,7 @@ for a22 in salt_concs:
     if i != 't':
       # plot each length for the current measurement
       for d in delta.keys():
-        if ((d != "50%" || d != "85%") and (a22 != 30 || a22 != 90):
+        if ((d != "50%" or d != "85%") and (a22 != 30 or a22 != 90):
           plt.plot(measurements['t'][d]*10, measurements[i][d], 
                  color=delta[d], label=labs[d], linewidth=2.0)
 

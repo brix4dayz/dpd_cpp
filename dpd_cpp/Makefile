@@ -2,7 +2,7 @@
 ifdef LINUX
 STDFLAG=-std=gnu++11
 ifdef HPC
-CC=/usr/local/apps/gcc/473/bin/g++
+CC=g++
 else
 CC=g++-4.8
 endif

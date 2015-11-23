@@ -33,7 +33,7 @@ for a in a22:
   os.chdir(group)
   print(os.getcwd())
   for d in delta:
-    #if ((d != "50%" || d != "85%") and (a != 30 || a != 90):
+    #if ((d != "50%" or d != "85%") and (a != 30 or a != 90):
     folder = deltaStrings[d] # relative path to folder
     os.chdir(folder) # go to group folder
     print(os.getcwd()) # print which group we're in
