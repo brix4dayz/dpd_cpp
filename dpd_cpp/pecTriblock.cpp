@@ -47,7 +47,7 @@ PECTriblock::PECTriblock( idx pec_length, idx tail_length, idx length,
 }
 
 PECTriblock::PECTriblock( idx* box_length, float* bond_length, idx pec_length, idx tail_length, idx length, 
-                          unsigned int* idTracker, unsigned short id ) : 
+                          unsigned int* idTracker, idx id ) : 
                           SymmetricAmphiphilicTriblock( pec_length, tail_length, length ) {
   this->id = id + 1;
   

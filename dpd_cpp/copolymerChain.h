@@ -10,16 +10,16 @@ class CopolymerChain : public ObjDPD {
 		idx chain_length;
 		PosVect* com;
 		Micelle* micelle;
-    unsigned short id;
+    idx id;
     virtual void printChain( FILE* stream ) {}
     virtual void printData( FILE* stream ) {}
     virtual void colorChain( byte type ) {}
-		~CopolymerChain() {
+		virtual ~CopolymerChain() {
       delete this->com;
       this->com = NULL;
       this->unlink();
     }
-    void unlink() {
+    virtual void unlink() {
       this->micelle = NULL;
     }
 };

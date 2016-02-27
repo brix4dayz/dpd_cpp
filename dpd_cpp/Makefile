@@ -249,6 +249,23 @@ else
 	$(CC) $(WARN) $(STDFLAG) $(LIBDPD) -DUSING -o triblockProcessor dpdTrajectory.cpp
 endif
 
+tadProcessor:
+ifndef HPC	
+	rm -rf *.o
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c vect.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c bead.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c polymerBlock.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c pecTriblock.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c bin.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c hydrophobicCore.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c micelle.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c copolymerMicelleFrame.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c dpdTrajectory.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DUSING -o tadProcessor tadMicelle.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
+else
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) $(LIBDPD) -DUSING -o triblockProcessor dpdTrajectory.cpp
+endif
+
 colorTriblock:
 ifndef HPC
 	rm -rf *.o

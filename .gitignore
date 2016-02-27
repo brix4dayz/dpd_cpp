@@ -1,2 +1,3 @@
 dpd_cpp/bin/
 dpd_cpp/lib/
+*.dSYM
