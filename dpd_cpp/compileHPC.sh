@@ -9,6 +9,7 @@ rm -rf ./bin/colorTriblock
 rm -rf ./bin/triblockTime
 rm -rf ./bin/triCoresTime
 rm -rf ./bin/linkerBuilder
+rm -rf ./bin/tadProcessor
 echo '...executables removed.'
 
 echo 'Compiling libdpd.so...'
@@ -39,6 +40,10 @@ echo 'Compiling linkerBuilder...'
 make linkerBuilder LINUX=1 HPC=1
 echo '...linkerBuilder compiled.'
 
+echo 'Compiling tadProcessor...'
+make tadProcessor LINUX=1 HPC=1
+echo '...tadProcessor compiled.'
+
 echo '...compilation completed.'
 rm -rf *.o
 mv -iv triblockProcessor ./bin/ 
@@ -47,4 +52,5 @@ mv -iv colorTriblock ./bin/
 mv -iv triblockTime ./bin/
 mv -iv triCoresTime ./bin/
 mv -iv linkerBuilder ./bin/
+mv -iv tadProcessor ./bin/
 echo 'Exiting...'
