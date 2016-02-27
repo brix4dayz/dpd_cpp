@@ -263,7 +263,7 @@ ifndef HPC
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -c dpdTrajectory.cpp
 	$(CC) $(WARN) $(DEBUG) $(STDFLAG) -DUSING -o tadProcessor tadMicelle.cpp dpdTrajectory.o copolymerMicelleFrame.o micelle.o hydrophobicCore.o bin.o pecTriblock.o polymerBlock.o bead.o vect.o
 else
-	$(CC) $(WARN) $(DEBUG) $(STDFLAG) $(LIBDPD) -DUSING -o triblockProcessor dpdTrajectory.cpp
+	$(CC) $(WARN) $(DEBUG) $(STDFLAG) $(LIBDPD) -DUSING -o tadProcessor tadMicelle.cpp
 endif
 
 colorTriblock:
