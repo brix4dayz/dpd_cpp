@@ -12,21 +12,21 @@
 
 namespace dpd2 {
 
-class Object {
-public:
-	Object();
-	virtual ~Object();
-	virtual const char* classname();
-	virtual const std::string toString();
+	class Object {
+	public:
+		Object();
+		virtual ~Object();
+		virtual const char* classname();
+		virtual const std::string toString();
 
-	const std::string& getGUID();
-	void correctGUID();
-	// copy...?
+		const std::string& getGUID();
+		void correctGUID();
+		// copy...?
 
-protected:
-	std::string GUID;
+	protected:
+		std::string GUID;
 
-};
+	};
 
 } /* namespace dpd */
 
