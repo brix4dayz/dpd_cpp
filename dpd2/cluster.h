@@ -19,20 +19,24 @@ namespace dpd2 {
 			index i,j,k;
 		} BinCoordinates;
 
+		typedef struct BinBoxDimensions {
+			index x,y,z;
+		};
+
 		class Binnable {
 		public:
 			BinCoordinates* coords;
 			geom::Position r;
 			Binnable(geom::Position& r);
 			Binnable(float x, float y, float z);
-			void calcCoords(float binSize, index numBins);
+			void calcCoords(float binSize, BinBoxDimensions* dimensions);
 			virtual ~Binnable();
 		};
 
 		class Bin : public Object {
 		public:
 			BinCoordinates* coords;
-			std::vector<Binnable> objects;
+			std::vector<Binnable&> objects;
 			bool checked, grouped;
 			Bin(index i, index j, index k);
 			virtual ~Bin();
@@ -53,17 +57,20 @@ namespace dpd2 {
 			void addBin(Bin* bin);
 		};
 
-		class BinCube : public Object {
+		class BinBox : public Object {
 		private:
 			Bin**** bins;
 		public:
-			BinCube(float boxLength, float binSize);
+			BinBoxDimensions* dimensions;
+			std::vector<Cluster*> clusters;
+			BinBox(linalg::Vector& boxDimensions, float binSize);
 			void fillBins(std::vector<Binnable>& objects);
 			void addBinnable(Binnable& obj);
+			void addCluster(Cluster* cluster);
 			virtual const char* classname();
 			virtual const std::string toString();
-			virtual ~BinCube();
-			std::vector<Cluster*> determineClusters();
+			virtual ~BinBox();
+			void deriveClusters();
 			void compareBin(Bin* bin, Cluster* cluster);
 		};
 
