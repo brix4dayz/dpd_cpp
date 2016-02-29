@@ -6,14 +6,18 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include "dpd.h"
+#include "dpd2.h"
+using namespace dpd2;
 
-using dpd::clustering::Example;
+
+#include <iostream>
+using namespace std;
 
 int main() {
 
-	Example e;
-	e.sayHi();
+	Object o;
+
+	cout << o.getGUID() << endl;
 
 	return 0;
 }
