@@ -23,13 +23,13 @@ int main() {
 
 	std::cout << vv.cross(*v).toString() << std::endl;
 
-	dpd2::geom::Point ep1;
+	dpd2::geom::Position ep1;
 
 	std::cout << ep1.getGUID() << std::endl;
 
-	dpd2::geom::Point ep2(1,1);
+	dpd2::geom::Position ep2(1,1);
 
-	dpd2::geom::Point pt(0.5f, 0.5f);
+	dpd2::geom::Position pt(0.5f, 0.5f);
 
 	dpd2::geom::Line l(0, 0, 1, 1);
 

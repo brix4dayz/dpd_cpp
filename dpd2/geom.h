@@ -16,10 +16,10 @@ namespace dpd2 {
 		/**
 		 *
 		 */
-		class Point : public linalg::Vector {
+		class Position : public linalg::Vector {
 		public:
-			Point(float x=0.0f, float y=0.0f, float z=0.0f);
-			virtual ~Point();
+			Position(float x=0.0f, float y=0.0f, float z=0.0f);
+			virtual ~Position();
 			virtual const char* classname();
 		};
 
@@ -28,12 +28,12 @@ namespace dpd2 {
 		 */
 		class Line : public Object {
 		public:
-			Point ep1, ep2;
+			Position ep1, ep2;
 			linalg::Vector direction;
 
 			Line(float x1, float y1, float x2, float y2);
-			Line(Point& p1, Point& p2);
-			Line(Point& p1, linalg::Vector& line);
+			Line(Position& p1, Position& p2);
+			Line(Position& p1, linalg::Vector& line);
 			virtual ~Line();
 			virtual const char* classname();
 
@@ -44,10 +44,10 @@ namespace dpd2 {
 		 * < 0 :
 		 * > 0 :
 		 */
-		float ptOnLine(Point& pt,
-				Point& ep1, Point& ep2);
+		float ptOnLine(Position& pt,
+				Position& ep1, Position& ep2);
 
-		float ptOnLine(Point& pt, Line& l);
+		float ptOnLine(Position& pt, Line& l);
 	}
 
 }

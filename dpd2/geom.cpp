@@ -10,27 +10,27 @@
 namespace dpd2 {
 
 	namespace geom {
-	float ptOnLine(Point& pt,
-					Point& ep1, Point& ep2) {
+	float ptOnLine(Position& pt,
+			Position& ep1, Position& ep2) {
 				return (ep1.x - pt.x) * (ep2.y - pt.y) - (ep1.y - pt.y) * (ep2.x - pt.x);
 			}
 
-			float ptOnLine(Point& pt, Line& l) {
+			float ptOnLine(Position& pt, Line& l) {
 				return ptOnLine(pt, l.ep1, l.ep2);
 			}
 
-			/******************************* Point *******************************/
-			Point::Point(float x, float y, float z) : dpd2::linalg::Vector(x,y,z) {
+			/******************************* Position *******************************/
+			Position::Position(float x, float y, float z) : dpd2::linalg::Vector(x,y,z) {
 				correctGUID(); // all classes descending Object must call this in their
 							   // constructor in order to have guid have classname
 			}
 
-			Point::~Point() {}
+			Position::~Position() {}
 
-			const char* Point::classname() {
-				return "Point";
+			const char* Position::classname() {
+				return "Position";
 			}
-			/******************************* Point *******************************/
+			/******************************* Position *******************************/
 
 
 			/******************************* Line *******************************/
@@ -42,7 +42,7 @@ namespace dpd2 {
 				correctGUID();
 			}
 
-			Line::Line(Point& p1, Point& p2) {
+			Line::Line(Position& p1, Position& p2) {
 				ep1 = p1;
 				ep2 = p2;
 				direction = linalg::sub(ep2, ep1);
@@ -50,10 +50,10 @@ namespace dpd2 {
 				correctGUID();
 			}
 
-			Line::Line(Point& p1, linalg::Vector& v) {
+			Line::Line(Position& p1, linalg::Vector& v) {
 				ep1 = p1;
 				linalg::Vector vv = linalg::add(p1, v);
-				ep2 = *(new Point(vv.x, vv.y));
+				ep2 = *(new Position(vv.x, vv.y));
 
 				direction = v;
 				direction.normalize();
