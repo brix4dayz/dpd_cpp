@@ -60,10 +60,10 @@ namespace dpd2 {
 
 		BinBoundsException::BinBoundsException(BinCoordinates* coords) {
 			this->coords = coords;
+			buffer = new char[50];
 		}
 
 		const char* BinBoundsException::what() const noexcept {
-			char buffer[50];
 			sprintf(buffer, "Coords (%hu,%hu,%hu) are out of bounds.",  coords->i, coords->j, coords->k);
 			return buffer;
 		}
@@ -78,9 +78,9 @@ namespace dpd2 {
 			bins[coords->i][coords->j][coords->k]->addBinnable(obj);
 		}
 
-		void BinBox::fillBins(std::vector<Binnable*>& objects) {
+		void BinBox::fillBins(std::vector<SimulationObject*>& objects) {
 			for (auto it = objects.begin(); it != objects.end(); it++) {
-				addBinnable(*it);
+				addBinnable((Binnable*) *it);
 			}
 		}
 
@@ -102,12 +102,13 @@ namespace dpd2 {
 			delete dimensions;
 		}
 
-		void BinBox::deriveClusters() {
+		void BinBox::deriveClusters(std::vector<SimulationObject*>& objects) {
+			fillBins(objects);
 			// TODO
 		}
 
 		void BinBox::compareBin(BinCube* bin, Cluster* cluster) {
-			// TODO
+			// TODO might want to change parameters
 		}
 
 		/********************************** BinBox ****************************************/

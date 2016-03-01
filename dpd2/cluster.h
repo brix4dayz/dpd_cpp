@@ -17,6 +17,42 @@ namespace dpd2 {
 
 	namespace cluster {
 
+		/************************** Cluster Solving Framework **************************/
+		class SimulationObject {
+		public:
+			geom::Position r;
+			SimulationObject(geom::Position& r);
+			SimulationObject(float x, float y, float z);
+			virtual ~SimulationObject();
+		};
+
+		class Cluster : public Object {
+		public:
+			index id;
+			std::vector<SimulationObject*> objects;
+			Cluster(index& idCounter);
+			virtual ~Cluster();
+			virtual const char* classname();
+			virtual const std::string toString();
+			void addObj(SimulationObject* bin);
+		};
+
+		class ClusteringSolver : public Object {
+		public:
+			std::vector<Cluster*> clusters;
+			ClusteringSolver();
+			void addCluster(Cluster* cluster);
+			virtual const char* classname();
+			virtual void deriveClusters() = 0;
+			virtual ~ClusteringSolver();
+		};
+
+		/************************** Cluster Solving Framework **************************/
+
+
+
+		/************************** BinBox Implementation **************************/
+
 		typedef struct BinCoordinates {
 			index i,j,k;
 		} BinCoordinates;
@@ -25,10 +61,17 @@ namespace dpd2 {
 			index x,y,z;
 		} BinBoxDimensions;
 
-		class Binnable {
+		class BinBoundsException : public std::exception {
 		public:
 			BinCoordinates* coords;
-			geom::Position r;
+			char* buffer;
+			BinBoundsException(BinCoordinates* coords);
+			virtual const char* what() const noexcept;
+		};
+
+		class Binnable : public SimulationObject {
+		public:
+			BinCoordinates* coords;
 			Binnable(geom::Position& r);
 			Binnable(float x, float y, float z);
 			void calcCoords(float binSize, BinBoxDimensions* dimensions);
@@ -48,25 +91,15 @@ namespace dpd2 {
 			bool isEmpty();
 		};
 
-		class Cluster : public Object {
+		class BinCluster : public Object {
 		public:
-			index id;
 			std::vector<BinCube*> binList;
-			Cluster(index& idCounter);
-			virtual ~Cluster();
+			BinCluster();
+			virtual ~BinCluster();
 			virtual const char* classname();
 			virtual const std::string toString();
 			void addBin(BinCube* bin);
-		};
-
-		class ClusteringSolver : public Object {
-		public:
-			std::vector<Cluster*> clusters;
-			ClusteringSolver();
-			void addCluster(Cluster* cluster);
-			virtual const char* classname();
-			virtual void deriveClusters() = 0;
-			virtual ~ClusteringSolver();
+			void populateCluster(Cluster* cluster);
 		};
 
 		class BinBox : public ClusteringSolver {
@@ -76,22 +109,16 @@ namespace dpd2 {
 			BinBoxDimensions* dimensions;
 			float binSize;
 			BinBox(linalg::Vector& boxDimensions, float binSize);
-			void fillBins(std::vector<Binnable*>& objects);
+			void fillBins(std::vector<SimulationObject*>& objects);
 			void addBinnable(Binnable* obj);
 			virtual const char* classname();
 			virtual const std::string toString();
 			virtual ~BinBox();
-			virtual void deriveClusters();
+			virtual void deriveClusters(std::vector<SimulationObject*>& objects);
 			void compareBin(BinCube* bin, Cluster* cluster);
 		};
 
-		class BinBoundsException : public std::exception {
-		public:
-			BinCoordinates* coords;
-			BinBoundsException(BinCoordinates* coords);
-			virtual const char* what() const noexcept;
-		};
-
+		/************************** BinBox Implementation **************************/
 
 	}
 
