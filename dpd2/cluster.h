@@ -18,11 +18,13 @@ namespace dpd2 {
 	namespace cluster {
 
 		/************************** Cluster Solving Framework **************************/
-		class SimulationObject {
+		class SimulationObject : public Object {
 		public:
-			geom::Position r;
-			SimulationObject(geom::Position& r);
+			geom::Position* r;
+			SimulationObject(geom::Position* r);
 			SimulationObject(float x, float y, float z);
+			virtual const char* classname();
+			virtual const std::string toString();
 			virtual ~SimulationObject();
 		};
 
@@ -33,8 +35,7 @@ namespace dpd2 {
 			Cluster(index& idCounter);
 			virtual ~Cluster();
 			virtual const char* classname();
-			virtual const std::string toString();
-			void addObj(SimulationObject* bin);
+			void addObj(SimulationObject* obj);
 		};
 
 		class ClusteringSolver : public Object {
@@ -43,7 +44,7 @@ namespace dpd2 {
 			ClusteringSolver();
 			void addCluster(Cluster* cluster);
 			virtual const char* classname();
-			virtual void deriveClusters() = 0;
+			virtual void deriveClusters(std::vector<SimulationObject*>& objects) = 0;
 			virtual ~ClusteringSolver();
 		};
 
@@ -69,12 +70,13 @@ namespace dpd2 {
 			virtual const char* what() const noexcept;
 		};
 
-		class Binnable : public SimulationObject {
+		class Binnable : public Object {
 		public:
 			BinCoordinates* coords;
-			Binnable(geom::Position& r);
-			Binnable(float x, float y, float z);
-			void calcCoords(float binSize, BinBoxDimensions* dimensions);
+			SimulationObject* obj;
+			Binnable(SimulationObject* obj, float binSize, BinBoxDimensions* dimensions);
+			virtual const char* classname();
+			virtual const std::string toString();
 			virtual ~Binnable();
 		};
 

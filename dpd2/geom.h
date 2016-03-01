@@ -28,6 +28,7 @@ namespace dpd2 {
 		 */
 		class Line : public Object {
 		public:
+			// TODO make everything pointers?
 			Position ep1, ep2;
 			linalg::Vector direction;
 
