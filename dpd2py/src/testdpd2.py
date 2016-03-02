@@ -58,12 +58,16 @@ class BinBox(object):
                  binSize=1.0,
                  cutoffDist=1.25):
         self.boxDimensions = boxDimensions
-        self.binSize = binSize
-        self.cutoffDist = cutoffDist
-        self.objectMap = {}
-        self.objectList = libdpd2.SimObjList()
-        self.obj = libdpd2.BinBox(c_float(boxDimensions["x"]), c_float(boxDimensions["y"]), c_float(boxDimensions["z"]),
-                                  c_float(binSize), c_float(cutoffDist))
+        if (isinstance(boxDimensions, dict) and ('x' in boxDimensions.keys()) and
+         ('y' in boxDimensions.keys()) and ('z' in boxDimensions.keys())):
+            self.binSize = binSize
+            self.cutoffDist = cutoffDist
+            self.objectMap = {}
+            self.objectList = libdpd2.SimObjList()
+            self.obj = libdpd2.BinBox(c_float(boxDimensions["x"]), c_float(boxDimensions["y"]), c_float(boxDimensions["z"]),
+                                      c_float(binSize), c_float(cutoffDist))
+        else:
+            print("python: Could not instantiate dpd2::cluster::BinBox in c++, improper dimensions.")
         return
     
     def addObj(self, sObj):
@@ -73,7 +77,10 @@ class BinBox(object):
         
     def deriveClusters(self, sObjList):
         for sObj in sObjList:
-            self.addObj(sObj)
+            if isinstance(sObj, SimulationObject):
+                self.addObj(sObj)
+            else:
+                print("python: Object is not a SimulationObject.")
         libdpd2.DeriveClusters(c_void_p(self.obj), c_void_p(self.objectList))
         return
         
@@ -93,6 +100,7 @@ if __name__ == '__main__':
     l.append(SimulationObject(35.5, 0.5, 39.8))
     l.append(SimulationObject(0.0, 35.25, 39.38))
     l.append(SimulationObject(100,100,100))
+    l.append("string") # print error message
 
     dimensions = {
                     'x': 36,
@@ -101,7 +109,10 @@ if __name__ == '__main__':
                   }
     solver = BinBox(dimensions,4.0,4.25)
     
-    solver.deriveClusters(l)
+    solver.deriveClusters(l) # print out of bounds
     
-    print(solver.numClusters())
+    print(solver.numClusters()) # 1
+    
+    dimensions = {'a':'stuff'}
+    solver = BinBox(dimensions) # print error message
     
