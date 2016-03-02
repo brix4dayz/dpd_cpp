@@ -256,7 +256,7 @@ namespace dpd2 {
 
 			Cluster* cluster;
 			index idCounter = 0;
-			for (int i = 0; i < bcs.size(); i++) {
+			for (unsigned int i = 0; i < bcs.size(); i++) {
 				cluster = new Cluster(idCounter);
 				bcs[i]->populateCluster(cluster);
 				clusters.push_back(cluster);

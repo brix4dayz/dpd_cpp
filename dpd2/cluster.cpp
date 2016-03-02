@@ -22,7 +22,7 @@ namespace dpd2 {
 		Cluster::~Cluster() {
 			// DO NOT DELETE OBJECTS, LET WHOEVER PROVIDED THEM
 			// DELETE THEM. JUST REMOVE REFERENCES
-			for (int i = 0; i < objects.size(); i++) {
+			for (unsigned int i = 0; i < objects.size(); i++) {
 				objects[i] = NULL;
 			}
 			objects.clear();
@@ -62,6 +62,9 @@ namespace dpd2 {
 			return "ClusteringSolver";
 		}
 
+		/**
+		 * Returns the PBC corrected distance based on the size of the cutoff.
+		 */
 		float ClusterSolver::getPBCDistSq(geom::Position* p1, geom::Position* p2) {
 			linalg::Vector distance = linalg::sub(*p1, *p2);
 

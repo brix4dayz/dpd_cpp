@@ -6,7 +6,7 @@
  */
 
 #include "dpd2.h"
-
+#include <string.h>
 #include <random>
 #include <sstream>
 #include <iostream>
