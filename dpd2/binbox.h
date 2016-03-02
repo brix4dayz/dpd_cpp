@@ -88,5 +88,4 @@ namespace dpd2 {
 	}
 }
 
-
 #endif /* BINBOX_H_ */

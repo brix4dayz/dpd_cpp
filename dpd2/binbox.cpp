@@ -9,6 +9,8 @@
 #include <iostream>
 #include "binbox.h"
 
+#include "dpd2py.h"
+
 namespace dpd2 {
 
 	namespace cluster {
@@ -204,7 +206,7 @@ namespace dpd2 {
 				try {
 					addBinnable(new Binnable(*it, binSize, dimensions));
 				} catch (BinBoundsException& e) {
-					std::cout << e.what() << std::endl;
+					std::cout << "c++: " << e.what() << std::endl;
 				}
 			}
 		}
@@ -242,7 +244,7 @@ namespace dpd2 {
 							bCluster = new BinCluster();
 							bCluster->addBin(current);
 							compareBin(current, bCluster);
-							//std::cout << bCluster->size() << std::endl;
+							//std::cout << "c++: " << bCluster->size() << std::endl;
 							if (bCluster->size() > 1) {
 								bcs.push_back(bCluster);
 							} else {
@@ -273,7 +275,7 @@ namespace dpd2 {
 		 * Recursive function for building BinCluster by checking nearest neighbors.
 		 */
 		void BinBox::compareBin(BinCube* bin, BinCluster* cluster) {
-			//printf("%d %d %d\n", (int) bin->coords->i, (int) bin->coords->j, (int) bin->coords->k);
+			//printf("c++: %d %d %d\n", (int) bin->coords->i, (int) bin->coords->j, (int) bin->coords->k);
 			BinCube* current = NULL;
 			short i, j, k;
 			for ( short di = -1; di < 2; di++ ) {
@@ -287,7 +289,7 @@ namespace dpd2 {
 					if ( k < 0 ) { k += dimensions->z; }
 
 
-					//printf("%d %d %d\n", (int) i, (int) j, (int) k);
+					//printf("c++: %d %d %d\n", (int) i, (int) j, (int) k);
 
 					current = bins[ i ][ j ][ k ];
 					if ( !current->isEmpty() && !current->grouped &&
