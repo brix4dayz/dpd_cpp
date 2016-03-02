@@ -15,7 +15,6 @@ namespace dpd2 {
 	namespace cluster {
 
 		/************************** BinBox Implementation **************************/
-
 		class BinBox;
 
 		typedef struct BinCoordinates {

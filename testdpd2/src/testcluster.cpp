@@ -18,7 +18,7 @@ using namespace dpd2::cluster;
  */
 void clustercase1() {
     /******************* Test 1 ***********************************/
-    BinBox box(new linalg::Vector(36.0f, 36.0f, 40.0f), 4.0f, 4.25f);
+    BinBox* box = new BinBox(new linalg::Vector(36.0f, 36.0f, 40.0f), 4.0f, 4.25f);
 
     std::vector<SimulationObject*> objs;
 
@@ -29,9 +29,17 @@ void clustercase1() {
 
     objs.push_back(new SimulationObject(new geom::Position(100.0f, 100.0f, 100.0f)));
 
-    box.deriveClusters(objs);
+    box->deriveClusters(objs);
 
-    std::cout << box.clusters.size() << std::endl;
+    std::cout << box->clusters.size() << std::endl;
+
+    delete box;
+
+	for (auto it = objs.begin(); it != objs.end(); it++) {
+		delete *it;
+		*it = NULL;
+	}
+	objs.clear();
     /******************* Test 1 ***********************************/
 }
 
@@ -40,7 +48,7 @@ void clustercase1() {
  */
 void clustercase2() {
     /******************* Test 2 ***********************************/
-    BinBox box(new linalg::Vector(36.0f, 36.0f, 40.0f), 4.0f, 4.25f);
+    BinBox* box = new BinBox(new linalg::Vector(36.0f, 36.0f, 40.0f), 4.0f, 4.25f);
 
     std::vector<SimulationObject*> objs;
 
@@ -52,9 +60,17 @@ void clustercase2() {
 
     objs.push_back(new SimulationObject(new geom::Position(29.7f, 8.25f, 15.79f)));
 
-    box.deriveClusters(objs);
+    box->deriveClusters(objs);
 
-    std::cout << box.clusters.size() << std::endl;
+    std::cout << box->clusters.size() << std::endl;
+
+    delete box;
+
+	for (auto it = objs.begin(); it != objs.end(); it++) {
+		delete *it;
+		*it = NULL;
+	}
+	objs.clear();
     /******************* Test 2 ***********************************/
 }
 
@@ -63,7 +79,7 @@ void clustercase2() {
  */
 void clustercase3() {
     /******************* Test 3 ***********************************/
-    BinBox box(new linalg::Vector(15.0f, 21.0f, 13.0f), 3.0f, 3.125f);
+    BinBox* box = new BinBox(new linalg::Vector(15.0f, 21.0f, 13.0f), 3.0f, 3.125f);
 
     std::vector<SimulationObject*> objs;
 
@@ -77,9 +93,17 @@ void clustercase3() {
 
     objs.push_back(new SimulationObject(new geom::Position(3.0f, 20.0f, 2.0f)));
 
-    box.deriveClusters(objs);
+    box->deriveClusters(objs);
 
-    std::cout << box.clusters.size() << std::endl;
+    std::cout << box->clusters.size() << std::endl;
+
+    delete box;
+
+	for (auto it = objs.begin(); it != objs.end(); it++) {
+		delete *it;
+		*it = NULL;
+	}
+	objs.clear();
     /******************* Test 3 ***********************************/
 }
 
@@ -88,7 +112,7 @@ void clustercase3() {
  */
 void clustercase4() {
     /******************* Test 4 ***********************************/
-    BinBox box(new linalg::Vector(36.0f, 36.0f, 40.0f), 4.0f, 4.25f);
+    BinBox* box = new BinBox(new linalg::Vector(36.0f, 36.0f, 40.0f), 4.0f, 4.25f);
 
     std::vector<SimulationObject*> objs;
 
@@ -102,9 +126,17 @@ void clustercase4() {
     objs.push_back(new SimulationObject(new geom::Position(17.0f, 13.0f, 24.0f)));
     objs.push_back(new SimulationObject(new geom::Position(16.0f, 14.0f, 22.0f)));
 
-    box.deriveClusters(objs);
+    box->deriveClusters(objs);
 
-    std::cout << box.clusters.size() << std::endl;
+    std::cout << box->clusters.size() << std::endl;
+
+    delete box;
+
+	for (auto it = objs.begin(); it != objs.end(); it++) {
+		delete *it;
+		*it = NULL;
+	}
+	objs.clear();
     /******************* Test 4 ***********************************/
 }
 

@@ -261,6 +261,12 @@ namespace dpd2 {
 				bcs[i]->populateCluster(cluster);
 				clusters.push_back(cluster);
 			}
+
+			for (auto it = bcs.begin(); it != bcs.end(); it++) {
+				delete *it;
+				*it = NULL;
+			}
+			bcs.clear();
 		}
 
 		/**
