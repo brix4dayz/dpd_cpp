@@ -1,6 +1,6 @@
-## Setting up _dpd_cpp_ on the HPC
+## Setting up _dpd2_ on the HPC
 <br>
-**_dpd_cpp_** has been compiled on the **HPC** in such a way that allows us to use it's executable programs from anywhere within the **HPC**. It does so by using what are known as runtime libraries, in the form of `.so` or shared object files. These libraries contain most of the actual code the programs use. And so, certain path variables in your `csh` environment need to be updated, so it can find the executables, and the `.so` files they require, whenever you run them.  
+**_dpd2_** has been compiled on the **HPC** in such a way that allows us to use it's executable programs from anywhere within the **HPC**. It does so by using what are known as runtime libraries, in the form of `.so` or shared object files. These libraries contain most of the actual code the programs use. And so, certain path variables in your `csh` environment need to be updated, so it can find the executables, and the `.so` files they require, whenever you run them.  
   
 Instructions for updating your paths as well as compiling **_dpd_cpp_** are given below. You can also find a brief description of **_dpd_cpp_**'s current executable programs which build and process our triblock simulations.
   
@@ -12,20 +12,26 @@ There's a short `bash` script on the **HPC** which you can run to update your `c
 		You need to run: `source ~/.cshrc` when this is done running.
 		You need to run: `source ~/.cshrc` when this is done running.
 		You need to run: `source ~/.cshrc` when this is done running.
+		You need to run: `source ~/.cshrc` when this is done running.
+		You need to run: `source ~/.cshrc` when this is done running.
+		You need to run: `source ~/.cshrc` when this is done running.
 	[whfuss@login04 dpd_cpp]$ source ~/.cshrc
 	[whfuss@login04 dpd_cpp]$ ./configureHPC.sh 
 		Path already up-to-date.
-		LD_LIBRARY_PATH already up-to-date.
-		LD_LIBRARY_PATH already up-to-date.
+		LD\_LIBRARY\_PATH already up-to-date.
+		LD\_LIBRARY\_PATH already up-to-date.
+		Path already up-to-date.
+		Path already up-to-date.
+		LD\_LIBRARY\_PATH already up-to-date.
 	[whfuss@login04 dpd_cpp]$  
 	
 When you initially run `configureHPC.sh` you may see the "You need to run..." message only once or twice and one or two of the up-to-date messages, that just means you already had some of the required folders in your path variables.  
 
 If you see the "You need to run..." message your first time running `configreHPC.sh` then you must then run the `source ~/.cshrc` command to update your environment without having to logout and log back in.  
 
-You can run `configureHPC.sh` a second time after updating your environment, to make sure you get all three up-to-date messages and that your environment is configured.
+You can run `configureHPC.sh` a second time after updating your environment, to make sure you get all six up-to-date messages and that your environment is configured.
 
-### The current executables
+### The old executables from _dpd\_cpp_
 
 ##### Builders
 + **triblockBuilder** - this program generates the `newdata.dat` for our normal BAB triblock system, a chain with a single PEC block in the center and two hydrophobic tails. It takes the following parameters:
@@ -96,17 +102,6 @@ The following shows to run `triblockProcessor` to process a BAB triblock traject
 		STDDEV:   0.0000   0.0000   0.0000   0.0000   0.0000
 	[whfuss@login04 dpd_cpp]$ 
 
-### Compiling `libdpd.so` and the executables
-If you need to recompile the executables or **_dpd_cpp_**'s runtime library `libdpd.so` on the **HPC**, you can do so easily using the commands below. 
-
-	[whfuss@login04 ~]$ cd /gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/
-	[whfuss@login04 dpd_cpp]$ ./compileHPC.sh > myCompile.out
-	[whfuss@login04 dpd_cpp]$ diff myCompile.out compile.out 
-	[whfuss@login04 dpd_cpp]$
-	
-`compile.out` is a text file containing the output that should be produced by `compileHPC.sh` if the compilation was successful. So it's important to redirect the output of `compileHPC.sh` to another text file, in the example above it was `myCompile.out`, so the two outputs can be compared.  
-
-If the `diff` command produces any output then the compilation went wrong, and you should email <whfuss@ncsu.edu> with a copy of your `myCompile.out` file.
 
 
 			

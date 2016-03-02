@@ -47,7 +47,8 @@ class SimulationObject(object):
     
     def guid(self):
         return str(libdpd2.GetGUID(c_void_p(self.obj)))
-    
+
+   
 '''
     Python wrapper class for dpd2::cluster::BinBox.
 '''
@@ -79,6 +80,7 @@ class BinBox(object):
     def numClusters(self):
         clusters = c_void_p(libdpd2.GetClusters(c_void_p(self.obj)))
         return int(libdpd2.GetNumClusters(clusters))
+
 
 '''
     Main function for testing.

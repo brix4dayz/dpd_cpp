@@ -1,5 +1,5 @@
-# _dpd_cpp_
-##### _Copyright (c) 2015, Yingling labs_
+# _dpd2_
+##### _Copyright (c) 2016, Yingling labs_
 ##### author: _Hayden Fuss_
 ##### _adapted from MATLAB and Perl scripts made by Nan Li and Hayden Fuss:_
 + gendata2.m
@@ -10,11 +10,9 @@
 + silica_micelles.pl  
 
 #### _Description_
-A C++ framework designed for building and processing **DPD** simulations, with several classes implemented specifically for block copolymer solutions.
+A C++ framework designed for building and, more importantly, analyzing **DPD** simulations. The framework establishes an interface specifically designed for easily solving the clustering problem that must typically be solved with colloidal systems. Although the framework allows for multiple cluster solving implementations, the **BinBox** algorithm is the only one currently.  
 
-There are generic classes such as **PosVect** (position vector), **DirVect** (direction vector), **Bond**, **Bead** (atom), **Gyration**, **PolymerBlock**, **CopolymerChain**, **Bin**, **DPDFrame** (trajectory processor), **DPDData** (generator), **DPDBuilder**.
-
-Also has specific implementations descending from these classes: **BeadGyration**, **HydrophobicTail**, **PECTriblock**, **HydrophobicCore**, **Micelle**, **DPDPolymerData** (aqueous polymer builder), **TriblockData** (builder), **ChargeTriblockData** (builder), **DiblockMicelle**, **TriblockMicelle**, **CopolymerMicelleFrame** (processor), **TriblockFrame** (processor).
+A Python wrapper module has also been made so that the **BinBox** solver can be used within Python. The remaining portion of the framework will be implemented in Python so it is easier to extend and use rather than potentially requiring clients to indirect directly with the DLL through `ctypes`.  
 
 <div style="text-align:center" markdown="1">
 

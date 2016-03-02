@@ -1,4 +1,4 @@
-### Reorganization of dpd_cpp
+### Compiling DLL's and using them within Python
 
 Creating dynamically linked libraries in C/C++: <http://www.cs.swarthmore.edu/~newhall/unixhelp/howto_C_libraries.html>  
 
@@ -19,34 +19,3 @@ Using this `.so` file to contain the library, the library can then be imported t
      # Use extern "C" function, must declare it's C return type  
      library.externFunction.restype = c_void_p  
      library.externFunction()   
-
-
-Needs to be organized into folders/directories:
-
-* *Types:*
-	+ Data structures (**List, Bin, BinCube**) with generic types T ???
-	+ **ObjDPD** - base class with virtual functions for properly managing memory.
-	+ **PosVect, DirVect, Bead, Bond, Gyration, BeadGyration**
-	+ _Static Containers_:
-		- **BeadList, PolymerBlock, HydrophobicTail, Nanoparticle, DNABlock**
-	+ _Bonds_:
-		- **BondList, AngBond, AngBondList**
-	+ **Molecule**'s:
-		- _Polymers_:
-			* **CopolymerChain, PECTriblock, PEChargeTriblock, PECLinkerQuadblock, SSDNAChain, DNAChain**
-		- _Solids_: 
-			* **Nanoparticle, Surfaces, Silica, Nanotube**
-	+ _Dynamics Containers_:
-		- **Bin, BeadBin, BondBin, TailBin, BlockBin, ChainBin, NPBin**
-	+ _Complex Structures_:
-		- **Micelle, DiblockMicelle, TriblockMicelle, HydrophobicCore**
-* *Initial Data:*
-	+ **DPDData**, **DPDPolymerData**
-	+ **TriblockData**, **ChargeTriblockData**
-* *Builders:*
-	+ **DPDBuilder**, **TriblockBuilder**, **ChargeTriblockBuilder**
-* *Frames:*
-	+ **DPDFrame**, **CopolymerMicelleFrame**, **TriblockFrame**, 
-	+ **BinCube** (Special HashMap for "cubic unit cell" simulations)
-* *Processors:*
-	+ **DPDTrajectory**, **CopolymerMicelleTrajectory**, **TriblockTrajectory**
