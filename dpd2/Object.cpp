@@ -11,7 +11,7 @@
 namespace dpd2 {
 
 Object::Object() {
-	GUID = identifiers::assignGUID(this);
+	GUID = guid::assignGUID(this);
 }
 
 Object::~Object() {}

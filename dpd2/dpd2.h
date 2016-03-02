@@ -19,6 +19,8 @@ namespace dpd2 {
 
 	typedef unsigned short index;
 
+	typedef unsigned long identifier;
+
 	namespace utils {
 
 		/**
@@ -50,7 +52,7 @@ namespace dpd2 {
 		std::string randomString(int size);
 	}
 
-	namespace identifiers {
+	namespace guid {
 		const std::string& localID(void);
 		std::string assignGUID(Object* obj);
 	}

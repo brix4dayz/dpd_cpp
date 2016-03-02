@@ -84,7 +84,7 @@ namespace dpd2 {
 	/**
 	 *
 	 */
-	const std::string& identifiers::localID(void)
+	const std::string& guid::localID(void)
 	{
 		static std::string LOCAL_ID = utils::randomString(7);
 		return LOCAL_ID;
@@ -93,7 +93,7 @@ namespace dpd2 {
 	/**
 	 *
 	 */
-	std::string identifiers::assignGUID(Object* obj) {
+	std::string guid::assignGUID(Object* obj) {
 		std::stringstream ss;
 		ss << obj->classname() << "::" << localID() << "::" << utils::randomString(5);
 		return ss.str();
