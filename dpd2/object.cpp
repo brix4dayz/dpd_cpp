@@ -5,7 +5,8 @@
  *      Author: Hayden
  */
 
-#include "Object.h"
+#include "object.h"
+
 #include "dpd2.h"
 
 namespace dpd2 {

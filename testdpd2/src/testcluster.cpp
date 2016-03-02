@@ -5,7 +5,7 @@
  *      Author: Hayden
  */
 
-#include "BinBox.h"
+#include <binbox.h>
 #include <iostream>
 
 using namespace dpd2;

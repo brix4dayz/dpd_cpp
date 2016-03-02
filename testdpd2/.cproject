@@ -25,7 +25,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dpd2/Debug}&quot;"/>
 								</option>
 								<option id="macosx.cpp.link.option.flags.1260384043" name="Linker flags" superClass="macosx.cpp.link.option.flags" value="-std=c++11" valueType="string"/>
-								<option id="macosx.cpp.link.option.libs.451934100" superClass="macosx.cpp.link.option.libs" valueType="libs">
+								<option id="macosx.cpp.link.option.libs.451934100" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="dpd2"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1880130744" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
@@ -49,7 +49,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.debug.2087220572" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.macosx.exe.debug.option.optimization.level.356328115" name="Optimization Level" superClass="gnu.c.compiler.macosx.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.macosx.exe.debug.option.debugging.level.1917178944" name="Debug Level" superClass="gnu.c.compiler.macosx.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.misc.other.1318667892" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
+								<option id="gnu.c.compiler.option.misc.other.1318667892" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.550195084" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 						</toolChain>

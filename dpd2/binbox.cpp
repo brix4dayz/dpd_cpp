@@ -5,9 +5,9 @@
  *      Author: Hayden
  */
 
-#include "BinBox.h"
 #include <sstream>
 #include <iostream>
+#include "binbox.h"
 
 namespace dpd2 {
 

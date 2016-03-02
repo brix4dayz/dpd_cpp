@@ -8,7 +8,7 @@
 #ifndef LINALG_H_
 #define LINALG_H_
 
-#include "Object.h"
+#include "object.h"
 
 namespace dpd2 {
 

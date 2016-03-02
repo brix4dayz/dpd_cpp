@@ -8,10 +8,9 @@
 #ifndef DPD2_H_
 #define DPD2_H_
 
-#include "Object.h"
-
 #include <string>
 #include <random>
+#include "object.h"
 
 namespace dpd2 {
 
