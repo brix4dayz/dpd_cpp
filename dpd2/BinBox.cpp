@@ -242,7 +242,7 @@ namespace dpd2 {
 							bCluster = new BinCluster();
 							bCluster->addBin(current);
 							compareBin(current, bCluster);
-							std::cout << bCluster->size() << std::endl;
+							//std::cout << bCluster->size() << std::endl;
 							if (bCluster->size() > 1) {
 								bcs.push_back(bCluster);
 							} else {

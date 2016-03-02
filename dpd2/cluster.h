@@ -15,18 +15,20 @@
 
 namespace dpd2 {
 
+	class SimulationObject : public Object {
+	public:
+		geom::Position* r;
+		SimulationObject(geom::Position* r);
+		SimulationObject(float x, float y, float z);
+		virtual const char* classname();
+		virtual const std::string toString();
+		virtual ~SimulationObject();
+	};
+
+
 	namespace cluster {
 
 		/************************** PBC Cluster Solving Framework **************************/
-		class SimulationObject : public Object {
-		public:
-			geom::Position* r;
-			SimulationObject(geom::Position* r);
-			SimulationObject(float x, float y, float z);
-			virtual const char* classname();
-			virtual const std::string toString();
-			virtual ~SimulationObject();
-		};
 
 		class Cluster : public Object {
 		public:
