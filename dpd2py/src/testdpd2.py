@@ -13,11 +13,16 @@ from ctypes import c_void_p
 from ctypes import c_uint
 from ctypes import c_float
 
+from sys import argv
+
 #TODO: Works on my mac, set path based on command line arguments
 # .dylib is for mac os x, .so for linux, .dll for windows
 # current makefiles only can compile .dylib (in eclipse) and .so
-libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") 
 
+if (len(argv) == 1):
+    libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") 
+else:
+    libdpd2 = cdll.LoadLibrary("/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd2/lib/libdpd2.so")
 
 '''
     Declare non-void return types for interface functions.
