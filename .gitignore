@@ -1,3 +1,6 @@
 dpd_cpp/bin/
 dpd_cpp/lib/
 *.dSYM
+testdpd2/bin/
+dpd2/lib/
+*.o

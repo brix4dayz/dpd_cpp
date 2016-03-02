@@ -3,59 +3,59 @@ Removing old executables...
 ...executables removed.
 Compiling libdpd.so...
 rm -rf ./lib/*.o ./lib/libdpd.so
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC vect.cpp -o vect.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC bead.cpp -o bead.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC polymerBlock.cpp -o polymerBlock.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC pecTriblock.cpp -o pecTriblock.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC linkerPECTriblock.cpp -o linkerPECTriblock.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC bin.cpp -o bin.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC hydrophobicCore.cpp -o hydrophobicCore.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC micelle.cpp -o micelle.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC copolymerMicelleFrame.cpp -o copolymerMicelleFrame.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC dpdTrajectory.cpp -o dpdTrajectory.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC triblockTimeEvolution.cpp -o triblockTimeEvolution.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o linkerTriblockData.o linkerPECTriblock.o
+g++ -Wall -std=gnu++11 -c -fPIC vect.cpp -o vect.o
+g++ -Wall -std=gnu++11 -c -fPIC bead.cpp -o bead.o
+g++ -Wall -std=gnu++11 -c -fPIC polymerBlock.cpp -o polymerBlock.o
+g++ -Wall -std=gnu++11 -c -fPIC pecTriblock.cpp -o pecTriblock.o
+g++ -Wall -std=gnu++11 -c -fPIC linkerPECTriblock.cpp -o linkerPECTriblock.o
+g++ -Wall -std=gnu++11 -c -fPIC bin.cpp -o bin.o
+g++ -Wall -std=gnu++11 -c -fPIC hydrophobicCore.cpp -o hydrophobicCore.o
+g++ -Wall -std=gnu++11 -c -fPIC micelle.cpp -o micelle.o
+g++ -Wall -std=gnu++11 -c -fPIC copolymerMicelleFrame.cpp -o copolymerMicelleFrame.o
+g++ -Wall -std=gnu++11 -c -fPIC dpdTrajectory.cpp -o dpdTrajectory.o
+g++ -Wall -std=gnu++11 -c -fPIC triblockTimeEvolution.cpp -o triblockTimeEvolution.o
+g++ -Wall -std=gnu++11 -c -fPIC dpdPolymerData.cpp -o dpdPolymerData.o
+g++ -Wall -std=gnu++11 -c -fPIC linkerTriblockData.cpp -o linkerTriblockData.o	
+g++ -Wall -std=gnu++11 -shared -Wl,-soname,libdpd.so -o libdpd.so vect.o bead.o polymerBlock.o pecTriblock.o bin.o hydrophobicCore.o micelle.o copolymerMicelleFrame.o dpdPolymerData.o dpdTrajectory.o triblockTimeEvolution.o linkerTriblockData.o linkerPECTriblock.o
 mv -iv *.o libdpd.so ./lib/
-`bead.o' -> `./lib/bead.o'
-`bin.o' -> `./lib/bin.o'
-`copolymerMicelleFrame.o' -> `./lib/copolymerMicelleFrame.o'
-`dpdPolymerData.o' -> `./lib/dpdPolymerData.o'
-`dpdTrajectory.o' -> `./lib/dpdTrajectory.o'
-`hydrophobicCore.o' -> `./lib/hydrophobicCore.o'
-`linkerPECTriblock.o' -> `./lib/linkerPECTriblock.o'
-`linkerTriblockData.o' -> `./lib/linkerTriblockData.o'
-`micelle.o' -> `./lib/micelle.o'
-`pecTriblock.o' -> `./lib/pecTriblock.o'
-`polymerBlock.o' -> `./lib/polymerBlock.o'
-`triblockTimeEvolution.o' -> `./lib/triblockTimeEvolution.o'
-`vect.o' -> `./lib/vect.o'
-`libdpd.so' -> `./lib/libdpd.so'
+‘bead.o’ -> ‘./lib/bead.o’
+‘bin.o’ -> ‘./lib/bin.o’
+‘copolymerMicelleFrame.o’ -> ‘./lib/copolymerMicelleFrame.o’
+‘dpdPolymerData.o’ -> ‘./lib/dpdPolymerData.o’
+‘dpdTrajectory.o’ -> ‘./lib/dpdTrajectory.o’
+‘hydrophobicCore.o’ -> ‘./lib/hydrophobicCore.o’
+‘linkerPECTriblock.o’ -> ‘./lib/linkerPECTriblock.o’
+‘linkerTriblockData.o’ -> ‘./lib/linkerTriblockData.o’
+‘micelle.o’ -> ‘./lib/micelle.o’
+‘pecTriblock.o’ -> ‘./lib/pecTriblock.o’
+‘polymerBlock.o’ -> ‘./lib/polymerBlock.o’
+‘triblockTimeEvolution.o’ -> ‘./lib/triblockTimeEvolution.o’
+‘vect.o’ -> ‘./lib/vect.o’
+‘libdpd.so’ -> ‘./lib/libdpd.so’
 ...libdpd.so compiled.
 Compiling triblockProcessor...
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triblockProcessor dpdTrajectory.cpp
+g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triblockProcessor dpdTrajectory.cpp
 ...triblockProcessor compiled.
 Compiling triblockBuilder...
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o triblockBuilder chargeTriblockBuilder.cpp
+g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o triblockBuilder chargeTriblockBuilder.cpp
 ...triblockBuilder compiled.
 Compiling colorTriblock...
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o colorTriblock colorTriblock.cpp
+g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o colorTriblock colorTriblock.cpp
 ...colorTriblock compiled.
 Compiling triblockTime...
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triblockTime triblockTimeEvolution.cpp
+g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triblockTime triblockTimeEvolution.cpp
 ...triblockTime compiled.
 Compiling triCoresTime...
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triCoresTime triblockCoresTime.cpp
+g++ -Wall -std=gnu++11 -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -DUSING -o triCoresTime triblockCoresTime.cpp
 ...triCoresTime compiled.
 Compiling linkerBuilder...
-/usr/local/apps/gcc/473/bin/g++ -Wall -std=gnu++11 -DUSING -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o linkerBuilder linkerTriblockData.cpp
+g++ -Wall -std=gnu++11 -DUSING -ldpd -L/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd_cpp/lib/ -o linkerBuilder linkerTriblockData.cpp
 ...linkerBuilder compiled.
 ...compilation completed.
-`triblockProcessor' -> `./bin/triblockProcessor'
-`triblockBuilder' -> `./bin/triblockBuilder'
-`colorTriblock' -> `./bin/colorTriblock'
-`triblockTime' -> `./bin/triblockTime'
-`triCoresTime' -> `./bin/triCoresTime'
-`linkerBuilder' -> `./bin/linkerBuilder'
+‘triblockProcessor’ -> ‘./bin/triblockProcessor’
+‘triblockBuilder’ -> ‘./bin/triblockBuilder’
+‘colorTriblock’ -> ‘./bin/colorTriblock’
+‘triblockTime’ -> ‘./bin/triblockTime’
+‘triCoresTime’ -> ‘./bin/triCoresTime’
+‘linkerBuilder’ -> ‘./bin/linkerBuilder’
 Exiting...

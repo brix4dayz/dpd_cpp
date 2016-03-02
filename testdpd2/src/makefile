@@ -15,7 +15,7 @@ CFLAGS=-Wall -g -O3
 SRCS = testcluster.cpp testdpd2.cpp
 OBJS =  $(SRCS:.cpp=.o)
 
-MAIN = ./bin/testdpd2
+MAIN = ../bin/testdpd2
 
 all: $(MAIN)
 	@echo testdpd2 has been compiled
