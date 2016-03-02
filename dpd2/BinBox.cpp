@@ -90,7 +90,6 @@ namespace dpd2 {
 		}
 
 		bool BinCube::groupBins(BinCube* other, BinBox* solver) {
-
 			SimulationObject* obj1, *obj2;
 			for (auto it1 = objects.begin(); it1 != objects.end(); it1++) {
 				obj1 = (*it1)->obj;
@@ -143,6 +142,14 @@ namespace dpd2 {
 			}
 		}
 
+		unsigned int BinCluster::size() {
+			unsigned int size = 0;
+			for (auto it = binList.begin(); it != binList.end(); it++) {
+				size += (*it)->objects.size();
+			}
+			return size;
+		}
+
 		/********************************* BinCluster ***************************************/
 
 
@@ -155,6 +162,8 @@ namespace dpd2 {
 			dimensions->x = (short) (boxDimensions->x / binSize);
 			dimensions->y = (short) (boxDimensions->y / binSize);
 			dimensions->z = (short) (boxDimensions->z / binSize);
+
+			//printf("%d %d %d\n", (int) dimensions->x, (int) dimensions->y, (int) dimensions->z);
 
 			bins = new BinCube***[dimensions->x];
 			for (index i = 0; i < dimensions->x; i++) {
@@ -176,7 +185,7 @@ namespace dpd2 {
 		}
 
 		const char* BinBoundsException::what() const noexcept {
-			sprintf(buffer, "Coords (%hu,%hu,%hu) are out of bounds.",  coords->i, coords->j, coords->k);
+			sprintf(buffer, "Coords (%d,%d,%d) are out of bounds.",  (int) coords->i, (int) coords->j, (int) coords->k);
 			return buffer;
 		}
 
@@ -233,7 +242,8 @@ namespace dpd2 {
 							bCluster = new BinCluster();
 							bCluster->addBin(current);
 							compareBin(current, bCluster);
-							if (bCluster->binList.size() > 1) {
+							std::cout << bCluster->size() << std::endl;
+							if (bCluster->size() > 1) {
 								bcs.push_back(bCluster);
 							} else {
 								delete bCluster;
@@ -257,21 +267,25 @@ namespace dpd2 {
 		 * Recursive function for building BinCluster by checking nearest neighbors.
 		 */
 		void BinBox::compareBin(BinCube* bin, BinCluster* cluster) {
+			//printf("%d %d %d\n", (int) bin->coords->i, (int) bin->coords->j, (int) bin->coords->k);
 			BinCube* current = NULL;
-			index i, j, k;
-			for ( index di = -1; di < 2; di++ ) {
-				for ( index dj = -1; dj < 2; dj++ ) {
-				  for ( index dk = -1; dk < 2; dk++ ) {
+			short i, j, k;
+			for ( short di = -1; di < 2; di++ ) {
+				for ( short dj = -1; dj < 2; dj++ ) {
+				  for ( short dk = -1; dk < 2; dk++ ) {
 					i = (short) (( bin->coords->i + di ) % dimensions->x);
-					if ( i < 0 ) i += dimensions->x;
+					if ( i < 0 ) { i += dimensions->x; }
 					j = (short) (( bin->coords->j + dj ) % dimensions->y);
-					if ( j < 0 ) j += dimensions->y;
+					if ( j < 0 ) { j += dimensions->y; }
 					k = (short) (( bin->coords->k + dk ) % dimensions->z);
-					if ( k < 0 ) k += dimensions->z;
-					//printf("%u %u %u\n", i, j, k );
+					if ( k < 0 ) { k += dimensions->z; }
+
+
+					//printf("%d %d %d\n", (int) i, (int) j, (int) k);
+
 					current = bins[ i ][ j ][ k ];
 					if ( !current->isEmpty() && !current->grouped &&
-						  bin->groupBins(current, this)) {
+						 bin->groupBins(current, this)) {
 					  cluster->addBin( current );
 					  compareBin( current, cluster );
 					}

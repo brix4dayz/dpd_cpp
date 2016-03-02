@@ -65,6 +65,7 @@ namespace dpd2 {
 			virtual const char* classname();
 			void addBin(BinCube* bin);
 			void populateCluster(Cluster* cluster);
+			unsigned int size();
 		};
 
 		class BinBox : public ClusterSolver {
