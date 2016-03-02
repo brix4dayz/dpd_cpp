@@ -11,30 +11,6 @@
 
 namespace dpd2 {
 
-	/********************************** SimulationObject ******************************/
-	SimulationObject::SimulationObject(geom::Position* r) {
-		this->r = r;
-		correctGUID();
-	}
-
-	SimulationObject::SimulationObject(float x, float y, float z) :
-	 SimulationObject(new geom::Position(x,y,z)) {}
-
-	SimulationObject::~SimulationObject() { delete r; }
-
-	const char* SimulationObject::classname() {
-		return "SimulationObject";
-	}
-
-	const std::string SimulationObject::toString() {
-		std::stringstream ss;
-		ss << GUID << " @ " << r->toString();
-		return ss.str();
-	}
-
-	/********************************** SimulationObject ******************************/
-
-
 	namespace cluster {
 
 		/********************************** Cluster **************************************/
