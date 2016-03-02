@@ -1,13 +1,10 @@
+CC=g++
+STDFLAG=-std=c++11
 ifdef LINUX
 STDFLAG=-std=gnu++11
-ifdef HPC
-CC=g++
-else
+ifndef HPC
 CC=g++-4.8
 endif
-else
-STDFLAG=-std=c++11
-CC=g++
 endif
 
 CFLAGS=-Wall -g -fPIC -O3
@@ -20,6 +17,7 @@ MAIN = ./lib/libdpd2.so
 
 all: $(MAIN)
 	@echo libdpd2.so has been compiled
+	
 $(MAIN): $(OBJS)
 	$(CC) $(STDFLAG) $(CFLAGS) -shared $^ -o $@
 
