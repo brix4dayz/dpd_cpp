@@ -38,15 +38,17 @@ namespace dpd2 {
 			void addObj(SimulationObject* obj);
 		};
 
-		class ClusteringSolver : public Object {
+		class ClusterSolver : public Object {
 		public:
 			linalg::Vector* boxDimensions;
+			float cutoffDistance, cutoffDistSq;
 			std::vector<Cluster*> clusters;
-			ClusteringSolver(linalg::Vector* boxDimensions);
+			ClusterSolver(linalg::Vector* boxDimensions, float cutoffDistance);
 			void addCluster(Cluster* cluster);
 			virtual const char* classname();
 			virtual void deriveClusters(std::vector<SimulationObject*>& objects) = 0;
-			virtual ~ClusteringSolver();
+			virtual ~ClusterSolver();
+			float getPBCDistSq(geom::Position* p1, geom::Position* p2);
 		};
 
 		/************************** PBC Cluster Solving Framework **************************/

@@ -16,12 +16,14 @@ namespace dpd2 {
 
 		/************************** BinBox Implementation **************************/
 
+		class BinBox;
+
 		typedef struct BinCoordinates {
-			index i,j,k;
+			short i,j,k;
 		} BinCoordinates;
 
 		typedef struct BinBoxDimensions {
-			index x,y,z;
+			short x,y,z;
 		} BinBoxDimensions;
 
 		class BinBoundsException : public std::exception {
@@ -46,12 +48,13 @@ namespace dpd2 {
 		public:
 			BinCoordinates* coords;
 			std::vector<Binnable*> objects;
-			bool checked, grouped;
-			BinCube(index i, index j, index k);
+			bool grouped;
+			BinCube(short i, short j, short k);
 			virtual ~BinCube();
 			virtual const char* classname();
 			void addBinnable(Binnable* obj);
 			bool isEmpty();
+			bool groupBins(BinCube* other, BinBox* solver);
 		};
 
 		class BinCluster : public Object {
@@ -64,19 +67,19 @@ namespace dpd2 {
 			void populateCluster(Cluster* cluster);
 		};
 
-		class BinBox : public ClusteringSolver {
+		class BinBox : public ClusterSolver {
 		private:
 			BinCube**** bins;
 		public:
 			BinBoxDimensions* dimensions;
 			float binSize;
-			BinBox(linalg::Vector* boxDimensions, float binSize);
+			BinBox(linalg::Vector* boxDimensions, float binSize, float cutoffDistance);
 			void fillBins(std::vector<SimulationObject*>& objects);
 			void addBinnable(Binnable* obj);
 			virtual const char* classname();
 			virtual ~BinBox();
 			virtual void deriveClusters(std::vector<SimulationObject*>& objects);
-			void compareBin(BinCube* bin, Cluster* cluster);
+			void compareBin(BinCube* bin, BinCluster* cluster);
 		};
 
 		/************************** BinBox Implementation **************************/

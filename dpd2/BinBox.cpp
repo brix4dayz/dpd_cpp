@@ -19,19 +19,19 @@ namespace dpd2 {
 
 			// calculate coordinates with pbc check
 			coords = new BinCoordinates();
-			coords->i = (index) (obj->r->x / binSize);
+			coords->i = (short) (obj->r->x / binSize);
 			if (coords->i < 0)
 				coords->i += dimensions->x;
 			else if (coords->i >= dimensions->x)
 				coords->i -= dimensions->x;
 
-			coords->j = (index) (obj->r->y / binSize);
+			coords->j = (short) (obj->r->y / binSize);
 			if (coords->j < 0)
 				coords->j += dimensions->y;
 			else if (coords->j >= dimensions->y)
 				coords->j -= dimensions->y;
 
-			coords->k = (index) (obj->r->z / binSize);
+			coords->k = (short) (obj->r->z / binSize);
 			if (coords->k < 0)
 				coords->k += dimensions->z;
 			else if (coords->k >= dimensions->z)
@@ -59,13 +59,12 @@ namespace dpd2 {
 
 		/********************************* BinCube ***************************************/
 
-		BinCube::BinCube(index i, index j, index k) {
+		BinCube::BinCube(short i, short j, short k) {
 			coords = new BinCoordinates();
 			coords->i = i;
 			coords->j = j;
 			coords->k = k;
 
-			checked = false;
 			grouped = false;
 			correctGUID();
 		}
@@ -89,6 +88,27 @@ namespace dpd2 {
 		bool BinCube::isEmpty() {
 			return objects.empty();
 		}
+
+		bool BinCube::groupBins(BinCube* other, BinBox* solver) {
+
+			SimulationObject* obj1, *obj2;
+			for (auto it1 = objects.begin(); it1 != objects.end(); it1++) {
+				obj1 = (*it1)->obj;
+				for (auto it2 = other->objects.begin(); it2 != other->objects.end(); it2++) {
+					obj2 = (*it2)->obj;
+					if (solver->getPBCDistSq(obj1->r, obj2->r) <= solver->cutoffDistSq) {
+						obj1 = NULL;
+						obj2 = NULL;
+						return true;
+					}
+				}
+			}
+
+			obj1 = NULL;
+			obj2 = NULL;
+			return false;
+		}
+
 		/********************************* BinCube ***************************************/
 
 		/********************************* BinCluster ***************************************/
@@ -108,24 +128,33 @@ namespace dpd2 {
 
 		void BinCluster::addBin(BinCube* bin) {
 			binList.push_back(bin);
+			bin->grouped = true;
 		}
 
 		void BinCluster::populateCluster(Cluster* cluster) {
-			// TODO
+			BinCube* bin;
+			Binnable* bObj;
+			for (auto binIt = binList.begin(); binIt != binList.end(); binIt++) {
+				bin = *binIt;
+				for (auto bObjIt = bin->objects.begin(); bObjIt != bin->objects.end(); bObjIt++) {
+					bObj = *bObjIt;
+					cluster->addObj(bObj->obj);
+				}
+			}
 		}
 
 		/********************************* BinCluster ***************************************/
 
 
 		/********************************** BinBox ****************************************/
-		BinBox::BinBox(linalg::Vector* boxDimensions, float binSize) :
-		  ClusteringSolver(boxDimensions),
+		BinBox::BinBox(linalg::Vector* boxDimensions, float binSize, float cutoffDistance) :
+		  ClusterSolver(boxDimensions, cutoffDistance),
 		  binSize(binSize)
 		{
 			dimensions = new BinBoxDimensions();
-			dimensions->x = (index) (boxDimensions->x / binSize);
-			dimensions->y = (index) (boxDimensions->y / binSize);
-			dimensions->z = (index) (boxDimensions->z / binSize);
+			dimensions->x = (short) (boxDimensions->x / binSize);
+			dimensions->y = (short) (boxDimensions->y / binSize);
+			dimensions->z = (short) (boxDimensions->z / binSize);
 
 			bins = new BinCube***[dimensions->x];
 			for (index i = 0; i < dimensions->x; i++) {
@@ -153,9 +182,9 @@ namespace dpd2 {
 
 		void BinBox::addBinnable(Binnable* obj) {
 			BinCoordinates* coords = obj->coords;
-			if (coords->i < 0 || coords->i > dimensions->x ||
-				coords->j < 0 || coords->j > dimensions->y ||
-				coords->k < 0 || coords->k > dimensions->z) {
+			if (coords->i < 0 || coords->i >= dimensions->x ||
+				coords->j < 0 || coords->j >= dimensions->y ||
+				coords->k < 0 || coords->k >= dimensions->z) {
 				throw BinBoundsException(coords);
 			}
 			bins[coords->i][coords->j][coords->k]->addBinnable(obj);
@@ -191,11 +220,64 @@ namespace dpd2 {
 
 		void BinBox::deriveClusters(std::vector<SimulationObject*>& objects) {
 			fillBins(objects);
-			// TODO
+
+			std::vector<BinCluster*> bcs;
+
+			BinCube* current;
+			BinCluster* bCluster;
+			for (index i = 0; i < dimensions->x; i++) {
+				for (index j = 0; j < dimensions->y; j++) {
+					for (index k = 0; k < dimensions->z; k++) {
+						current = bins[i][j][k];
+						if (!current->isEmpty() && !current->grouped) {
+							bCluster = new BinCluster();
+							bCluster->addBin(current);
+							compareBin(current, bCluster);
+							if (bCluster->binList.size() > 1) {
+								bcs.push_back(bCluster);
+							} else {
+								delete bCluster;
+								bCluster = NULL;
+							}
+						}
+					}
+				}
+			}
+
+			Cluster* cluster;
+			index idCounter = 0;
+			for (int i = 0; i < bcs.size(); i++) {
+				cluster = new Cluster(idCounter);
+				bcs[i]->populateCluster(cluster);
+				clusters.push_back(cluster);
+			}
 		}
 
-		void BinBox::compareBin(BinCube* bin, Cluster* cluster) {
-			// TODO might want to change parameters
+		/**
+		 * Recursive function for building BinCluster by checking nearest neighbors.
+		 */
+		void BinBox::compareBin(BinCube* bin, BinCluster* cluster) {
+			BinCube* current = NULL;
+			index i, j, k;
+			for ( index di = -1; di < 2; di++ ) {
+				for ( index dj = -1; dj < 2; dj++ ) {
+				  for ( index dk = -1; dk < 2; dk++ ) {
+					i = (short) (( bin->coords->i + di ) % dimensions->x);
+					if ( i < 0 ) i += dimensions->x;
+					j = (short) (( bin->coords->j + dj ) % dimensions->y);
+					if ( j < 0 ) j += dimensions->y;
+					k = (short) (( bin->coords->k + dk ) % dimensions->z);
+					if ( k < 0 ) k += dimensions->z;
+					//printf("%u %u %u\n", i, j, k );
+					current = bins[ i ][ j ][ k ];
+					if ( !current->isEmpty() && !current->grouped &&
+						  bin->groupBins(current, this)) {
+					  cluster->addBin( current );
+					  compareBin( current, cluster );
+					}
+				  }
+				}
+			}
 		}
 
 		/********************************** BinBox ****************************************/
