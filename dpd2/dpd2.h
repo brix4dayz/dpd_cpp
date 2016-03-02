@@ -11,6 +11,8 @@
 #include <string>
 #include <random>
 #include "object.h"
+#include "geom.h"
+#include <ostream>
 
 namespace dpd2 {
 
@@ -55,6 +57,32 @@ namespace dpd2 {
 		const std::string& localID(void);
 		std::string assignGUID(Object* obj);
 	}
+
+	class SimulationObject : public Object {
+	public:
+		geom::Position* r;
+		SimulationObject(geom::Position* r);
+		SimulationObject(float x, float y, float z);
+		virtual const char* classname();
+		virtual const std::string toString();
+		virtual ~SimulationObject();
+	};
+
+	class Bead : public Object {
+	public:
+		unsigned int id, molId;
+		byte type;
+
+		Bead(std::string& line);
+		Bead(geom::Position* r, byte type, unsigned int& beadCounter, unsigned int molId);
+
+		void printXYZ(std::ostream& out);
+		void printDat(std::ostream& out);
+
+		virtual const char* classname();
+		virtual const std::string toString();
+		virtual ~Bead();
+	};
 
 }
 
