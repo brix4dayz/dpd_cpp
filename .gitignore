@@ -4,3 +4,4 @@ dpd_cpp/lib/
 testdpd2/bin/
 dpd2/lib/
 *.o
+*.pyc

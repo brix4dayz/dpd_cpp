@@ -31,6 +31,7 @@ namespace dpd2 {
 			char* buffer;
 			BinBoundsException(BinCoordinates* coords);
 			virtual const char* what() const noexcept;
+			virtual ~BinBoundsException();
 		};
 
 		class Binnable : public Object {
