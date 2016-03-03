@@ -15,14 +15,11 @@ from ctypes import c_float
 
 from sys import argv
 
-#TODO: Works on my mac, set path based on command line arguments
-# .dylib is for mac os x, .so for linux, .dll for windows
 # current makefiles only can compile .dylib (in eclipse) and .so
-
 if (len(argv) == 1):
-    libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") 
+    libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") # my mac
 else:
-    libdpd2 = cdll.LoadLibrary("/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd2/lib/libdpd2.so")
+    libdpd2 = cdll.LoadLibrary("/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd2/lib/libdpd2.so") # HPC
 
 '''
     Declare non-void return types for interface functions.
@@ -39,6 +36,12 @@ libdpd2.GetClusters.restype = c_void_p
 
 libdpd2.GetNumClusters.restype = c_uint
 
+libdpd2.Cluster.restype = c_void_p
+
+libdpd2.GetNumObjects.restype = c_uint
+
+libdpd2.ObjectFromCluster.restype = c_void_p
+
 '''
     Python wrapper class for dpd2::SimulationObject.
 '''
@@ -48,11 +51,11 @@ class SimulationObject(object):
         self.y = y
         self.z = z
         self.obj = libdpd2.SimObj(c_float(x), c_float(y), c_float(z))
+        self.guid = str(libdpd2.GetGUID(c_void_p(self.obj)))
         return
     
-    def guid(self):
-        return str(libdpd2.GetGUID(c_void_p(self.obj)))
-
+    def __str__(self):
+        return self.guid + " @ (" + str(self.x) + "," + str(self.y) + "," + str(self.z) + ")"
    
 '''
     Python wrapper class for dpd2::cluster::BinBox.
@@ -71,12 +74,13 @@ class BinBox(object):
             self.objectList = libdpd2.SimObjList()
             self.obj = libdpd2.BinBox(c_float(boxDimensions["x"]), c_float(boxDimensions["y"]), c_float(boxDimensions["z"]),
                                       c_float(binSize), c_float(cutoffDist))
+            self.clusterList = []
         else:
             print("python: Could not instantiate dpd2::cluster::BinBox in c++, improper dimensions.")
         return
     
     def addObj(self, sObj):
-        self.objectMap[sObj.guid()] = sObj;
+        self.objectMap[sObj.guid] = sObj;
         libdpd2.AddObjToList(c_void_p(self.objectList), c_void_p(sObj.obj))
         return
         
@@ -87,12 +91,31 @@ class BinBox(object):
             else:
                 print("python: Object is not a SimulationObject.")
         libdpd2.DeriveClusters(c_void_p(self.obj), c_void_p(self.objectList))
+        
+        clusters = c_void_p(libdpd2.GetClusters(c_void_p(self.obj)))
+        
+        numClusters = int(libdpd2.GetNumClusters(clusters))
+        
+        tempCluster = None
+        
+        numObjs = 0
+        clust = None
+        objPtr = None
+        for i in range(numClusters):
+            tempCluster = []
+            clust = c_void_p(libdpd2.Cluster(clusters, c_uint(i)))
+            numObjs = int(libdpd2.GetNumObjects(clust))
+            for j in range(numObjs):
+                objPtr = c_void_p(libdpd2.ObjectFromCluster(clust, c_uint(j)))
+                tempCluster.append(self.objectMap[str(libdpd2.GetGUID(objPtr))])
+            self.clusterList.append(tempCluster)
         return
         
     def numClusters(self):
-        clusters = c_void_p(libdpd2.GetClusters(c_void_p(self.obj)))
-        return int(libdpd2.GetNumClusters(clusters))
-
+        for cluster in self.clusterList:
+            for obj in cluster:
+                print(str(obj))
+        return len(self.clusterList)
 
 '''
     Main function for testing.
@@ -112,6 +135,7 @@ if __name__ == '__main__':
                     'y': 36,
                     'z': 40
                   }
+    
     solver = BinBox(dimensions,4.0,4.25)
     
     solver.deriveClusters(l) # print out of bounds

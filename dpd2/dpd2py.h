@@ -51,6 +51,18 @@ extern "C" {
 		return list->size();
 	}
 
+	cluster::Cluster* Cluster(vector<cluster::Cluster*>* list, unsigned int idx) {
+		return list->at(idx);
+	}
+
+	unsigned int GetNumObjects(cluster::Cluster* cluster) {
+		return cluster->objects.size();
+	}
+
+	SimulationObject* ObjectFromCluster(cluster::Cluster* cluster, unsigned int idx) {
+		return cluster->objects[idx];
+	}
+
 	const char* GetGUID(SimulationObject* obj) {
 		return obj->getGUID().c_str();
 	}
