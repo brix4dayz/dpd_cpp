@@ -42,25 +42,34 @@ libdpd2.GetNumObjects.restype = c_uint
 
 libdpd2.ObjectFromCluster.restype = c_void_p
 
+
+class DPDObject(object):
+    def destroy(self):
+        raise NotImplementedError("Please implement destroy()")
+
 '''
     Python wrapper class for dpd2::SimulationObject.
 '''
-class SimulationObject(object):
+class SimulationObject(DPDObject):
     def __init__(self,x,y,z=0.0):
         self.x = x
         self.y = y
         self.z = z
-        self.obj = libdpd2.SimObj(c_float(x), c_float(y), c_float(z))
-        self.guid = str(libdpd2.GetGUID(c_void_p(self.obj)))
+        self.obj = c_void_p(libdpd2.SimObj(c_float(x), c_float(y), c_float(z)))
+        self.guid = str(libdpd2.GetGUID(self.obj))
         return
     
     def __str__(self):
         return self.guid + " @ (" + str(self.x) + "," + str(self.y) + "," + str(self.z) + ")"
    
+    def destroy(self):
+        libdpd2.DeleteSimObj(self.obj)
+        return
+   
 '''
     Python wrapper class for dpd2::cluster::BinBox.
 '''
-class BinBox(object):
+class BinBox(DPDObject):
     def __init__(self,
                  boxDimensions={'x':0.0, 'y':0.0, 'z':0.0},
                  binSize=1.0,
@@ -81,7 +90,7 @@ class BinBox(object):
     
     def addObj(self, sObj):
         self.objectMap[sObj.guid] = sObj;
-        libdpd2.AddObjToList(c_void_p(self.objectList), c_void_p(sObj.obj))
+        libdpd2.AddObjToList(c_void_p(self.objectList), sObj.obj)
         return
         
     def deriveClusters(self, sObjList):
@@ -116,6 +125,11 @@ class BinBox(object):
             for obj in cluster:
                 print(str(obj))
         return len(self.clusterList)
+    
+    def destroy(self):
+        libdpd2.DeleteBinBox(c_void_p(self.obj))
+        libdpd2.DeleteObjList(c_void_p(self.objectList))
+        return
 
 '''
     Main function for testing.
@@ -141,6 +155,26 @@ if __name__ == '__main__':
     solver.deriveClusters(l) # print out of bounds
     
     print(solver.numClusters()) # 1
+    
+    
+#     for i in l:
+#         try:
+#             i.destroy()
+#         except NotImplementedError as e:
+#             print(e)
+#         except AttributeError:
+#             pass
+#         finally:
+#             del i
+#     del l
+    
+    try:
+        solver.destroy()
+    except NotImplementedError as e:
+        print(e)
+    finally:
+        del solver
+        
     
     dimensions = {'a':'stuff'}
     solver = BinBox(dimensions) # print error message

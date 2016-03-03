@@ -54,6 +54,7 @@ namespace dpd2 {
 		}
 
 		Binnable::~Binnable() {
+			std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
 			delete coords;
 		}
 
@@ -72,6 +73,7 @@ namespace dpd2 {
 		}
 
 		BinCube::~BinCube() {
+			std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
 			for (auto it = objects.begin(); it != objects.end(); it++) {
 				delete *it;
 			}
@@ -120,6 +122,7 @@ namespace dpd2 {
 		}
 
 		BinCluster::~BinCluster() {
+			std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
 			binList.clear();
 		}
 
@@ -216,6 +219,7 @@ namespace dpd2 {
 		}
 
 		BinBox::~BinBox() {
+			std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
 			for (index i = 0; i < dimensions->x; i++) {
 				for (index j = 0; j < dimensions->y; j++) {
 					for (index k = 0; k < dimensions->z; k++) {

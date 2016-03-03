@@ -67,6 +67,21 @@ extern "C" {
 		return obj->getGUID().c_str();
 	}
 
+	void DeleteBinBox(cluster::BinBox* box) {
+		delete box;
+		box = NULL;
+	}
+
+	void DeleteSimObj(SimulationObject* obj) {
+		delete obj;
+		obj = NULL;
+	}
+
+	void DeleteObjList(vector<SimulationObject*>* list) {
+		delete list;
+		list = NULL;
+	}
+
 }
 
 
