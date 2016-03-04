@@ -86,9 +86,9 @@ class BinBox(DPDObject):
         if (isinstance(boxDimensions, dict) and ('x' in boxDimensions.keys()) and
          ('y' in boxDimensions.keys()) and ('z' in boxDimensions.keys())):
             self.binSize = binSize
+            self.objectList = None
             self.cutoffDist = cutoffDist
-            self.objectMap = {}
-            self.objectList = libdpd2.SimObjList()
+            self.objectMap = None
             self.obj = libdpd2.BinBox(c_float(boxDimensions["x"]), c_float(boxDimensions["y"]), c_float(boxDimensions["z"]),
                                       c_float(binSize), c_float(cutoffDist))
             self.clusterList = []
@@ -102,6 +102,9 @@ class BinBox(DPDObject):
         return
         
     def deriveClusters(self, sObjList):
+        self.objectList = libdpd2.SimObjList()
+        self.objectMap = {}
+        
         # build vector<SimulationObject*> for BinBox
         for sObj in sObjList:
             if isinstance(sObj, SimulationObject):
@@ -130,6 +133,13 @@ class BinBox(DPDObject):
                 objPtr = c_void_p(libdpd2.ObjectFromCluster(clust, c_uint(j)))
                 tempCluster.append(self.objectMap[str(libdpd2.GetGUID(objPtr))])
             self.clusterList.append(tempCluster)
+            
+        libdpd2.DeleteObjList(c_void_p(self.objectList))
+        del self.objectList
+        self.objectList = None
+        del self.objectMap
+        self.objectMap = None
+        
         return self.clusterList
         
     def numClusters(self):
@@ -138,11 +148,13 @@ class BinBox(DPDObject):
 #                 print(str(obj))
         return len(self.clusterList)
     
-    #TODO: def empty(self): libdpd2.EmptyBinBox(c_void_p(self.obj))
+    def empty(self):
+        libdpd2.EmptyBinBox(c_void_p(self.obj))
+        return
     
     def destroy(self):
         libdpd2.DeleteBinBox(c_void_p(self.obj))
-        libdpd2.DeleteObjList(c_void_p(self.objectList))
+        del self.obj
         return
 
 '''

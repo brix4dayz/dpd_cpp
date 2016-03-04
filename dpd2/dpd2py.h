@@ -82,7 +82,9 @@ extern "C" {
 		list = NULL;
 	}
 
-	// TODO void EmptyBinBox(cluster::BinBox* box)
+	void EmptyBinBox(cluster::BinBox* box) {
+		box->empty();
+	}
 
 }
 

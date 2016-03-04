@@ -8,6 +8,7 @@
 #include "cluster.h"
 #include "dpd2.h"
 #include <sstream>
+#include <iostream>
 
 namespace dpd2 {
 
@@ -20,6 +21,7 @@ namespace dpd2 {
 		}
 
 		Cluster::~Cluster() {
+			std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
 			// DO NOT DELETE OBJECTS, LET WHOEVER PROVIDED THEM
 			// DELETE THEM. JUST REMOVE REFERENCES
 			for (unsigned int i = 0; i < objects.size(); i++) {
@@ -48,7 +50,10 @@ namespace dpd2 {
 		}
 
 		ClusterSolver::~ClusterSolver() {
-			// TODO emptyClusters
+			emptyClusters();
+		}
+
+		void ClusterSolver::emptyClusters() {
 			for (auto it = clusters.begin(); it != clusters.end(); it++) {
 				delete *it;
 			}

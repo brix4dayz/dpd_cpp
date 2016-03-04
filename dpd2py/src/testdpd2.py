@@ -61,6 +61,9 @@ if __name__ == '__main__':
 #         finally:
 #             del i
 #     del l
+
+    solver.empty()
+    print("Done emptying.")
     
     ################# MEMORY MANAGEMENT TEST ##########################
     

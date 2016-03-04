@@ -40,6 +40,7 @@ namespace dpd2 {
 			virtual void deriveClusters(std::vector<SimulationObject*>& objects) = 0;
 			virtual ~ClusterSolver();
 			float getPBCDistSq(geom::Position* p1, geom::Position* p2);
+			void emptyClusters();
 			// TODO PBC correct clusters...
 		};
 

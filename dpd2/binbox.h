@@ -55,6 +55,7 @@ namespace dpd2 {
 			void addBinnable(Binnable* obj);
 			bool isEmpty();
 			bool groupBins(BinCube* other, BinBox* solver);
+			void clear();
 		};
 
 		class BinCluster : public Object {
@@ -81,8 +82,8 @@ namespace dpd2 {
 			virtual ~BinBox();
 			virtual void deriveClusters(std::vector<SimulationObject*>& objects);
 			void compareBin(BinCube* bin, BinCluster* cluster);
-			// TODO void clearBins
-			// TODO void empty() { clearBins(); emptyCluster(); }
+			void clearBins();
+			void empty();
 		};
 
 		/************************** BinBox Implementation **************************/
