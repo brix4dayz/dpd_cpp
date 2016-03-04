@@ -109,7 +109,7 @@ namespace dpd2 {
 	 SimulationObject(new geom::Position(x,y,z)) {}
 
 	SimulationObject::~SimulationObject() {
-		std::cout << "c++: Deleting " << GUID << std::endl;
+		//std::cout << "c++: Deleting " << GUID << std::endl;
 		delete r;
 	}
 

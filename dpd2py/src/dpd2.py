@@ -64,18 +64,14 @@ class SimulationObject(DPDObject):
     def __str__(self):
         return self.guid + " @ (" + str(self.x) + "," + str(self.y) + "," + str(self.z) + ")"
    
+    '''
+        Frees the SimulationObject* that is behind
+        the scenes in C++. The Python SimulationObject will still hold useful
+        data such as the position and GUID.
+    '''
     def destroy(self):
         libdpd2.DeleteSimObj(self.obj)
         return
-   
-   
-def destroyObjList(objL):
-    for obj in objL:
-        if isinstance(obj, SimulationObject):
-            obj.destroy()
-        del obj
-    del objL
-    return
 
 '''
     Python wrapper class for dpd2::cluster::BinBox.
@@ -134,7 +130,7 @@ class BinBox(DPDObject):
                 objPtr = c_void_p(libdpd2.ObjectFromCluster(clust, c_uint(j)))
                 tempCluster.append(self.objectMap[str(libdpd2.GetGUID(objPtr))])
             self.clusterList.append(tempCluster)
-        return
+        return self.clusterList
         
     def numClusters(self):
 #         for cluster in self.clusterList:
@@ -148,5 +144,16 @@ class BinBox(DPDObject):
         libdpd2.DeleteBinBox(c_void_p(self.obj))
         libdpd2.DeleteObjList(c_void_p(self.objectList))
         return
+
+'''
+    Utility function for calling destroy on an instance of
+    SimulationObject.
+'''
+def freeObjList(objL):
+    if isinstance(objL, list):
+        for obj in objL:
+            if isinstance(obj, SimulationObject):
+                obj.destroy()
+    return
 
 #TODO: class Bead(SimulationObject):

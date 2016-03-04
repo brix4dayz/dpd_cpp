@@ -6,7 +6,7 @@ Created on Mar 2, 2016
 
 from dpd2 import SimulationObject
 from dpd2 import BinBox
-from dpd2 import destroyObjList
+from dpd2 import freeObjList
 
 '''
     Main function for testing.
@@ -30,11 +30,26 @@ if __name__ == '__main__':
     
     solver = BinBox(dimensions,4.0,4.25)
     
-    solver.deriveClusters(l) # print out of bounds
+    clusters = solver.deriveClusters(l) # print out of bounds
     
     print(solver.numClusters()) # 1
     
-    clusters = solver.clusterList
+    print(len(clusters))
+    
+    
+    
+    ####### FRAME LOOP FLOW ##########
+    #
+    # Empty BinBox
+    # Build list/frame of SimulationObject's
+    # deriveClusters(frame)
+    # Call freeObjList on frame
+    # Process clusterList
+    # Store results of processing
+    #
+    # *THIS ENSURES MEMORY IS MANAGED EFFICIENTLY*
+    #
+    ####### FRAME LOOP FLOW ##########
     
 #     for i in l:
 #         try:
@@ -48,6 +63,10 @@ if __name__ == '__main__':
 #     del l
     
     ################# MEMORY MANAGEMENT TEST ##########################
+    
+    # frees the underlying C++ pointers, use when your
+    # done with a BinBox
+    # use empty() to clear BinBox before a new frame
     try:
         solver.destroy()
     except NotImplementedError as e:
@@ -61,7 +80,11 @@ if __name__ == '__main__':
         for objs in c:
             print(str(objs))
             
-    destroyObjList(l)
+    # frees the underlying C++ pointer to save memory
+    # SimObject's are still useful, just can no longer be passed to
+    # BinBox. Good to call before you process the clusterList returned
+    # from deriveCluster
+    freeObjList(l)
         
     #################### ERROR TEST ###############################
     dimensions = {'a':'stuff'}
