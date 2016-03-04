@@ -20,7 +20,7 @@ using namespace dpd2;
 extern "C" {
 
 	void PrintFromC() {
-		std::cout << "Printing from c!" << std::endl;
+		std::cout << "c++: Printing!" << std::endl;
 	}
 
 	vector<SimulationObject*>* SimObjList() {
@@ -81,6 +81,8 @@ extern "C" {
 		delete list;
 		list = NULL;
 	}
+
+	// TODO void EmptyBinBox(cluster::BinBox* box)
 
 }
 

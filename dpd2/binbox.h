@@ -81,6 +81,8 @@ namespace dpd2 {
 			virtual ~BinBox();
 			virtual void deriveClusters(std::vector<SimulationObject*>& objects);
 			void compareBin(BinCube* bin, BinCluster* cluster);
+			// TODO void clearBins
+			// TODO void empty() { clearBins(); emptyCluster(); }
 		};
 
 		/************************** BinBox Implementation **************************/

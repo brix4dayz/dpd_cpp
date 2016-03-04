@@ -108,7 +108,10 @@ namespace dpd2 {
 	SimulationObject::SimulationObject(float x, float y, float z) :
 	 SimulationObject(new geom::Position(x,y,z)) {}
 
-	SimulationObject::~SimulationObject() { delete r; }
+	SimulationObject::~SimulationObject() {
+		std::cout << "c++: Deleting " << GUID << std::endl;
+		delete r;
+	}
 
 	const char* SimulationObject::classname() {
 		return "SimulationObject";

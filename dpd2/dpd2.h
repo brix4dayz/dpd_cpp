@@ -68,6 +68,8 @@ namespace dpd2 {
 		virtual ~SimulationObject();
 	};
 
+	// TODO class SimulationFrame
+
 	class Bead : public Object {
 	public:
 		unsigned int id, molId;

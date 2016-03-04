@@ -16,7 +16,7 @@ from ctypes import c_float
 from sys import argv
 
 # current makefiles only can compile .dylib (in eclipse) and .so
-if (len(argv) == 1):
+if (len(argv) != 1):
     libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") # my mac
 else:
     libdpd2 = cdll.LoadLibrary("/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd2/lib/libdpd2.so") # HPC
@@ -68,6 +68,15 @@ class SimulationObject(DPDObject):
         libdpd2.DeleteSimObj(self.obj)
         return
    
+   
+def destroyObjList(objL):
+    for obj in objL:
+        if isinstance(obj, SimulationObject):
+            obj.destroy()
+        del obj
+    del objL
+    return
+
 '''
     Python wrapper class for dpd2::cluster::BinBox.
 '''
@@ -133,8 +142,11 @@ class BinBox(DPDObject):
 #                 print(str(obj))
         return len(self.clusterList)
     
+    #TODO: def empty(self): libdpd2.EmptyBinBox(c_void_p(self.obj))
+    
     def destroy(self):
         libdpd2.DeleteBinBox(c_void_p(self.obj))
         libdpd2.DeleteObjList(c_void_p(self.objectList))
         return
 
+#TODO: class Bead(SimulationObject):

@@ -48,6 +48,7 @@ namespace dpd2 {
 		}
 
 		ClusterSolver::~ClusterSolver() {
+			// TODO emptyClusters
 			for (auto it = clusters.begin(); it != clusters.end(); it++) {
 				delete *it;
 			}

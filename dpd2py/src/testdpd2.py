@@ -6,6 +6,7 @@ Created on Mar 2, 2016
 
 from dpd2 import SimulationObject
 from dpd2 import BinBox
+from dpd2 import destroyObjList
 
 '''
     Main function for testing.
@@ -59,6 +60,8 @@ if __name__ == '__main__':
         print(str(i))
         for objs in c:
             print(str(objs))
+            
+    destroyObjList(l)
         
     #################### ERROR TEST ###############################
     dimensions = {'a':'stuff'}
