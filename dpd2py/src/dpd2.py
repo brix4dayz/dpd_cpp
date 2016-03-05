@@ -17,9 +17,11 @@ from sys import argv
 
 # current makefiles only can compile .dylib (in eclipse) and .so
 if (len(argv) != 1):
-    libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") # my mac
+    libdpd2 = cdll.LoadLibrary("/Users/Hayden/Documents/Research/NCSU/Triblock" + 
+                               "/triblock/dpd_cpp/dpd2/Debug/libdpd2.dylib") # my mac
 else:
-    libdpd2 = cdll.LoadLibrary("/gpfs_partners/yingling/backup/Fuss/dpd_cpp/dpd2/lib/libdpd2.so") # HPC
+    libdpd2 = cdll.LoadLibrary("/gpfs_partners/yingling/backup/Fuss/dpd_cpp/" + 
+                               "dpd2/lib/libdpd2.so") # HPC
 
 '''
     Declare non-void return types for interface functions.
@@ -43,7 +45,8 @@ libdpd2.GetNumObjects.restype = c_uint
 libdpd2.ObjectFromCluster.restype = c_void_p
 
 '''
-    "Abstract" class that requires destroy to be implemented for pointer clean up.
+    "Abstract" class that requires destroy to be 
+    implemented for pointer clean up.
 '''
 class DPDObject(object):
     def destroy(self):
@@ -53,6 +56,10 @@ class DPDObject(object):
     Python wrapper class for dpd2::SimulationObject.
 '''
 class SimulationObject(DPDObject):
+    
+    '''
+        Constructor for initializing a SimulationObject
+    '''
     def __init__(self,x,y,z=0.0):
         self.x = x
         self.y = y
@@ -61,6 +68,9 @@ class SimulationObject(DPDObject):
         self.guid = str(libdpd2.GetGUID(self.obj))
         return
     
+    '''
+        "Explains" how to represent a SimulationObject as a string.
+    '''
     def __str__(self):
         return self.guid + " @ (" + str(self.x) + "," + str(self.y) + "," + str(self.z) + ")"
    
@@ -77,8 +87,12 @@ class SimulationObject(DPDObject):
     Python wrapper class for dpd2::cluster::BinBox.
 '''
 class BinBox(DPDObject):
+    
+    '''
+        Constructor for building a BinBox.
+    '''
     def __init__(self,
-                 boxDimensions={'x':0.0, 'y':0.0, 'z':0.0},
+                 boxDimensions={'x':36.0, 'y':36.0, 'z':36.0},
                  binSize=1.0,
                  cutoffDist=1.25):
         self.boxDimensions = boxDimensions
@@ -96,17 +110,24 @@ class BinBox(DPDObject):
             print("python: Could not instantiate dpd2::cluster::BinBox in c++, improper dimensions.")
         return
     
+    '''
+        Add SimulationObject to the map, or lookup table, and then to the
+        underlying C++ vector<SimulationObject*> list
+    '''
     def addObj(self, sObj):
         self.objectMap[sObj.guid] = sObj;
         libdpd2.AddObjToList(c_void_p(self.objectList), sObj.obj)
         return
-        
-    def deriveClusters(self, sObjList):
+    
+    '''
+        Derives the clusters within a given list of SimulationObject's.
+    '''
+    def deriveClusters(self, frame):
         self.objectList = libdpd2.SimObjList()
         self.objectMap = {}
         
         # build vector<SimulationObject*> for BinBox
-        for sObj in sObjList:
+        for sObj in frame:
             if isinstance(sObj, SimulationObject):
                 self.addObj(sObj)
             else:
@@ -118,8 +139,8 @@ class BinBox(DPDObject):
         # retrieve vector<Cluster*> from BinBox
         clusters = c_void_p(libdpd2.GetClusters(c_void_p(self.obj)))
         
-        # build array of arrays containing SimulationObjects,
-        # each array is a cluster
+        # build list of lists containing SimulationObjects,
+        # each list, or array, is a cluster
         numClusters = int(libdpd2.GetNumClusters(clusters))
         tempCluster = None
         numObjs = 0
@@ -133,7 +154,8 @@ class BinBox(DPDObject):
                 objPtr = c_void_p(libdpd2.ObjectFromCluster(clust, c_uint(j)))
                 tempCluster.append(self.objectMap[str(libdpd2.GetGUID(objPtr))])
             self.clusterList.append(tempCluster)
-            
+        
+        # free memory and delete unneeded variables
         libdpd2.DeleteObjList(c_void_p(self.objectList))
         del self.objectList
         self.objectList = None
@@ -141,25 +163,37 @@ class BinBox(DPDObject):
         self.objectMap = None
         
         return self.clusterList
-        
+    
+    '''
+        For testing libdpd2, doesn't work that way anymore...
+        TODO: possibly remove?
+    '''
     def numClusters(self):
 #         for cluster in self.clusterList:
 #             for obj in cluster:
 #                 print(str(obj))
         return len(self.clusterList)
     
+    '''
+        Empty the Binnable's within BinCube's. Removes old frame data.
+    '''
     def empty(self):
         libdpd2.EmptyBinBox(c_void_p(self.obj))
         return
     
+    '''
+        Free underlying C++ memory.
+    '''
     def destroy(self):
         libdpd2.DeleteBinBox(c_void_p(self.obj))
         del self.obj
         return
 
 '''
-    Utility function for calling destroy on an instance of
-    SimulationObject.
+    Frees the underlying C++ pointer to save memory
+    SimObject's are still useful, just can no longer be passed to
+    BinBox. Good to call before you process the clusterList returned
+    from deriveCluster
 '''
 def freeObjList(objL):
     if isinstance(objL, list):

@@ -6,67 +6,32 @@ Created on Mar 2, 2016
 
 from dpd2 import SimulationObject
 from dpd2 import BinBox
-from dpd2 import freeObjList
 
 '''
-    Main function for testing.
+    Test parameters. Need to be "cleaned" up after each test.
 '''
-if __name__ == '__main__':
-    
-    ###################### CLUSTER CASE 1 #################################
-    l = []
-    l.append(SimulationObject(0,1,0))
-    l.append(SimulationObject(0,35,0))
-    l.append(SimulationObject(35.5, 0.5, 39.8))
-    l.append(SimulationObject(0.0, 35.25, 39.38))
-    l.append(SimulationObject(100,100,100))
-    l.append("string") # print error message
+solver = None
+l = None
 
-    dimensions = {
-                    'x': 36,
-                    'y': 36,
-                    'z': 40
-                  }
-    
-    solver = BinBox(dimensions,4.0,4.25)
-    
-    clusters = solver.deriveClusters(l) # print out of bounds
-    
-    print(solver.numClusters()) # 1
-    
-    print(len(clusters))
-    
-    
-    
-    ####### FRAME LOOP FLOW ##########
-    #
-    # Empty BinBox
-    # Build list/frame of SimulationObject's
-    # deriveClusters(frame)
-    # Call freeObjList on frame
-    # Process clusterList
-    # Store results of processing
-    #
-    # *THIS ENSURES MEMORY IS MANAGED EFFICIENTLY*
-    #
-    ####### FRAME LOOP FLOW ##########
-    
-#     for i in l:
-#         try:
-#             i.destroy()
-#         except NotImplementedError as e:
-#             print(e)
-#         except AttributeError:
-#             pass
-#         finally:
-#             del i
-#     del l
+def printClusters(clusters):
+    if isinstance(clusters, list):
+        print("Number of clusters: " + str(len(clusters)))
+        for i in range(len(clusters)):
+            c = clusters[i]
+            print("Cluster " + str(i))
+            for objs in c:
+                if isinstance(objs, SimulationObject):
+                    print("\t" + str(objs))
+                else:
+                    print(objs.__class__.__name__ + " is not SimulationObject.")
+    else:
+        print("Clusters must be a list, cannot be a " + clusters.__class__.__name__)
+    return
 
-    solver.empty()
-    print("Done emptying.")
-    
-    ################# MEMORY MANAGEMENT TEST ##########################
-    
+
+def cleanUp():
+    global solver
+    global l
     # frees the underlying C++ pointers, use when your
     # done with a BinBox
     # use empty() to clear BinBox before a new frame
@@ -77,19 +42,118 @@ if __name__ == '__main__':
     finally:
         del solver
         
-    for i in range(len(clusters)):
-        c = clusters[i]
-        print(str(i))
-        for objs in c:
-            print(str(objs))
-            
-    # frees the underlying C++ pointer to save memory
-    # SimObject's are still useful, just can no longer be passed to
-    # BinBox. Good to call before you process the clusterList returned
-    # from deriveCluster
-    freeObjList(l)
+    for i in l:
+        try:
+            i.destroy()
+        except NotImplementedError as e:
+            print(e)
+        except AttributeError:
+            pass
+        finally:
+            del i
+    del l
+    
+    solver = None
+    l = None
+    
+    return
+
+'''
+    1 cluster.
+'''
+def testcase1():
+    global solver
+    global l
+    
+    print("Beginning: TEST 1")
+    l = []
+    l.append(SimulationObject(0,1,0))
+    l.append(SimulationObject(0,35,0))
+    l.append(SimulationObject(35.5, 0.5, 39.8))
+    l.append(SimulationObject(0.0, 35.25, 39.38))
+    
+    
+    # describes box dimensions, can be non-cubic
+    dimensions = {
+                    'x': 36.0,
+                    'y': 36.0,
+                    'z': 40.0
+                  }
+    
+    # bin cube length, box is broken into cubes, or bins, of a specified length
+    binSize = 4.0
+    
+    # cutoff distance for determining clusters
+    # NOTE: binSize <= cutoffDist <= sqrt(3) * binSize
+    # AKA cutoff distance shouldnt longer than the bin cube
+    cutoffDist = 4.25
+    
+    # parameters: box dimensions, bin cube length, cluster cutoff distance
+    # NOTE: 
+    solver = BinBox(dimensions, binSize, cutoffDist)
+    
+    clusters = solver.deriveClusters(l) # print out of bounds
+    
+    printClusters(clusters)
+    
+    cleanUp()
+    
+    print("Ending: TEST 1 ")
         
-    #################### ERROR TEST ###############################
+    return
+    
+'''
+    Test error handling for BinBox. Invalid dimensions parameter.
+    Invalid object in frame list. 
+'''
+def testerrors():
+    global solver
+    global l
+    
+    print("Beginning: TEST ERRORS")
+    # invalid dimensions, dictionary doesn't x, y, or z
     dimensions = {'a':'stuff'}
     solver = BinBox(dimensions) # print error message
+
+    # create BinBox with default parameters:
+    #   boxDimensions={'x':36.0, 'y':36.0, 'z':36.0},
+    #   binSize=1.0,
+    #   cutoffDist=1.25
+    solver = BinBox()
+    
+    l = []
+    l.append("string") # invalid object to give to binbox
+    l.append(SimulationObject(100,100,100)) # out of bounds point
+       
+    solver.deriveClusters(l) # print error about str not being allowed and out of bounds
+
+    print("Ending: TEST ERRORS")
+
+    return
+
+'''
+    Main function for testing.
+'''
+if __name__ == '__main__':
+    
+    testcase1()
+    testerrors()
+    
+    ####### FRAME LOOP FLOW ##########
+    #
+    # 
+    # Build list/frame of SimulationObject's
+    # get clusters from solver.deriveClusters(frame)
+    # call freeObjList on frame
+    # solver.empty()
+    # Process clusterList
+    # Store results of processing
+    # del frame
+    #
+    # *THIS ENSURES MEMORY IS MANAGED EFFICIENTLY*
+    #
+    ####### FRAME LOOP FLOW ##########
+    
+
+
     
