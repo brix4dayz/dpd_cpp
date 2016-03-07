@@ -101,6 +101,77 @@ def testcase1():
     print("Ending: TEST 1 ")
         
     return
+ 
+'''
+    0 clusters. 4 separate points.
+'''
+def testcase2():
+    global solver
+    global l
+    print("Beginning: TEST 2")
+    
+    l = []
+    solver = BinBox({
+                    'x': 36.0,
+                    'y': 36.0,
+                    'z': 40.0
+                  }, 4.0, 4.25)
+    
+    l.append(SimulationObject(5.0, 12.0, 21.0))
+
+    l.append(SimulationObject(0.0, 35.0, 32.0))
+    
+    l.append(SimulationObject(1.0, 0.5, 0.8))
+    
+    l.append(SimulationObject(29.7, 8.25, 15.79))
+
+    clusters = solver.deriveClusters(l)
+    printClusters(clusters)
+    
+    cleanUp()
+    
+    print("Ending: TEST 2 ")
+    
+    return
+
+'''
+    1 cluster. 2 separate points
+'''
+def testcase3():
+    global solver
+    global l
+
+    print("Beginning: TEST 3")
+
+    l = []
+    solver = BinBox({'x': 15.0, 'y': 21.0, 'z': 13.0}, 3.0, 3.125)
+    
+    l.append(SimulationObject(7.5, 0.5, 6.5))
+    l.append(SimulationObject(7.5, 20.5, 6.5))
+    l.append(SimulationObject(7.0, 21.3333, 7.0))
+    l.append(SimulationObject(8.0, 0.0, 6.2))
+    l.append(SimulationObject(7.2, 20.9, 6.9))
+        
+    l.append(SimulationObject(11.0, 13.0, 0.0))
+    
+    l.append(SimulationObject(3.0, 20.0, 2.0))
+        
+    clusters = solver.deriveClusters(l)
+    printClusters(clusters)
+    
+    cleanUp()
+        
+    print("Ending: TEST 3")
+        
+    return
+
+'''
+    3 clusters.
+'''
+def testcase4():
+    return 
+
+ 
     
 '''
     Test error handling for BinBox. Invalid dimensions parameter.
@@ -127,6 +198,8 @@ def testerrors():
        
     solver.deriveClusters(l) # print error about str not being allowed and out of bounds
 
+    printClusters(solver.clusterList)
+
     print("Ending: TEST ERRORS")
 
     return
@@ -137,6 +210,9 @@ def testerrors():
 if __name__ == '__main__':
     
     testcase1()
+    testcase2()
+    testcase3()
+    testcase4()
     testerrors()
     
     ####### FRAME LOOP FLOW ##########

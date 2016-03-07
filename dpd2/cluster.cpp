@@ -21,7 +21,7 @@ namespace dpd2 {
 		}
 
 		Cluster::~Cluster() {
-			std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
+			//std::cout << "c++: " << GUID << " is being destroyed." << std::endl;
 			// DO NOT DELETE OBJECTS, LET WHOEVER PROVIDED THEM
 			// DELETE THEM. JUST REMOVE REFERENCES
 			for (unsigned int i = 0; i < objects.size(); i++) {

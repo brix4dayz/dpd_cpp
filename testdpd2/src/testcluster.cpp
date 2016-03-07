@@ -140,11 +140,19 @@ void clustercase4() {
     /******************* Test 4 ***********************************/
 }
 
+/**
+ * Real data.
+ */
+void clustercase5() {
+	// TODO get frame data from finished simulation thats easy to count
+}
+
 void testcluster() {
 	clustercase1();
 	clustercase2();
 	clustercase3();
 	clustercase4();
+	clustercase5();
 }
 /******************************** testcluster ********************************************/
 
