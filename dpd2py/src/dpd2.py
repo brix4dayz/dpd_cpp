@@ -114,7 +114,7 @@ class BinBox(DPDObject):
         Add SimulationObject to the map, or lookup table, and then to the
         underlying C++ vector<SimulationObject*> list
     '''
-    def addObj(self, sObj):
+    def add_obj(self, sObj):
         self.objectMap[sObj.guid] = sObj;
         libdpd2.AddObjToList(c_void_p(self.objectList), sObj.obj)
         return
@@ -122,14 +122,14 @@ class BinBox(DPDObject):
     '''
         Derives the clusters within a given list of SimulationObject's.
     '''
-    def deriveClusters(self, frame):
+    def derive_clusters(self, frame):
         self.objectList = libdpd2.SimObjList()
         self.objectMap = {}
         
         # build vector<SimulationObject*> for BinBox
         for sObj in frame:
             if isinstance(sObj, SimulationObject):
-                self.addObj(sObj)
+                self.add_obj(sObj)
             else:
                 print("python: " + sObj.__class__.__name__ + " is not a SimulationObject.")
         
@@ -168,7 +168,7 @@ class BinBox(DPDObject):
         For testing libdpd2, doesn't work that way anymore...
         TODO: possibly remove?
     '''
-    def numClusters(self):
+    def num_clusters(self):
 #         for cluster in self.clusterList:
 #             for obj in cluster:
 #                 print(str(obj))
@@ -179,6 +179,7 @@ class BinBox(DPDObject):
     '''
     def empty(self):
         libdpd2.EmptyBinBox(c_void_p(self.obj))
+        self.clusterList = []
         return
     
     '''
@@ -195,7 +196,7 @@ class BinBox(DPDObject):
     BinBox. Good to call before you process the clusterList returned
     from deriveCluster
 '''
-def freeObjList(objL):
+def free_obj_list(objL):
     if isinstance(objL, list):
         for obj in objL:
             if isinstance(obj, SimulationObject):

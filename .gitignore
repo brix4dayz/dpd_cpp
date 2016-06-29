@@ -5,3 +5,4 @@ testdpd2/bin/
 dpd2/lib/
 *.o
 *.pyc
+traj_polymer_1.xyz

@@ -1,22 +1,48 @@
-from dpd2 import SimulationObject, BinBox, freeObjList
-from sys import argv
+from dpd2 import SimulationObject, BinBox, free_obj_list
+from multiprocessing import Process, Semaphore, Queue, cpu_count
+from time import sleep, time
+from sys import argv, exit
 
 def bead(line):
     
+    # TODO change back to dict
     data = line.split()
-    _bead = SimulationObject(x=data[1], 
-                             y=data[2],
-                             z=data[3])
-    
-    setattr(_bead, "bead_id", data[0])    
+    _bead = {
+        "x": float(data[1]), 
+        "y": float(data[2]),
+        "z": float(data[3]),
+        "bead_id": int(data[0])
+    }
+        
     return _bead
 
-def hydrophobe_tail(num_beads, in_file):
+def hydrophobe_tail(chain_idx, idx, num_beads, in_file):
     _tail = {}
     
     _tail["block"] = polymer_block(num_beads, in_file)
-    # TODO calc center of mass, store reference to other tail
+    _tail["chain_idx"] = chain_idx
+    _tail["tail_idx"] = idx
+
     return _tail
+
+def tail_calc_com(_tail):
+        com = {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+         
+        for i in range(len(_tail["block"])):
+            for key in com.keys():
+                com[key] += _tail["block"][i][key]
+                
+        for key in com.keys():
+            com[key] /= len(_tail["block"])
+            
+        _tail["com"] = SimulationObject(**com)
+        
+        setattr(_tail["com"], "chain_idx", _tail["chain_idx"])
+        setattr(_tail["com"], "tail_idx", _tail["tail_idx"])
     
 def polymer_block(num_beads, in_file):
     _block = []
@@ -26,47 +52,88 @@ def polymer_block(num_beads, in_file):
     
     return _block
 
-def triblock(poly_length, tail_length, in_file):
+def triblock(idx, poly_length, tail_length, in_file):
     _triblock = {
-       "tail1": hydrophobe_tail(tail_length, in_file),
+        "idx": idx,
+       "tail1": hydrophobe_tail(idx, "tail1", tail_length, in_file),
        "block": polymer_block(poly_length, in_file),
-       "tail2": hydrophobe_tail(tail_length, in_file)
+       "tail2": hydrophobe_tail(idx, "tail2", tail_length, in_file)
     }
-    
-    # TODO this just be center of mass beads for tails
-    def get_beads():
-        _beads = []
-        
-        for bead in _triblock["tail1"]["block"]:
-            _beads.append(bead)
-        for bead in _triblock["block"]:
-            _beads.append(bead)
-        for bead in _triblock["tail"]["block"]:
-            _beads.append(bead)
-
-    _triblock["get_beads"] = get_beads
     
     return _triblock
 
-def frame(num_chains, poly_length, tail_length, in_file):
+def triblock_get_beads(_triblock):
+    tail_calc_com(_triblock["tail1"])
+    tail_calc_com(_triblock["tail2"])
+    _beads = []
+    _beads.append(_triblock["tail1"]["com"])
+    _beads.append(_triblock["tail2"]["com"])
+    return _beads
+
+def frame(idx, num_chains, poly_length, tail_length, in_file):
     _frame = {
+        "idx": idx,
        "chains": [],
        "beads": [],
        "micelles": None
     }
     
     for i in xrange(num_chains):
-        chain = triblock(poly_length, tail_length, in_file)
+        chain = triblock(i, poly_length, tail_length, in_file)
         _frame["chains"].append(chain)
-        for bead in chain["get_beads"]():
-            _frame["beads"].append(bead)
     
     return _frame
 
-def micelle(cluster):
-    pass
+def calc_com(_frame):
+    for i in xrange(len(_frame["chains"])):
+        for bead in triblock_get_beads(_frame["chains"][i]):
+            _frame["beads"].append(bead)
 
-def process(**kwargs):
+def micelle(cluster):
+    # TODO 
+    return cluster
+
+class Worker(Process):
+    
+    def __init__(self, idx, queue, my_lock, neighbor_lock, box_dimensions):
+        super(Worker, self).__init__()
+        self.solver = BinBox(box_dimensions)
+        self.idx = idx
+        self.queue = queue
+        self.my_lock = my_lock
+        self.neighbor_lock = neighbor_lock
+        
+    def run(self):
+        
+        while True:
+            # Get the frame
+            self.my_lock.acquire()
+            _frame = self.queue.get()
+            if _frame is None:
+                self.queue.put(None)
+                self.neighbor_lock.release()
+                exit()
+            self.neighbor_lock.release()
+    
+            calc_com(_frame)
+            # Do stuff with the frame
+            self.solver.derive_clusters(_frame["beads"])
+            free_obj_list(_frame["beads"])
+            
+            _frame["micelles"] = []
+            for cluster in self.solver.clusterList:
+                _frame["micelles"].append(micelle(cluster))
+                    
+            self.solver.empty()
+    
+            # Print to output
+            self.my_lock.acquire()
+            print("\t" + str(self.idx) + " print results for frame " + str(_frame["idx"]))
+            print("\t\tNumber of micelles: " + str(len(_frame["micelles"])))
+            self.neighbor_lock.release()    
+
+
+def main(**kwargs):
     
     num_beads_per_frame = kwargs["num_beads"]
     poly_length = kwargs["poly_length"]
@@ -78,25 +145,60 @@ def process(**kwargs):
     num_frames = kwargs["num_frames"]
     chain_length = poly_length + 2 * tail_length
     num_chains = num_beads_per_frame // chain_length
-    
-    cluster_solver = BinBox(boxDimensions=kwargs["box_dimensions"])
-    
-    with open(kwargs["input_file"], "r") as in_file:
-        for i in range(num_frames):            
-            _frame = frame(num_chains, poly_length, tail_length, in_file)
-            
-            cluster_solver.deriveClusters(_frame["beads"])
-            
-            freeObjList(_frame["beads"])
-            
-            _frame["micelles"] = []
-            for cluster in cluster_solver.clusterList:
-                _frame["micelles"].append(micelle(cluster))
-                
-            cluster_solver.empty()
 
+    num_workers = cpu_count()
+    print("Creating " + str(num_workers) + " workers...")
+    queue = Queue()
+    workers = []
+    locks = []
+    for i in range(num_workers):
+        locks.append(Semaphore(0))
+            
+    for i in range(num_workers):        
+        ni = (i + 1) % num_workers
+        w = Worker(i, queue, locks[i], locks[ni], kwargs["box_dimensions"])
+        workers.append(w)
+        w.start()
+    
+    print("Opening file... beginning processing...")
+    with open(kwargs["input_file"], "r") as in_file:
+        locks[0].release()
+        for i in range(num_frames): 
+            in_file.readline() # skip num atoms
+            in_file.readline() # skip comment
+            if i % 10 == 0:           
+                _frame = frame(i, num_chains, poly_length, tail_length, in_file)
+                queue.put(_frame)
+            else:
+                # skip frame
+                for i in xrange(num_beads_per_frame):
+                    in_file.readline()
+                
+    while not queue.empty():
+        sleep(1.0)
+        
+    queue.put(None)
+        
+    for w in workers:
+        w.join()
+        
+    print("Processing complete.")
 
 if __name__ == "__main__":
-    pass
+    start = time()
+    main(**{
+        "input_file": argv[1],
+        "num_beads": int(argv[2]),
+        "poly_length": int(argv[3]),
+        "tail_length": int(argv[4]),
+        "num_frames": int(argv[5]),
+        "box_dimensions": {
+            "x": float(argv[6]),
+            "y": float(argv[6]),
+            "z": float(argv[6])
+        }    
+    })
+    ttl_time = time() - start
+    print("Ttl time: " + str(ttl_time))
 
     

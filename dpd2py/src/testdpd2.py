@@ -13,9 +13,9 @@ from dpd2 import BinBox
 solver = None
 l = None
 
-def printClusters(clusters):
+def print_clusters(clusters):
     if isinstance(clusters, list):
-        print("Number of clusters: " + str(len(clusters)))
+        print("Number of clusters:" + str(len(clusters)))
         for i in range(len(clusters)):
             c = clusters[i]
             print("Cluster " + str(i))
@@ -29,7 +29,7 @@ def printClusters(clusters):
     return
 
 
-def cleanUp():
+def clean_up():
     global solver
     global l
     # frees the underlying C++ pointers, use when your
@@ -92,11 +92,11 @@ def testcase1():
     # NOTE: 
     solver = BinBox(dimensions, binSize, cutoffDist)
     
-    clusters = solver.deriveClusters(l) # print out of bounds
+    clusters = solver.derive_clusters(l) # print out of bounds
     
-    printClusters(clusters)
+    print_clusters(clusters)
     
-    cleanUp()
+    clean_up()
     
     print("Ending: TEST 1 ")
         
@@ -125,10 +125,10 @@ def testcase2():
     
     l.append(SimulationObject(29.7, 8.25, 15.79))
 
-    clusters = solver.deriveClusters(l)
-    printClusters(clusters)
+    clusters = solver.derive_clusters(l)
+    print_clusters(clusters)
     
-    cleanUp()
+    clean_up()
     
     print("Ending: TEST 2 ")
     
@@ -156,10 +156,10 @@ def testcase3():
     
     l.append(SimulationObject(3.0, 20.0, 2.0))
         
-    clusters = solver.deriveClusters(l)
-    printClusters(clusters)
+    clusters = solver.derive_clusters(l)
+    print_clusters(clusters)
     
-    cleanUp()
+    clean_up()
         
     print("Ending: TEST 3")
         
@@ -196,9 +196,9 @@ def testerrors():
     l.append("string") # invalid object to give to binbox
     l.append(SimulationObject(100,100,100)) # out of bounds point
        
-    solver.deriveClusters(l) # print error about str not being allowed and out of bounds
+    solver.derive_clusters(l) # print error about str not being allowed and out of bounds
 
-    printClusters(solver.clusterList)
+    print_clusters(solver.clusterList)
 
     print("Ending: TEST ERRORS")
 
