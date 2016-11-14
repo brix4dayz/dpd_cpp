@@ -1,11 +1,9 @@
 from dpd2 import SimulationObject, BinBox, free_obj_list
-from multiprocessing import Process, Semaphore, Queue, cpu_count
-from time import sleep, time
+from multiprocessing import Process, Queue, cpu_count
+from time import time
 from sys import argv, exit
 
 def bead(line):
-    
-    # TODO change back to dict
     data = line.split()
     _bead = {
         "x": float(data[1]), 
@@ -26,29 +24,29 @@ def hydrophobe_tail(chain_idx, idx, num_beads, in_file):
     return _tail
 
 def tail_calc_com(_tail):
-        com = {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-         
-        for i in range(len(_tail["block"])):
-            for key in com.keys():
-                com[key] += _tail["block"][i][key]
-                
+    com = {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    }
+     
+    for i in range(len(_tail["block"])):
         for key in com.keys():
-            com[key] /= len(_tail["block"])
+            com[key] += _tail["block"][i][key]
             
-        _tail["com"] = SimulationObject(**com)
+    for key in com.keys():
+        com[key] /= len(_tail["block"])
         
-        setattr(_tail["com"], "chain_idx", _tail["chain_idx"])
-        setattr(_tail["com"], "tail_idx", _tail["tail_idx"])
+    _tail["com"] = SimulationObject(**com)
+    
+    setattr(_tail["com"], "chain_idx", _tail["chain_idx"])
+    setattr(_tail["com"], "tail_idx", _tail["tail_idx"])
     
 def polymer_block(num_beads, in_file):
     _block = []
     
-    for i in range(num_beads):
-        _block.append(bead(in_file.readline()))
+    for i in xrange(num_beads):
+        _block.append(bead(in_file.next().rstrip('\n')))
     
     return _block
 
@@ -95,43 +93,57 @@ def micelle(cluster):
 
 class Worker(Process):
     
-    def __init__(self, idx, queue, my_lock, neighbor_lock, box_dimensions):
+    def __init__(self, idx, inQ, outQ, box_dimensions):
         super(Worker, self).__init__()
-        self.solver = BinBox(box_dimensions)
+        self.box_dimensions = box_dimensions
         self.idx = idx
-        self.queue = queue
-        self.my_lock = my_lock
-        self.neighbor_lock = neighbor_lock
+        self.name = "Worker " + str(idx)
+        self.inQ = inQ
+        self.outQ = outQ
         
     def run(self):
         
         while True:
-            # Get the frame
-            self.my_lock.acquire()
-            _frame = self.queue.get()
-            if _frame is None:
-                self.queue.put(None)
-                self.neighbor_lock.release()
-                exit()
-            self.neighbor_lock.release()
-    
-            calc_com(_frame)
-            # Do stuff with the frame
-            self.solver.derive_clusters(_frame["beads"])
-            free_obj_list(_frame["beads"])
+           
+#             print(self.name + " is waiting to receive frame...")
+            _frame = self.inQ.get()
             
-            _frame["micelles"] = []
-            for cluster in self.solver.clusterList:
-                _frame["micelles"].append(micelle(cluster))
-                    
-            self.solver.empty()
+            if _frame is None:
+#                 print(self.name + " is exiting...")
+                break
     
-            # Print to output
-            self.my_lock.acquire()
-            print("\t" + str(self.idx) + " print results for frame " + str(_frame["idx"]))
-            print("\t\tNumber of micelles: " + str(len(_frame["micelles"])))
-            self.neighbor_lock.release()    
+#             print(self.name + " is processing frame " + str(_frame["idx"]))
+    
+            out = process_frame(_frame, self.box_dimensions)
+            
+#             print(self.name + " is trying to send...")
+            self.outQ.put(out) 
+            
+        exit(0)
 
+def process_frame(_frame, box_dimensions):
+    calc_com(_frame)
+    # Do stuff with the frame
+    solver = BinBox(box_dimensions)
+    solver.derive_clusters(_frame["beads"])
+    free_obj_list(_frame["beads"])
+    
+    _frame["micelles"] = []
+    for cluster in solver.clusterList:
+        _frame["micelles"].append(micelle(cluster))
+            
+    solver.destroy()
+    del solver
+
+    # Print to output
+    out = "\t Frame " + str(_frame["idx"])
+    out += ",\tNumber of micelles: " + str(len(_frame["micelles"]))
+    
+    #TODO do more stuff
+    
+    del _frame
+    
+    return out
 
 def main(**kwargs):
     
@@ -146,41 +158,52 @@ def main(**kwargs):
     chain_length = poly_length + 2 * tail_length
     num_chains = num_beads_per_frame // chain_length
 
-    num_workers = cpu_count()
+    num_workers = 4
     print("Creating " + str(num_workers) + " workers...")
-    queue = Queue()
     workers = []
-    locks = []
-    for i in range(num_workers):
-        locks.append(Semaphore(0))
-            
+    queues = []
+             
     for i in range(num_workers):        
-        ni = (i + 1) % num_workers
-        w = Worker(i, queue, locks[i], locks[ni], kwargs["box_dimensions"])
+        qs = {
+           "input": Queue(),
+           "output": Queue()
+        }
+        w = Worker(i, qs["input"], qs["output"], kwargs["box_dimensions"])
         workers.append(w)
+        queues.append(qs)
         w.start()
-    
+#     
     print("Opening file... beginning processing...")
+    frame_count = 0
+    worker_idx = 0
     with open(kwargs["input_file"], "r") as in_file:
-        locks[0].release()
-        for i in range(num_frames): 
-            in_file.readline() # skip num atoms
-            in_file.readline() # skip comment
+        for i in xrange(num_frames): 
+            in_file.next() # skip num atoms
+            in_file.next() # skip comment
             if i % 10 == 0:           
                 _frame = frame(i, num_chains, poly_length, tail_length, in_file)
-                queue.put(_frame)
+#                 process_frame(_frame, kwargs["box_dimensions"])
+                queues[worker_idx]["input"].put(_frame)
+                worker_idx = (worker_idx + 1) % num_workers
+                frame_count += 1
+#                 print("Main is sending frame " + str(i))
             else:
                 # skip frame
                 for i in xrange(num_beads_per_frame):
-                    in_file.readline()
+                    in_file.next()
                 
-    while not queue.empty():
-        sleep(1.0)
-        
-    queue.put(None)
-        
-    for w in workers:
-        w.join()
+    out_count = 0
+    worker_idx = 0
+    while out_count < frame_count:
+#         print("Main is receiving output " + str(out_count))
+        out = queues[worker_idx]["output"].get()
+        print(out)
+        worker_idx = (worker_idx + 1) % num_workers
+        out_count += 1          
+         
+    for i in range(num_workers):
+        queues[i]["input"].put(None)
+        workers[i].join()
         
     print("Processing complete.")
 
